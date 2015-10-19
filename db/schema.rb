@@ -1,0 +1,158 @@
+# encoding: UTF-8
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
+#
+# Note that this schema.rb definition is the authoritative source for your
+# database schema. If you need to create the application database on another
+# system, you should be using db:schema:load, not running all the migrations
+# from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# you'll amass, the slower it'll run and the greater likelihood for issues).
+#
+# It's strongly recommended that you check this file into your version control system.
+
+ActiveRecord::Schema.define(version: 20151018055634) do
+
+  create_table "children", force: :cascade do |t|
+    t.date     "dob"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "contents", force: :cascade do |t|
+    t.string   "type",       limit: 255
+    t.string   "details",    limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.string   "status",     limit: 255
+  end
+
+  create_table "course_contents", force: :cascade do |t|
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "course_id",  limit: 4
+    t.integer  "content_id", limit: 4
+  end
+
+  add_index "course_contents", ["content_id"], name: "index_course_contents_on_content_id", using: :btree
+  add_index "course_contents", ["course_id"], name: "index_course_contents_on_course_id", using: :btree
+
+  create_table "courses", force: :cascade do |t|
+    t.string   "module_name", limit: 255
+    t.string   "string",      limit: 255
+    t.string   "criteria",    limit: 255
+    t.integer  "seq_no",      limit: 4
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "status",      limit: 255
+  end
+
+  create_table "device_details", force: :cascade do |t|
+    t.string   "status",     limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "user_id",    limit: 4
+    t.string   "device_id",  limit: 255
+  end
+
+  add_index "device_details", ["user_id"], name: "index_device_details_on_user_id", using: :btree
+
+  create_table "player_usage_stats", force: :cascade do |t|
+    t.integer  "duration",         limit: 4
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "device_detail_id", limit: 4
+    t.integer  "user_id",          limit: 4
+    t.integer  "course_id",        limit: 4
+    t.integer  "content_id",       limit: 4
+  end
+
+  add_index "player_usage_stats", ["content_id"], name: "index_player_usage_stats_on_content_id", using: :btree
+  add_index "player_usage_stats", ["course_id"], name: "index_player_usage_stats_on_course_id", using: :btree
+  add_index "player_usage_stats", ["device_detail_id"], name: "index_player_usage_stats_on_device_detail_id", using: :btree
+  add_index "player_usage_stats", ["user_id"], name: "index_player_usage_stats_on_user_id", using: :btree
+
+  create_table "progress", force: :cascade do |t|
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.string   "details",     limit: 255
+    t.string   "status",      limit: 255
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "course_id",   limit: 4
+  end
+
+  add_index "progress", ["course_id"], name: "index_progress_on_course_id", using: :btree
+
+  create_table "relationships", force: :cascade do |t|
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "user_id",    limit: 4
+    t.integer  "child_id",   limit: 4
+    t.string   "relation",   limit: 255
+  end
+
+  add_index "relationships", ["child_id"], name: "index_relationships_on_child_id", using: :btree
+  add_index "relationships", ["user_id"], name: "index_relationships_on_user_id", using: :btree
+
+  create_table "transactions", force: :cascade do |t|
+    t.datetime "date"
+    t.string   "status",     limit: 255
+    t.string   "details",    limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "user_id",    limit: 4
+  end
+
+  add_index "transactions", ["user_id"], name: "index_transactions_on_user_id", using: :btree
+
+  create_table "user_children", force: :cascade do |t|
+    t.string   "realationship", limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "user_id",       limit: 4
+    t.integer  "child_id",      limit: 4
+  end
+
+  add_index "user_children", ["child_id"], name: "index_user_children_on_child_id", using: :btree
+  add_index "user_children", ["user_id"], name: "index_user_children_on_user_id", using: :btree
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                  limit: 255, default: "", null: false
+    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "reset_password_token",   limit: 255
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip",     limit: 255
+    t.string   "last_sign_in_ip",        limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "f_name",                 limit: 255
+    t.string   "l_name",                 limit: 255
+    t.datetime "subscription_end_date"
+    t.string   "type_of_subscription",   limit: 255
+    t.string   "status",                 limit: 255
+    t.string   "authentication_token",   limit: 255
+    t.datetime "confirmed_at"
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  add_foreign_key "course_contents", "contents"
+  add_foreign_key "course_contents", "courses"
+  add_foreign_key "device_details", "users"
+  add_foreign_key "player_usage_stats", "contents"
+  add_foreign_key "player_usage_stats", "courses"
+  add_foreign_key "player_usage_stats", "device_details"
+  add_foreign_key "player_usage_stats", "users"
+  add_foreign_key "progress", "courses"
+  add_foreign_key "relationships", "children"
+  add_foreign_key "relationships", "users"
+  add_foreign_key "transactions", "users"
+  add_foreign_key "user_children", "children"
+  add_foreign_key "user_children", "users"
+end
