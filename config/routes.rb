@@ -2,6 +2,9 @@ require 'api_constraints'
 Nuryl::Application.routes.draw do
   devise_for :users
   # Api definition
+  devise_scope :user do
+    root to: "devise/sessions#new"
+  end
   namespace :api, defaults: { format: :json },
             constraints: { subdomain: 'api' }, path: '/'  do
     scope module: :v1 , path: '/v1',
