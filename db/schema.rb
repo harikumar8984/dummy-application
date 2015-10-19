@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151018055634) do
+ActiveRecord::Schema.define(version: 20151019075436) do
 
   create_table "children", force: :cascade do |t|
     t.date     "dob"
@@ -107,11 +107,11 @@ ActiveRecord::Schema.define(version: 20151018055634) do
   add_index "transactions", ["user_id"], name: "index_transactions_on_user_id", using: :btree
 
   create_table "user_children", force: :cascade do |t|
-    t.string   "realationship", limit: 255
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.integer  "user_id",       limit: 4
-    t.integer  "child_id",      limit: 4
+    t.string   "relationship", limit: 255
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "user_id",      limit: 4
+    t.integer  "child_id",     limit: 4
   end
 
   add_index "user_children", ["child_id"], name: "index_user_children_on_child_id", using: :btree
@@ -137,6 +137,7 @@ ActiveRecord::Schema.define(version: 20151018055634) do
     t.string   "status",                 limit: 255
     t.string   "authentication_token",   limit: 255
     t.datetime "confirmed_at"
+    t.string   "zipcode",                limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
