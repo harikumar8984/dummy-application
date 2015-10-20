@@ -6,12 +6,11 @@ Nuryl::Application.routes.draw do
     root to: "devise/sessions#new"
   end
   namespace :api, defaults: { format: :json },
-            constraints: { subdomain: 'api' }, path: '/'  do
+             path: '/api'  do
     scope module: :v1 , path: '/v1',
           constraints: ApiConstraints.new(version: 1, default: true) do
       # We are going to list our resources here
       devise_for :users
-      resources :users
     end
   end
 end
