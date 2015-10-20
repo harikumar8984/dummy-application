@@ -11,6 +11,7 @@ Nuryl::Application.routes.draw do
           constraints: ApiConstraints.new(version: 1, default: true) do
       # We are going to list our resources here
       devise_for :users
+      resources :users
     end
   end
 end
