@@ -13,8 +13,8 @@ Nuryl::Application.routes.draw do
       # We are going to list our resources here
       devise_for :users
       resources :users do
-        member do
-          get 'welcome_content'
+        collection do
+          get 'welcome_content_structure'
         end
       end
     end

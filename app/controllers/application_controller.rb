@@ -29,6 +29,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_device
+    binding.pry
       device_details = DeviceDetail.where(device_id: params[:device_id].strip, status: 'active') if params[:device_id]
       if device_details.blank?
         render :status => 401,:json=> {:success => false, errors: params[:device_id].blank? ? [t('devise.failure.no_device')] : [t('devise.failure.invalid_device')]}

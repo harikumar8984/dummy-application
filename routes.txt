@@ -1,0 +1,32 @@
+Running `rake routes` attached to terminal... up, run.7611
+                      Prefix Verb   URI Pattern                       Controller#Action
+            new_user_session GET    /users/sign_in(.:format)          devise/sessions#new
+                user_session POST   /users/sign_in(.:format)          devise/sessions#create
+        destroy_user_session DELETE /users/sign_out(.:format)         devise/sessions#destroy
+               user_password POST   /users/password(.:format)         devise/passwords#create
+           new_user_password GET    /users/password/new(.:format)     devise/passwords#new
+          edit_user_password GET    /users/password/edit(.:format)    devise/passwords#edit
+                             PATCH  /users/password(.:format)         devise/passwords#update
+                             PUT    /users/password(.:format)         devise/passwords#update
+    cancel_user_registration GET    /users/cancel(.:format)           devise/registrations#cancel
+           user_registration POST   /users(.:format)                  devise/registrations#create
+       new_user_registration GET    /users/sign_up(.:format)          devise/registrations#new
+      edit_user_registration GET    /users/edit(.:format)             devise/registrations#edit
+                             PATCH  /users(.:format)                  devise/registrations#update
+                             PUT    /users(.:format)                  devise/registrations#update
+                             DELETE /users(.:format)                  devise/registrations#destroy
+        new_api_user_session GET    /v1/users/sign_in(.:format)       api/v1/sessions#new {:format=>:json, :subdomain=>"api"}
+            api_user_session POST   /v1/users/sign_in(.:format)       api/v1/sessions#create {:format=>:json, :subdomain=>"api"}
+    destroy_api_user_session DELETE /v1/users/sign_out(.:format)      api/v1/sessions#destroy {:format=>:json, :subdomain=>"api"}
+           api_user_password POST   /v1/users/password(.:format)      api/v1/passwords#create {:format=>:json, :subdomain=>"api"}
+       new_api_user_password GET    /v1/users/password/new(.:format)  api/v1/passwords#new {:format=>:json, :subdomain=>"api"}
+      edit_api_user_password GET    /v1/users/password/edit(.:format) api/v1/passwords#edit {:format=>:json, :subdomain=>"api"}
+                             PATCH  /v1/users/password(.:format)      api/v1/passwords#update {:format=>:json, :subdomain=>"api"}
+                             PUT    /v1/users/password(.:format)      api/v1/passwords#update {:format=>:json, :subdomain=>"api"}
+cancel_api_user_registration GET    /v1/users/cancel(.:format)        api/v1/registrations#cancel {:format=>:json, :subdomain=>"api"}
+       api_user_registration POST   /v1/users(.:format)               api/v1/registrations#create {:format=>:json, :subdomain=>"api"}
+   new_api_user_registration GET    /v1/users/sign_up(.:format)       api/v1/registrations#new {:format=>:json, :subdomain=>"api"}
+  edit_api_user_registration GET    /v1/users/edit(.:format)          api/v1/registrations#edit {:format=>:json, :subdomain=>"api"}
+                             PATCH  /v1/users(.:format)               api/v1/registrations#update {:format=>:json, :subdomain=>"api"}
+                             PUT    /v1/users(.:format)               api/v1/registrations#update {:format=>:json, :subdomain=>"api"}
+                             DELETE /v1/users(.:format)               api/v1/registrations#destroy {:format=>:json, :subdomain=>"api"}
