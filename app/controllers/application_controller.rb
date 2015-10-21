@@ -24,18 +24,31 @@ class ApplicationController < ActionController::Base
     if user
       sign_in user, store: false
     else
-      render :status => 401, :json => {errors: [t('api.v1.token.invalid_token')]}
+      render :status => 401, :json => {:success => false, errors: user_token.blank? ? [t('devise.failure.no_token')] : [t('devise.failure.invalid')]}
     end
   end
 
-
-
   def authenticate_device
-    render :json=> {:success => false, :message => "Device id missed"} if params[:device_id].blank?
-    return
-      device_details = DeviceDetail.where(device_id: params[:device_id].strip, status: 'active')
+      device_details = DeviceDetail.where(device_id: params[:device_id].strip, status: 'active') if params[:device_id]
       if device_details.blank?
-        render :json=> {:success => false, :message => "Invalid device id"}
+        render :status => 401,:json=> {:success => false, errors: params[:device_id].blank? ? [t('devise.failure.no_device')] : [t('devise.failure.invalid_device')]}
       end
   end
+
+  def course_content_structure(course_id)
+    course = Course.find(course_id)
+    course_content = CourseContent.where(course_id: course_id).order(:seq_no)
+    content_structure=  {criteria: course.criteria, course_id: course.id, :video => [], :text => [], :audio => []}
+    course_content.each do |course|
+      if course.content.content_type == "Audio"
+        content_structure[:audio] << course.content.id
+      elsif course.content.content_type == "Video"
+        content_structure[:video] << course.content.id
+      elsif course.content.content_type == "Text"
+        content_structure[:text] << course.content.id
+      end
+    end
+    render :json => {content: content_structure}
+  end
+
 end
