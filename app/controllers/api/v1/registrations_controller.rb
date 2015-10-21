@@ -9,10 +9,8 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   def create
     build_resource(sign_up_params.merge!(status: 'Active'))
     #device = DeviceDetail.find_or_create_by(device_id: params[:device_id])
-    device_id = request.headers["device-id"]
-    if device_id.blank?
-      render :status => 401,:json=> {:success => false, errors:  [t('devise.failure.no_device')]}
-    elsif resource.save
+    if resource.save
+      device_id = request.headers["device-id"]
       if resource.device_detail.nil?
         DeviceDetail.create(device_id: device_id, status: "Active", user_id: resource.id)
       end
