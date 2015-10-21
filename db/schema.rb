@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151019075436) do
+ActiveRecord::Schema.define(version: 20151021053403) do
 
   create_table "children", force: :cascade do |t|
     t.date     "dob"
@@ -20,11 +20,11 @@ ActiveRecord::Schema.define(version: 20151019075436) do
   end
 
   create_table "contents", force: :cascade do |t|
-    t.string   "type",       limit: 255
-    t.string   "details",    limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.string   "status",     limit: 255
+    t.string   "content_type", limit: 255
+    t.string   "details",      limit: 255
+    t.string   "status",       limit: 255
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "course_contents", force: :cascade do |t|
@@ -32,16 +32,15 @@ ActiveRecord::Schema.define(version: 20151019075436) do
     t.datetime "updated_at",           null: false
     t.integer  "course_id",  limit: 4
     t.integer  "content_id", limit: 4
+    t.integer  "seq_no",     limit: 4
   end
 
   add_index "course_contents", ["content_id"], name: "index_course_contents_on_content_id", using: :btree
   add_index "course_contents", ["course_id"], name: "index_course_contents_on_course_id", using: :btree
 
   create_table "courses", force: :cascade do |t|
-    t.string   "module_name", limit: 255
-    t.string   "string",      limit: 255
+    t.string   "course_name", limit: 255
     t.string   "criteria",    limit: 255
-    t.integer  "seq_no",      limit: 4
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.string   "status",      limit: 255
@@ -72,28 +71,19 @@ ActiveRecord::Schema.define(version: 20151019075436) do
   add_index "player_usage_stats", ["device_detail_id"], name: "index_player_usage_stats_on_device_detail_id", using: :btree
   add_index "player_usage_stats", ["user_id"], name: "index_player_usage_stats_on_user_id", using: :btree
 
-  create_table "progress", force: :cascade do |t|
+  create_table "progresses", force: :cascade do |t|
     t.datetime "started_at"
     t.datetime "finished_at"
     t.string   "details",     limit: 255
     t.string   "status",      limit: 255
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.integer  "user_id",     limit: 4
     t.integer  "course_id",   limit: 4
   end
 
-  add_index "progress", ["course_id"], name: "index_progress_on_course_id", using: :btree
-
-  create_table "relationships", force: :cascade do |t|
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.integer  "user_id",    limit: 4
-    t.integer  "child_id",   limit: 4
-    t.string   "relation",   limit: 255
-  end
-
-  add_index "relationships", ["child_id"], name: "index_relationships_on_child_id", using: :btree
-  add_index "relationships", ["user_id"], name: "index_relationships_on_user_id", using: :btree
+  add_index "progresses", ["course_id"], name: "index_progresses_on_course_id", using: :btree
+  add_index "progresses", ["user_id"], name: "index_progresses_on_user_id", using: :btree
 
   create_table "transactions", force: :cascade do |t|
     t.datetime "date"
@@ -150,9 +140,8 @@ ActiveRecord::Schema.define(version: 20151019075436) do
   add_foreign_key "player_usage_stats", "courses"
   add_foreign_key "player_usage_stats", "device_details"
   add_foreign_key "player_usage_stats", "users"
-  add_foreign_key "progress", "courses"
-  add_foreign_key "relationships", "children"
-  add_foreign_key "relationships", "users"
+  add_foreign_key "progresses", "courses"
+  add_foreign_key "progresses", "users"
   add_foreign_key "transactions", "users"
   add_foreign_key "user_children", "children"
   add_foreign_key "user_children", "users"
