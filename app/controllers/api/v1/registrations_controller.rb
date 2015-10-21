@@ -10,7 +10,8 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
     #device = DeviceDetail.find_or_create_by(device_id: params[:device_id])
     if resource.save
       if resource.device_detail.nil?
-        DeviceDetail.create(device_id: params[:device_id], status: "Active", user_id: resource.id)
+        device_id = request.headers["device-id"]
+        DeviceDetail.create(device_id: device_id, status: "Active", user_id: resource.id)
       end
       #device.update_attributes(status: 'active', user_id: resource.id)
       #creating child of user

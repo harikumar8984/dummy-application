@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   # via parameters. However, anyone could use Rails's token
   # authentication features to get the token from a header.
   def authenticate_user_from_token!
-    user_token = params[:user_token].presence || params[:auth_token].presence
+    user_token = request.headers["auth-token"].presence
     user       = user_token && User.find_by_authentication_token(user_token.to_s)
     if user
       sign_in user, store: false
@@ -29,9 +29,10 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_device
-      device_details = DeviceDetail.where(device_id: params[:device_id].strip, status: 'active') if params[:device_id]
+      device_id = request.headers["device-id"].presence
+      device_details = DeviceDetail.where(device_id: device_id.strip, status: 'active') if device_id
       if device_details.blank?
-        render :status => 401,:json=> {:success => false, errors: params[:device_id].blank? ? [t('devise.failure.no_device')] : [t('devise.failure.invalid_device')]}
+        render :status => 401,:json=> {:success => false, errors: device_id.blank? ? [t('devise.failure.no_device')] : [t('devise.failure.invalid_device')]}
       end
   end
 
