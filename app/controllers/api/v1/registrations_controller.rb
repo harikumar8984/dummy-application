@@ -3,14 +3,17 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
   skip_before_filter :authenticate_scope!, :only => [:update]
   skip_before_filter :authenticate_user_from_token!, :only => :create
+  skip_before_filter :authenticate_device, :only => :create
   respond_to :json
 
   def create
     build_resource(sign_up_params.merge!(status: 'Active'))
     #device = DeviceDetail.find_or_create_by(device_id: params[:device_id])
-    if resource.save
+    device_id = request.headers["device-id"]
+    if device_id.blank?
+      render :status => 401,:json=> {:success => false, errors:  [t('devise.failure.no_device')]}
+    elsif resource.save
       if resource.device_detail.nil?
-        device_id = request.headers["device-id"]
         DeviceDetail.create(device_id: device_id, status: "Active", user_id: resource.id)
       end
       #device.update_attributes(status: 'active', user_id: resource.id)
