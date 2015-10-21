@@ -1,5 +1,6 @@
 require 'api_constraints'
 Nuryl::Application.routes.draw do
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   devise_for :users
   # Api definition
   devise_scope :user do
@@ -11,6 +12,11 @@ Nuryl::Application.routes.draw do
           constraints: ApiConstraints.new(version: 1, default: true) do
       # We are going to list our resources here
       devise_for :users
+      resources :users do
+        member do
+          get 'welcome_content'
+        end
+      end
     end
   end
 end

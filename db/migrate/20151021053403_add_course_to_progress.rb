@@ -1,4 +1,4 @@
-class AddConurseToProgress < ActiveRecord::Migration
+class AddCourseToProgress < ActiveRecord::Migration
   def change
     add_reference :progresses, :course, index: true, foreign_key: true
   end
