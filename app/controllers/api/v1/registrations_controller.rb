@@ -19,7 +19,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       child.user_child.update_attributes(relationship: params[:relationship]) if child
       if resource.active_for_authentication?
         resource.ensure_authentication_token!
-        return render status: 201, :json=> {:success => true, :user => resource.authentication_token}
+        return render status: 201, :json=> {:success => true, :auth_token => resource.authentication_token}
       else
         expire_session_data_after_sign_in!
         return render status: 201, :json => {:success => true}
