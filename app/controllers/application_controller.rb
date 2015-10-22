@@ -3,11 +3,11 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   before_filter :is_device_id?
-  before_filter :authenticate_device
   # This is our new function that comes before Devise's one
   before_filter :authenticate_user_from_token!
   # # This is Devise's authentication
   # before_filter :authenticate_user!
+  before_filter :authenticate_device
 
   # def after_sign_in_path_for(resource)
   #   edit_user_registration_path
@@ -30,34 +30,19 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_device
-      device_id = request.headers["device-id"].presence
-      device_details = DeviceDetail.where(device_id: device_id.strip, status: 'active') if device_id
+      device_id = request.headers["device-id"].presence || params['device-id'].presence
+      device_details = DeviceDetail.where(device_id: device_id.strip, user_id: current_user.id, status: 'active') if device_id
       if device_details.blank?
-        render :status => 401,:json=> {:success => false, errors: device_id.blank? ? [t('devise.failure.no_device')] : [t('devise.failure.invalid_device')]}
+        render :status => 401,:json=> {:success => false, errors: device_id.blank? ? [t('devise.failure.Invalid device id')] : [t('devise.failure.invalid_device')]}
       end
   end
 
   def is_device_id?
-    device_id = request.headers["device-id"]
+    device_id = request.headers["device-id"] || params['device-id'].presence
     if device_id.blank?
       render :status => 401,:json=> {:success => false, errors:  [t('devise.failure.no_device')]}
     end
   end
 
-  def course_content_structure(course_id)
-    course = Course.find(course_id)
-    course_content = CourseContent.where(course_id: course_id).order(:seq_no)
-    content_structure=  {criteria: course.criteria, course_id: course.id, :video => [], :text => [], :audio => []}
-    course_content.each do |course|
-      if course.content.content_type == "Audio"
-        content_structure[:audio] << course.content.id
-      elsif course.content.content_type == "Video"
-        content_structure[:video] << course.content.id
-      elsif course.content.content_type == "Text"
-        content_structure[:text] << course.content.id
-      end
-    end
-    render :json => {content: content_structure}
-  end
 
 end

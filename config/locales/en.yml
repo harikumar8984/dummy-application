@@ -21,3 +21,5 @@
 
 en:
   hello: "Hello world"
+  no_email: 'Please provide email'
+  email_already_exist: 'Email already exist in our system'

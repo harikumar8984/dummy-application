@@ -14,7 +14,8 @@ Nuryl::Application.routes.draw do
       devise_for :users
       resources :users do
         collection do
-          get 'welcome_content_structure'
+          get 'welcome_content'
+          get 'validate_unique_email'
         end
       end
     end
