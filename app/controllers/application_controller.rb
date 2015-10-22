@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_device
-      device_id = request.headers["device-id"].presence || params['device-id'].presence
+      device_id = request.headers["device-id"].presence || params[:device_id].presence
       device_details = DeviceDetail.where(device_id: device_id.strip, user_id: current_user.id, status: 'active') if device_id
       if device_details.blank?
         render :status => 401,:json=> {:success => false, errors: device_id.blank? ? [t('devise.failure.Invalid device id')] : [t('devise.failure.invalid_device')]}
@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
   end
 
   def is_device_id?
-    device_id = request.headers["device-id"] || params['device-id'].presence
+    device_id = request.headers["device-id"] || params[:device_id].presence
     if device_id.blank?
       render :status => 401,:json=> {:success => false, errors:  [t('devise.failure.no_device')]}
     end
