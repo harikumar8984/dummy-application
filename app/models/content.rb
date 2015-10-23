@@ -7,7 +7,7 @@ class Content < ActiveRecord::Base
   has_many :player_usage_stats, dependent: :destroy
 
   mount_uploader :name, ContentUploader
-  after_save :encrypt_content_data
+  #after_save :encrypt_content_data
 
  def encrypt_content_data
     @cipher = 'aes-128-cbc'
