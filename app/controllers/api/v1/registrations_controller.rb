@@ -7,7 +7,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   respond_to :json
 
   def create
-    build_resource(sign_up_params.merge!(status: 'Active'))
+    build_resource(sign_up_params.merge!(status: 'ACTIVE'))
     #device = DeviceDetail.find_or_create_by(device_id: params[:device_id])
     if resource.save
       device_id = request.headers["device-id"]
