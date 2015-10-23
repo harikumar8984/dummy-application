@@ -1,7 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   skip_before_filter :authenticate_user_from_token!, :only => :validate_unique_email
   skip_before_filter :authenticate_device, :only => :validate_unique_email
-
   respond_to :json
 
   def welcome_content
@@ -17,6 +16,16 @@ class Api::V1::UsersController < ApplicationController
         return render status: 200, :json=> {:success => true}
     else
         return render status: 200, :json=> {:success => false, messages: [t('email_already_exist')] }
+    end
+  end
+
+  def get_content
+    content = Content.where(id: params[:content_id]).first
+    unless content.blank?
+      send_file content.name.path
+      #return render status: 200, :json=> {:success => true, data: content.name.path }
+    else
+      return render status: 200, :json=> {:success => false, messages: [t('content_not_found')] }
     end
   end
 

@@ -2,12 +2,12 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  before_filter :is_device_id?
+  #before_filter :is_device_id?
   # This is our new function that comes before Devise's one
-  before_filter :authenticate_user_from_token!
+  #before_filter :authenticate_user_from_token!
   # # This is Devise's authentication
   # before_filter :authenticate_user!
-  before_filter :authenticate_device
+  #before_filter :authenticate_device
 
   # def after_sign_in_path_for(resource)
   #   edit_user_registration_path
@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_device
-      device_id = request.headers["device-id"].presence || params[:device_id].presence
+      device_id = request.headers["device-id"].presence
       device_details = DeviceDetail.where(device_id: device_id.strip, user_id: current_user.id, status: 'active') if device_id
       if device_details.blank?
         render :status => 401,:json=> {:success => false, errors: device_id.blank? ? [t('devise.failure.Invalid device id')] : [t('devise.failure.invalid_device')]}
@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
   end
 
   def is_device_id?
-    device_id = request.headers["device-id"] || params[:device_id].presence
+    device_id = request.headers["device-id"]
     if device_id.blank?
       render :status => 401,:json=> {:success => false, errors:  [t('devise.failure.no_device')]}
     end
