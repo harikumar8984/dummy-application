@@ -22,8 +22,7 @@ class Api::V1::UsersController < ApplicationController
   def get_content
     content = Content.where(id: params[:content_id]).first
     unless content.blank?
-      send_file content.name.path
-      #return render status: 200, :json=> {:success => true, data: content.name.path }
+      return render status: 200, :json=> {:success => true, data: request.base_url.to_s + content.name.url }
     else
       return render status: 200, :json=> {:success => false, messages: [t('content_not_found')] }
     end
