@@ -11,6 +11,8 @@ class Content < ActiveRecord::Base
   mount_uploader :name, ContentUploader
   after_save :encrypt_content_data
 
+  scope :active, -> { where(status: 'ACTIVE') }
+
  def encrypt_content_data
     if self.name_changed?
       @cipher = 'aes-128-cbc'

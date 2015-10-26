@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151023121758) do
+ActiveRecord::Schema.define(version: 20151026065741) do
 
   create_table "children", force: :cascade do |t|
     t.date     "dob"
@@ -81,8 +81,10 @@ ActiveRecord::Schema.define(version: 20151023121758) do
     t.datetime "updated_at",              null: false
     t.integer  "user_id",     limit: 4
     t.integer  "course_id",   limit: 4
+    t.integer  "content_id",  limit: 4
   end
 
+  add_index "progresses", ["content_id"], name: "index_progresses_on_content_id", using: :btree
   add_index "progresses", ["course_id"], name: "index_progresses_on_course_id", using: :btree
   add_index "progresses", ["user_id"], name: "index_progresses_on_user_id", using: :btree
 
@@ -141,6 +143,7 @@ ActiveRecord::Schema.define(version: 20151023121758) do
   add_foreign_key "player_usage_stats", "courses"
   add_foreign_key "player_usage_stats", "device_details"
   add_foreign_key "player_usage_stats", "users"
+  add_foreign_key "progresses", "contents"
   add_foreign_key "progresses", "courses"
   add_foreign_key "progresses", "users"
   add_foreign_key "transactions", "users"
