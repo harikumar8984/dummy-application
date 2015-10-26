@@ -27,7 +27,7 @@ class Content < ActiveRecord::Base
       encrypted_data << cipher.final
       e = [encrypted_data, iv].map {|v| Base64.strict_encode64(v)}.join("--")
       File.open(self.name.path,'w'){|f| f.write e}
-      end
+    end
  end
 
   def content_type_enum
