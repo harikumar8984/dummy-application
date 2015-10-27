@@ -40,3 +40,9 @@ RailsAdmin.config do |config|
     # history_show
   end
 end
+
+RailsAdmin::ApplicationController.class_eval do
+  skip_before_action :is_device_id?
+  skip_before_filter :authenticate_user_from_token!
+  skip_before_filter :authenticate_device
+end
