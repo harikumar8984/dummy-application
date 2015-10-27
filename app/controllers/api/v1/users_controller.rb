@@ -23,7 +23,8 @@ class Api::V1::UsersController < ApplicationController
     content = Content.active.where(id: params[:content_id]).first
     unless content.blank?
       progress = Progress.create(content_id: content.id, user_id: current_user.id, course_id: params[:course_id],status: "TRANSMITTED")
-      return render status: 200, :json=> {:success => true, data: request.base_url.to_s + content.name.url }
+      send_file content.name.path
+      #return render status: 200, :json=> {:success => true, data: request.base_url.to_s + content.name.url }
     else
       return render status: 200, :json=> {:success => false, messages: [t('content_not_found')] }
     end
