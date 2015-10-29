@@ -19,4 +19,8 @@ class Content < ActiveRecord::Base
     [['ACTIVE'],['INACTIVE']]
   end
 
+  def is_file_exist?
+    self.name.file.exists? || File.exists?(self.name.path)
+  end
+
 end

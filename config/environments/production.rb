@@ -76,4 +76,9 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # ENV['S3_KEY'] = 'AKIAIK6UMPMPMJE5ZNJQ'
+  # ENV['S3_BUCKET_NAME'] = 'nuryl-qa'
+  # ENV['S3_SECRET'] = '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'
+  # ENV['RAILS_SERVE_STATIC_FILES'] = 'enabled'
 end

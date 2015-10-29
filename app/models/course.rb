@@ -10,13 +10,16 @@ class Course < ActiveRecord::Base
     course_content = CourseContent.where(course_id: course_id).includes(:content).order(:seq_no)
     content_structure=  {criteria: criteria, course_id: course_id, video: [], text: [], audio: []}
     course_content.each do |course|
-      type = course.content.content_type.upcase if course.content.content_type
-      if type == "AUDIO"
-        content_structure[:audio] << course.content.id
-      elsif type == "VIDEO"
-        content_structure[:video] << course.content.id
-      elsif type == "TEXT"
-        content_structure[:text] << course.content.id
+      is_file = course.content.is_file_exist?
+      if is_file
+        type = course.content.content_type.upcase if course.content.content_type
+        if type == "AUDIO"
+          content_structure[:audio] << course.content.id
+        elsif type == "VIDEO"
+          content_structure[:video] << course.content.id
+        elsif type == "TEXT"
+          content_structure[:text] << course.content.id
+        end
       end
     end
     {content: content_structure}
