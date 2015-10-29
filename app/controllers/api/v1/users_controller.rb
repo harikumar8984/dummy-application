@@ -21,14 +21,14 @@ class Api::V1::UsersController < ApplicationController
 
   def get_content
     content = Content.active.where(id: params[:content_id]).first
-    unless content.blank?
-      if content.is_file_exist?
-        progress = Progress.create(content_id: content.id, user_id: current_user.id, course_id: params[:course_id],status: "TRANSMITTED")
-        data = Rails.env.production? ? open(content.name.url) : File.open(content.name.path,'r')
-        send_data data.read, :disposition => 'inline'
-      else
-        return render status: 200, :json=> {:success => false, messages: [t('content_not_found')] }
-      end
+    course = Course.where(id: params[:course_id]).first
+    if course.blank? || content.blank?
+      return render status: 200, :json=> {:success => false, messages: course.blank? ? [t('course_not_found')] : [t('content_not_found')] }
+    end
+    if content.is_file_exist?
+      progress = Progress.create(content_id: content.id, user_id: current_user.id, course_id: course.id,status: "TRANSMITTED")
+      data = Rails.env.production? ? open(content.name.url) : File.open(content.name.path,'r')
+      send_data data.read, :disposition => 'inline'
     else
       return render status: 200, :json=> {:success => false, messages: [t('content_not_found')] }
     end
