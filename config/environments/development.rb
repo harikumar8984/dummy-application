@@ -45,8 +45,8 @@ Rails.application.configure do
       address: 'localhost',
       port: 1025
   }
-  # ENV['S3_KEY'] = 'AKIAIK6UMPMPMJE5ZNJQ'
-  # ENV['S3_BUCKET_NAME'] = 'nuryl-qa'
-  # ENV['S3_SECRET'] = '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'
+  ENV['S3_KEY'] = 'AKIAIK6UMPMPMJE5ZNJQ'
+  ENV['S3_BUCKET_NAME'] = 'nuryl-qa'
+  ENV['S3_SECRET'] = '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'
 
 end

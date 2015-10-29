@@ -1,14 +1,14 @@
 # encoding: utf-8
 
 class ContentUploader < CarrierWave::Uploader::Base
-
+  process :encrypt_content_data
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
   # include CarrierWave::MiniMagick
 
   # Choose what kind of storage to use for this uploader:
   if Rails.env == 'production'
-    storage :file
+    storage :fog
   else
     storage :file
   end
@@ -18,6 +18,23 @@ class ContentUploader < CarrierWave::Uploader::Base
   def store_dir
     "uploads/#{model.class.to_s.underscore}/#{model.content_type}"
   end
+
+  def encrypt_content_data
+      @cipher = 'aes-128-cbc'
+      d = OpenSSL::Cipher.new(@cipher)
+      @secret = OpenSSL::PKCS5.pbkdf2_hmac_sha1("password", "some salt", 1024, d.key_len)
+      cipher = OpenSSL::Cipher::Cipher.new(@cipher)
+      iv = cipher.random_iv
+      cipher.encrypt
+      cipher.key = @secret
+      cipher.iv = iv
+      data = Rails.env == 'production' ? File.open(current_path,'r').read : File.open(self.path,'r').read
+      encrypted_data = cipher.update(data)
+      encrypted_data << cipher.final
+      e = [encrypted_data, iv].map {|v| Base64.strict_encode64(v)}.join("--")
+      Rails.env == 'production' ? File.open(current_path,'w'){|f| f.write e} : File.open(self.path,'w'){|f| f.write e}
+  end
+
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url
