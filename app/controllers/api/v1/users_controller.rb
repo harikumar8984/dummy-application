@@ -27,8 +27,9 @@ class Api::V1::UsersController < ApplicationController
     end
     if content.is_file_exist?
       progress = Progress.create(content_id: content.id, user_id: current_user.id, course_id: course.id,status: "TRANSMITTED")
-      data = Rails.env.production? ? open(content.name.url) : File.open(content.name.path,'r')
-      send_data data.read, :disposition => 'inline'
+      #data = Rails.env.production? ? open(content.name.url) : File.open(content.name.path,'r')
+      return render status: 200, :json=> {:success => true, data: Rails.env.production? ? content.name.url : request.base_url.to_s + content.name.url }
+      #send_data data.read, :disposition => 'inline'
     else
       return render status: 200, :json=> {:success => false, messages: [t('content_not_found')] }
     end
