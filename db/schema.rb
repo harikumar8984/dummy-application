@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151026065741) do
+ActiveRecord::Schema.define(version: 20151102144634) do
 
   create_table "children", force: :cascade do |t|
     t.date     "dob"
@@ -25,7 +25,6 @@ ActiveRecord::Schema.define(version: 20151026065741) do
     t.string   "status",       limit: 255
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
-    t.string   "detail",       limit: 255
   end
 
   create_table "course_contents", force: :cascade do |t|
@@ -65,6 +64,7 @@ ActiveRecord::Schema.define(version: 20151026065741) do
     t.integer  "user_id",          limit: 4
     t.integer  "course_id",        limit: 4
     t.integer  "content_id",       limit: 4
+    t.datetime "usage_date"
   end
 
   add_index "player_usage_stats", ["content_id"], name: "index_player_usage_stats_on_content_id", using: :btree

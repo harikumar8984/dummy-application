@@ -17,6 +17,7 @@ Nuryl::Application.routes.draw do
           get 'welcome_content'
           get 'validate_unique_email'
           get 'courses/:course_id/:content_type/:content_id' => 'users#get_content'
+          post 'courses/:course_id' => 'users#player_usage_status'
         end
       end
 
