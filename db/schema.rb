@@ -11,12 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151102144634) do
+ActiveRecord::Schema.define(version: 20151103063306) do
 
   create_table "children", force: :cascade do |t|
     t.date     "dob"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.string   "name",       limit: 255
   end
 
   create_table "contents", force: :cascade do |t|
