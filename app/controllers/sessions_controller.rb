@@ -27,5 +27,13 @@ class SessionsController < Devise::SessionsController
     return render json: { success: false, errors: [t('devise.sessions.invalid_login')] }, :status => :unauthorized
   end
 
+  def new
+    if user_signed_in? && current_user.admin?
+      redirect_to rails_admin_path
+    else
+      super
+    end
+  end
+
 
 end
