@@ -28,7 +28,7 @@ class Api::V1::UsersController < ApplicationController
     if content.is_file_exist?
       progress = Progress.create(content_id: content.id, user_id: current_user.id, course_id: course.id,status: "TRANSMITTED")
       #data = Rails.env.production? ? open(content.name.url) : File.open(content.name.path,'r')
-      return render status: 200, :json=> {:success => true, data: Rails.env.production? ? content.name.url : request.base_url.to_s + content.name.url }
+      return render status: 200, :json=> {:success => true, data: Rails.env.production? ? content_url(content) : request.base_url.to_s + content_url(content) }
       #send_data data.read, :disposition => 'inline'
     else
       return render status: 200, :json=> {:success => false, messages: [t('content_not_found')] }
@@ -53,6 +53,10 @@ class Api::V1::UsersController < ApplicationController
     end
     PlayerUsageStat.import columns, values
     return render status: 201, :json=> {:success => true}
+  end
+
+  def content_url(content)
+    params[:android] ? content.name.android.url : content.name.url
   end
 
   def is_blank_course_content(course, content)

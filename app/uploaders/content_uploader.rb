@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class ContentUploader < CarrierWave::Uploader::Base
-  process :encrypt_content_data
+
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
   # include CarrierWave::MiniMagick
@@ -12,6 +12,17 @@ class ContentUploader < CarrierWave::Uploader::Base
   else
     storage :file
   end
+
+  version :android do
+    process :encrypt_content_data
+  end
+
+
+  # after :store, :unlink_original
+  #
+  # def unlink_original(file)
+  #   file.delete if version_name.blank?
+  # end
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
