@@ -24,7 +24,8 @@ class SessionsController < Devise::SessionsController
 
 
   def failure
-    return render json: { success: false, errors: [t('devise.sessions.invalid_login')] }, :status => :unauthorized
+    flash[:message] = t('devise.sessions.invalid_login')
+    redirect_to root_path
   end
 
   def new
