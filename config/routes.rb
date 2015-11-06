@@ -1,10 +1,10 @@
 require 'api_constraints'
 Nuryl::Application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-  devise_for :users
+  devise_for :users,path_names: {sign_up: "register"} ,controllers: {sessions: 'sessions'}
   # Api definition
   devise_scope :user do
-    root to: "devise/sessions#new"
+    root to: "sessions#new"
   end
   namespace :api, defaults: { format: :json },
              path: '/api'  do
