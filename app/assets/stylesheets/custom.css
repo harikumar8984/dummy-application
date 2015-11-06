@@ -23,3 +23,7 @@ body {
 .sbt_btn{
     cursor:pointer;
 }
+
+.message{
+    color: brown;
+}
