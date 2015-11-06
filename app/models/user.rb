@@ -18,6 +18,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def admin?
+    email == "admin@nuryl.com"
+  end
+
   private
 
   def generate_authentication_token

@@ -5,6 +5,7 @@ class Content < ActiveRecord::Base
   has_many :course_contents , dependent: :destroy
   has_many :courses, through: :course_contents, dependent: :destroy
   has_many :player_usage_stats, dependent: :destroy
+  has_many :progress, dependent: :destroy
   validates :content_type, inclusion: { in: %w(VIDEO AUDIO TEXT), message: "%{value} is not a valid type" }
   validates :status, inclusion: { in: %w(ACTIVE INACTIVE) , message: "%{value} is not a valid status" }
   validates :name, :status, :content_type, presence: true

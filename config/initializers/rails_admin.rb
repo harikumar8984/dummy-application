@@ -11,6 +11,15 @@ RailsAdmin.config do |config|
   ## == Cancan ==
   # config.authorize_with :cancan
 
+
+  config.authorize_with do
+    redirect_to main_app.root_path unless current_user.admin?
+  end
+
+  config.current_user_method(&:current_user)
+
+  config.excluded_models = ["UserChild"]
+
   ## == Pundit ==
   # config.authorize_with :pundit
 
@@ -27,12 +36,18 @@ RailsAdmin.config do |config|
   config.actions do
     dashboard                     # mandatory
     index                         # mandatory
-    new
+    new do
+      only ['Course', 'CourseContent', 'Content']
+    end
     export
     bulk_delete
     show
-    edit
-    delete
+    edit do
+      only ['Course', 'CourseContent', 'Content']
+    end
+    delete  do
+      only ['Course', 'CourseContent', 'Content']
+    end
     show_in_app
 
     ## With an audit adapter, you can add:
