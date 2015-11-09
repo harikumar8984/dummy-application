@@ -9,6 +9,8 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   def create
     build_resource(sign_up_params.merge!(status: 'ACTIVE'))
     #device = DeviceDetail.find_or_create_by(device_id: params[:device_id])
+    puts '######## Before save #############'
+    puts resource
     if resource.save
       device_id = request.headers["device-id"]
       if resource.device_detail.nil?
@@ -30,6 +32,8 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
         return render status: 201, :json => {:success => true}
       end
     else
+      puts '######## No saving cause #############'
+      puts resource
       clean_up_passwords resource
       return render :status => 200, :json => {:success => false, :errors => resource.errors}
     end
