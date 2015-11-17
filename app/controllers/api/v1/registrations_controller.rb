@@ -9,8 +9,6 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   def create
     build_resource(sign_up_params.merge!(status: 'ACTIVE'))
     #device = DeviceDetail.find_or_create_by(device_id: params[:device_id])
-    puts '######## Before save #############'
-    puts resource
     if resource.save
       device_id = request.headers["device-id"]
       if resource.device_detail.nil?
@@ -24,6 +22,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       else
        child.user_child.update_attributes(relationship: params[:relationship])
       end
+      UserMailer.user_registered_to_nuryl( resource, "Nuryl Registration").deliver
       if resource.active_for_authentication?
         resource.ensure_authentication_token!
         return render status: 201, :json=> {:success => true, :auth_token => resource.authentication_token}
@@ -32,8 +31,6 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
         return render status: 201, :json => {:success => true}
       end
     else
-      puts '######## No saving cause #############'
-      puts resource
       clean_up_passwords resource
       return render :status => 200, :json => {:success => false, :errors => resource.errors}
     end
