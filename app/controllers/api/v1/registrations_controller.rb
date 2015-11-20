@@ -16,13 +16,15 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       end
       #device.update_attributes(status: 'active', user_id: resource.id)
       #creating child of user
+      dob_format if params[:dob]
       child = resource.children.create(dob: params[:dob], name: params[:baby_name])
       unless child.errors.messages.blank?
         return render :status => 200, :json => {:success => false, :auth_token => resource.authentication_token, :errors => child.errors.messages}
       else
        child.user_child.update_attributes(relationship: params[:relationship])
       end
-      UserMailer.user_registered_to_nuryl( resource, "Nuryl Registration").deliver
+      #HRR Mail functionality turning off
+      #UserMailer.user_registered_to_nuryl( resource, "Nuryl Registration").deliver
       if resource.active_for_authentication?
         resource.ensure_authentication_token!
         return render status: 201, :json=> {:success => true, :auth_token => resource.authentication_token}
@@ -34,6 +36,11 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       clean_up_passwords resource
       return render :status => 200, :json => {:success => false, :errors => resource.errors}
     end
+  end
+
+  def dob_format
+    format = params[:dob].include?("/") ? "%m/%d/%Y" : "%m-%d-%Y"
+    params[:dob] = Date.strptime(params[:dob], format) rescue nil
   end
 
   def sign_up_params
