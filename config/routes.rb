@@ -14,7 +14,7 @@ Nuryl::Application.routes.draw do
       devise_for :users
       resources :users do
         collection do
-          get 'welcome_content'
+          get 'course_content'
           get 'validate_unique_email'
           get 'courses/:course_id/:content_type/:content_id' => 'users#get_content'
           post 'courses/:course_id' => 'users#player_usage_status'
