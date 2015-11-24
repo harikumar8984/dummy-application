@@ -3,9 +3,10 @@ class Api::V1::UsersController < ApplicationController
   skip_before_filter :authenticate_device, :only => :validate_unique_email
   respond_to :json
 
-  def welcome_content
-    #Under the assumption for welcome content the course id will be one
-    content = Course.content_structure(Course.first.id)
+  def course_content
+    content = {content: []}
+    course_id = Course.where(criteria: params[:criteria]).pluck(:id).first
+    content = Course.content_structure(course_id) unless course_id.nil?
     render :json => content
   end
 
@@ -26,9 +27,10 @@ class Api::V1::UsersController < ApplicationController
       render status: 200, :json=> {:success => false, messages: course.blank? ? [t('course_not_found')] : [t('content_not_found')] }
     end
     if content.is_file_exist?
+      song_url = Rails.env.production? ? content_url(content) : request.base_url.to_s + content_url(content)
       progress = Progress.create(content_id: content.id, user_id: current_user.id, course_id: course.id,status: "TRANSMITTED")
       #data = Rails.env.production? ? open(content.name.url) : File.open(content.name.path,'r')
-      return render status: 200, :json=> {:success => true, data: Rails.env.production? ? content_url(content) : request.base_url.to_s + content_url(content) }
+      return render status: 200, :json=> {:success => true, data: song_url }
       #send_data data.read, :disposition => 'inline'
     else
       return render status: 200, :json=> {:success => false, messages: [t('content_not_found')] }
