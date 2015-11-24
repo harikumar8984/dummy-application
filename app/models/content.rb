@@ -27,9 +27,11 @@ class Content < ActiveRecord::Base
   end
 
   def add_file_duration
-    file =  Rails.env.production?  ? self.name.file : self.name.path
-    info = Mp3Info.open(file)
-    self.update_columns(duration: info.length.round(2))
+    if is_file_exist?
+      file =  Rails.env.production?  ? self.name.file : self.name.path
+      info = Mp3Info.open(file)
+      self.update_columns(duration: info.length.round(2)) unless info.nil?
+    end
   end
 
 end
