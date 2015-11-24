@@ -8,7 +8,7 @@ class Course < ActiveRecord::Base
   def self.content_structure(course_id)
     criteria = Course.where(id: course_id).pluck(:criteria).first
     course_content = CourseContent.where(course_id: course_id).includes(:content).order(:seq_no)
-    content_structure=  {criteria: criteria, course_id: course_id, video: [], text: [], audio: []}
+    content_structure=  {criteria: criteria, course_id: course_id, duration: 0.00, video: [], text: [], audio: []}
     course_content.each do |course|
       is_file = course.content.is_file_exist?
       if is_file
@@ -20,6 +20,7 @@ class Course < ActiveRecord::Base
         elsif type == "TEXT"
           content_structure[:text] << course.content.id
         end
+        content_structure[:duration] += course.content.duration
       end
     end
     {content: content_structure}
