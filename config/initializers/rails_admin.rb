@@ -58,6 +58,7 @@ RailsAdmin.config do |config|
   end
 
   RailsAdmin::ApplicationController.class_eval do
+    before_filter :authenticate_user!
     skip_before_action :is_device_id?
     skip_before_filter :authenticate_user_from_token!
     skip_before_filter :authenticate_device
