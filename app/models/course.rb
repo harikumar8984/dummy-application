@@ -12,14 +12,9 @@ class Course < ActiveRecord::Base
     course_content.each do |course|
       is_file = course.content.is_file_exist?
       if is_file
-        type = course.content.content_type.upcase if course.content.content_type
-        if type == "AUDIO"
-          content_structure[:audio] << course.content.id
-        elsif type == "VIDEO"
-          content_structure[:video] << course.content.id
-        elsif type == "TEXT"
-          content_structure[:text] << course.content.id
-        end
+        type = course.content.content_type.downcase.to_sym if course.content.content_type
+        hash = {id: course.content.id, duration: course.content.duration ?  course.content.duration : 0.00}
+        content_structure[type].push(hash)
         content_structure[:duration] += course.content.duration
       end
     end
