@@ -1,6 +1,5 @@
 require 'openssl'
 require 'base64'
-require 'mp3info'
 
 class Content < ActiveRecord::Base
   has_many :course_contents , dependent: :destroy
@@ -11,7 +10,6 @@ class Content < ActiveRecord::Base
   validates :status, inclusion: { in: %w(ACTIVE INACTIVE) , message: "%{value} is not a valid status" }
   validates :name, :status, :content_type, presence: true
   mount_uploader :name, ContentUploader
-  before_save :add_file_duration
   scope :active, -> { where(status: 'ACTIVE') }
 
   def content_type_enum
@@ -24,11 +22,6 @@ class Content < ActiveRecord::Base
 
   def is_file_exist?
     self.name.file.exists? || File.exists?(self.name.path)
-  end
-
-  def add_file_duration
-    info = Mp3Info.open(self.name.path)
-    self.duration =  info.length.round(2) unless info.nil?
   end
 
 end
