@@ -57,6 +57,14 @@ RailsAdmin.config do |config|
     # history_show
   end
 
+  config.model User do
+    update do
+      field :f_name
+      field :l_name
+    end
+  end
+
+
   RailsAdmin::ApplicationController.class_eval do
     before_filter :authenticate_user!
     skip_before_action :is_device_id?
