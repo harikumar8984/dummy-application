@@ -46,7 +46,6 @@ class ContentUploader < CarrierWave::Uploader::Base
       Rails.env == 'production' ? File.open(current_path,'w'){|f| f.write e} : File.open(self.path,'w'){|f| f.write e}
   end
 
-
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url
   #   # For Rails 3.1+ asset pipeline compatibility:
