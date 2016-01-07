@@ -29,7 +29,7 @@ class Content < ActiveRecord::Base
 
   def save_meta_data_content
     #reading
-    reading_path = Rails.env == 'production' ? self.new_record? ? self.name.path : open(self.name.url) : self.name.path
+    reading_path = is_new? ? open(self.name.url) : self.name.path 
     info = Mp3Info.open(reading_path)
     unless info.tag.nil?
       self.title = info.tag.album if self.title.blank?
@@ -41,10 +41,10 @@ class Content < ActiveRecord::Base
 
     #writing
     if is_new?
-    open("/tmp/#{info.tag.album}", 'wb') do |file|
-      file << open(self.name.url).read
-    end
-      writing_path = "/tmp/#{info.tag.album}"
+      open("/tmp/#{self.id}/#{info.tag.album}", 'wb') do |file|
+        file << open(self.name.url).read
+      end
+      writing_path = "/tmp/#{self.id}/#{info.tag.album}"
     else
       writing_path = self.name.path
     end
@@ -57,7 +57,7 @@ class Content < ActiveRecord::Base
         mp3.tag2.TCOM = self.creator unless self.creator.blank?
       end
     end
-    self.name = File.open("/tmp/#{info.tag.album}") if is_new?
+    self.name = File.open("/tmp/#{self.id}/#{info.tag.album}") if is_new?
 
   end
 
