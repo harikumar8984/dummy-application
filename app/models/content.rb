@@ -2,6 +2,7 @@ require 'openssl'
 require 'base64'
 require 'mp3info'
 
+
 class Content < ActiveRecord::Base
   has_many :course_contents , dependent: :destroy
   has_many :courses, through: :course_contents, dependent: :destroy
@@ -27,7 +28,9 @@ class Content < ActiveRecord::Base
   end
 
   def save_meta_data_content
-    info = Mp3Info.open(self.name.path)
+    #reading
+    reading_path = Rails.env == 'production' ? self.new_record? ? self.name.path : open(self.name.url) : self.name.path
+    info = Mp3Info.open(reading_path)
     unless info.tag.nil?
       self.title = info.tag.album if self.title.blank?
       self.artist =  info.tag.artist if self.artist.blank?
@@ -36,7 +39,16 @@ class Content < ActiveRecord::Base
       self.creator = info.tag2.TCOM  if self.creator.blank?
     end
 
-    Mp3Info.open(self.name.path) do |mp3|
+    #writing
+    if is_new?
+    open("/tmp/#{self.id}/#{info.tag.album}", 'wb') do |file|
+      file << open(self.name.url).read
+    end
+      writing_path = "/tmp/#{self.id}/#{info.tag.album}"
+    else
+      writing_path = self.name.path
+    end
+    Mp3Info.open(writing_path) do |mp3|
       unless info.tag.nil?
         mp3.tag.album = self.title unless self.title.blank?
         mp3.tag.artist = self.artist unless self.artist.blank?
@@ -44,6 +56,16 @@ class Content < ActiveRecord::Base
       unless info.tag2.nil?
         mp3.tag2.TCOM = self.creator unless self.creator.blank?
       end
+    end
+    self.name = File.open("/tmp/#{self.id}/#{info.tag.album}") if is_new?
+
+  end
+
+  def is_new?
+    if !self.new_record? && Rails.env == 'production' && !self.name_changed?
+      true
+    else
+      false
     end
   end
 
