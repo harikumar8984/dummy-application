@@ -5,6 +5,7 @@ Nuryl::Application.routes.draw do
   # Api definition
   devise_scope :user do
     root to: "sessions#new"
+    match 'api/v1/user_registration' => 'api/v1/registrations#create', :via => :post
   end
   namespace :api, defaults: { format: :json },
              path: '/api'  do
@@ -22,5 +23,7 @@ Nuryl::Application.routes.draw do
       end
 
     end
+
+
   end
 end

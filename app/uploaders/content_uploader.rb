@@ -13,7 +13,7 @@ class ContentUploader < CarrierWave::Uploader::Base
     storage :file
   end
 
-  version :android do
+  version :encrypted do
     process :encrypt_content_data
   end
 

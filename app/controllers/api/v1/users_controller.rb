@@ -24,7 +24,7 @@ class Api::V1::UsersController < ApplicationController
     content = Content.active.where(id: params[:content_id]).first
     course = Course.where(id: params[:course_id]).first
     if is_blank_course_content(course, content)
-      render status: 200, :json=> {:success => false, messages: course.blank? ? [t('course_not_found')] : [t('content_not_found')] }
+      return render status: 200, :json=> {:success => false, messages: course.blank? ? [t('course_not_found')] : [t('content_not_found')] }
     end
     if content.is_file_exist?
       song_url = Rails.env.production? ? content_url(content) : request.base_url.to_s + content_url(content)
@@ -58,7 +58,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def content_url(content)
-    params[:android] ? content.name.android.url : content.name.url
+    params[:encrypted] ? content.name.encrypted.url : content.name.url
   end
 
   def is_blank_course_content(course, content)

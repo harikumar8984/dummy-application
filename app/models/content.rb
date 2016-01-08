@@ -29,7 +29,7 @@ class Content < ActiveRecord::Base
 
   def save_meta_data_content
     #reading
-    reading_path = is_new? ? open(self.name.url) : self.name.path 
+    reading_path = is_new? ? open(self.name.url) : self.name.path
     info = Mp3Info.open(reading_path)
     unless info.tag.nil?
       self.title = info.tag.album if self.title.blank?
