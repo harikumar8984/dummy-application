@@ -17,5 +17,5 @@
 /tmp
 /public
 /views/api/v1/transactions
-/assets/javascripts
+app/assets/javascripts
 /views/transactions
