@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
   has_many :progress, dependent: :destroy
   has_many :transactions, dependent: :destroy
 
+  validates :f_name,:l_name, :type_of_subscription, presence: true
+
   def ensure_authentication_token!
     if authentication_token.blank?
       self.authentication_token = generate_authentication_token

@@ -6,8 +6,6 @@ Nuryl::Application.routes.draw do
   devise_scope :user do
     root to: "sessions#new"
     match 'api/v1/user_registration' => 'api/v1/registrations#create', :via => :post
-    match 'api/v1/edit_profile' => 'api/v1/users#edit_profile', :via => :get
-    match 'api/v1/update_profile' => 'api/v1/users#update_profile', :via => :post
   end
 
   namespace :api, defaults: { format: :json },
@@ -23,6 +21,8 @@ Nuryl::Application.routes.draw do
           get 'courses/:course_id/:content_type/:content_id' => 'users#get_content'
           post 'courses/:course_id' => 'users#player_usage_status'
           get 'usage_statics' => 'users#send_usage_statics_info'
+          get 'edit_profile' => 'users#edit_profile'
+          post 'update_profile' => 'users#update_profile'
         end
       end
       resources :transactions do
@@ -36,6 +36,8 @@ Nuryl::Application.routes.draw do
       end
     end
   end
+
+  resources :transactions
 
 
 end
