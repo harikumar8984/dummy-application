@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   has_one :device_detail, dependent: :destroy
   has_many :player_usage_stats, dependent: :destroy
   has_many :progress, dependent: :destroy
+  has_many :transactions, dependent: :destroy
 
   def ensure_authentication_token!
     if authentication_token.blank?
@@ -21,6 +22,14 @@ class User < ActiveRecord::Base
 
   def admin?
     email == "admin@nuryl.com"
+  end
+
+  def update_stripe_customer_token(token)
+    update_attributes(stripe_customer_token: token)
+  end
+
+  def self.user_from_authentication(token)
+    User.find_by_authentication_token(token.to_s)
   end
 
   private

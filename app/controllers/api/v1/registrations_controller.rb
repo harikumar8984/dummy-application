@@ -1,5 +1,6 @@
 class Api::V1::RegistrationsController < Devise::RegistrationsController
   include ApiHelper
+  include UserCommonMethodControllerConcern
   skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
   skip_before_filter :authenticate_scope!, :only => [:update]
   skip_before_filter :authenticate_user_from_token!, :only => :create
@@ -38,12 +39,5 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
     end
   end
 
-  def dob_format
-    format = params[:dob].include?("/") ? "%m/%d/%Y" : "%m-%d-%Y"
-    params[:dob] = Date.strptime(params[:dob], format) rescue nil
-  end
 
-  def sign_up_params
-    params.permit( :email, :password, :f_name, :l_name, :type_of_subscription, :zipcode)
-  end
 end

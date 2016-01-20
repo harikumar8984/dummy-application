@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160104085916) do
+ActiveRecord::Schema.define(version: 20160118121428) do
 
   create_table "children", force: :cascade do |t|
     t.date     "dob"
@@ -95,11 +95,26 @@ ActiveRecord::Schema.define(version: 20160104085916) do
 
   create_table "transactions", force: :cascade do |t|
     t.datetime "date"
-    t.string   "status",     limit: 255
-    t.string   "details",    limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.integer  "user_id",    limit: 4
+    t.string   "status",           limit: 255
+    t.string   "details",          limit: 255
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.integer  "user_id",          limit: 4
+    t.string   "customer_id",      limit: 255
+    t.integer  "account_balance",  limit: 4
+    t.string   "currency",         limit: 255
+    t.string   "default_source",   limit: 255
+    t.boolean  "delinquent",       limit: 1
+    t.string   "description",      limit: 255
+    t.string   "card_id",          limit: 255
+    t.string   "source_url",       limit: 255
+    t.string   "subscription_id",  limit: 255
+    t.string   "plan_id",          limit: 255
+    t.integer  "amount",           limit: 4
+    t.string   "interval",         limit: 255
+    t.integer  "quantity",         limit: 4
+    t.string   "tax_percent",      limit: 255
+    t.string   "subscription_url", limit: 255
   end
 
   add_index "transactions", ["user_id"], name: "index_transactions_on_user_id", using: :btree
@@ -136,6 +151,7 @@ ActiveRecord::Schema.define(version: 20160104085916) do
     t.string   "authentication_token",   limit: 255
     t.datetime "confirmed_at"
     t.string   "zipcode",                limit: 255
+    t.string   "stripe_customer_token",  limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

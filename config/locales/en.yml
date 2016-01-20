@@ -25,3 +25,4 @@ en:
   email_already_exist: 'Email already exist in our system'
   content_not_found: 'The resource you searching is not found in our system'
   course_not_found: 'The provided course is not found in our system'
+  invalid_login: 'Invalid username or password'

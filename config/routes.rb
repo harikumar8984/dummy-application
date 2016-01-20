@@ -6,7 +6,10 @@ Nuryl::Application.routes.draw do
   devise_scope :user do
     root to: "sessions#new"
     match 'api/v1/user_registration' => 'api/v1/registrations#create', :via => :post
+    match 'api/v1/edit_profile' => 'api/v1/users#edit_profile', :via => :get
+    match 'api/v1/update_profile' => 'api/v1/users#update_profile', :via => :post
   end
+
   namespace :api, defaults: { format: :json },
              path: '/api'  do
     scope module: :v1 , path: '/v1',
@@ -19,11 +22,20 @@ Nuryl::Application.routes.draw do
           get 'validate_unique_email'
           get 'courses/:course_id/:content_type/:content_id' => 'users#get_content'
           post 'courses/:course_id' => 'users#player_usage_status'
+          get 'usage_statics' => 'users#send_usage_statics_info'
         end
       end
-
+      resources :transactions do
+        collection do
+          post 'subscripe' => 'transactions#create'
+          get 'subscription_amount' => 'transactions#get_subscription_amount'
+          post 'change_subscription_plan' => 'transactions#change_plan'
+          post 'new_subscription' => 'transactions#new_subscription'
+          post 'cancel_subscription' => 'transactions#cancel_subscription'
+        end
+      end
     end
-
-
   end
+
+
 end
