@@ -1,7 +1,7 @@
 class Course < ActiveRecord::Base
   has_many :course_contents, dependent: :destroy
   has_many :contents, through: :course_contents, dependent: :destroy
-  has_many :player_usage_stats, dependent: :destroy
+# has_many :player_usage_stats, dependent: :destroy
   has_many :progress, dependent: :destroy
   validates :status, inclusion: { in: %w(ACTIVE INACTIVE) , message: "%{value} is not a valid status" }
   validates :course_name,:status,:criteria, presence: true

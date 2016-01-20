@@ -44,5 +44,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def user_from_auth_token
+    user_token = request.headers["auth-token"].presence
+    user       = user_token && User.find_by_authentication_token(user_token.to_s)
+    user
+  end
+
 
 end
