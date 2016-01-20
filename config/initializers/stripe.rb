@@ -1,2 +1,2 @@
-Stripe.api_key = ENV['stripe_api_key']
-STRIPE_PUBLIC_KEY = ENV['stripe_public_key']
+Stripe.api_key = ENV['Stripe_Api_Key']
+STRIPE_PUBLIC_KEY = ENV['Stripe_Public_Key']

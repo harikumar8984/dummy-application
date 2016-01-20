@@ -48,7 +48,7 @@ Rails.application.configure do
   ENV['S3_KEY'] = 'AKIAIK6UMPMPMJE5ZNJQ'
   ENV['S3_BUCKET_NAME'] = 'nuryl-qa'
   ENV['S3_SECRET'] = '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'
-  ENV['stripe_api_key'] = 'sk_test_vlIezxokqfZIJzW0YxCHxpRm'
-  ENV['stripe_public_key'] = 'pk_test_S7wpepqd0twI3CST8yiVPFUh'
+  ENV['Stripe_Api_Key'] = 'sk_test_vlIezxokqfZIJzW0YxCHxpRm'
+  ENV['Stripe_Public_Key'] = 'pk_test_S7wpepqd0twI3CST8yiVPFUh'
 
 end

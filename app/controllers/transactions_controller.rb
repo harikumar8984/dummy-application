@@ -10,7 +10,5 @@ class  TransactionsController < ApplicationController
     @subscription = Transaction.new
   end
 
-
-
 end
 
