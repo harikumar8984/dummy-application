@@ -16,3 +16,6 @@
 !/log/.keep
 /tmp
 /public
+/views/api/v1/transactions
+/assets/javascripts
+/views/transactions
