@@ -31,7 +31,7 @@ class Api::V1::UsersController < ApplicationController
       song_url = Rails.env.production? ? content_url(content) : request.base_url.to_s + content_url(content)
       progress = Progress.create(content_id: content.id, user_id: current_user.id, course_id: course.id,status: "TRANSMITTED")
       #data = Rails.env.production? ? open(content.name.url) : File.open(content.name.path,'r')
-      return render status: 200, :json=> {:success => true, data: song_url }
+      return render status: 200, :json=> {:success => true, data: {url: song_url, title: content.title, artist: content.artist, creator: content.creator } }
       #send_data data.read, :disposition => 'inline'
     else
       return render status: 200, :json=> {:success => false, messages: [t('content_not_found')] }
