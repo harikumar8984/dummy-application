@@ -21,7 +21,7 @@ class Course < ActiveRecord::Base
   end
 
   def criteria_enum
-    [['Welcome Content'],['Month 5'],['Month 6'],['Month 7'], ['Month 8'], ['Month 9'], ['Month 10'], ['Month 11'], ['Year 1']]
+    [['Welcome_Content'],['Month_5'],['Month_6'],['Month_7'], ['Month_8'], ['Month_9'], ['Month_10'], ['Month_11'], ['Year_1']]
   end
 
   def status_enum
