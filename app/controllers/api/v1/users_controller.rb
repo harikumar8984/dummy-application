@@ -8,7 +8,7 @@ class Api::V1::UsersController < ApplicationController
     content = {content: []}
     course_id = Course.where(criteria: params[:criteria]).pluck(:id).first
     content = Course.content_structure(course_id) unless course_id.nil?
-    render :json => content
+    render :json => {:success => true, data: content }
   end
 
   def validate_unique_email
