@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160118121428) do
+ActiveRecord::Schema.define(version: 20160125062753) do
 
   create_table "children", force: :cascade do |t|
     t.date     "dob"
@@ -93,31 +93,60 @@ ActiveRecord::Schema.define(version: 20160118121428) do
   add_index "progresses", ["course_id"], name: "index_progresses_on_course_id", using: :btree
   add_index "progresses", ["user_id"], name: "index_progresses_on_user_id", using: :btree
 
-  create_table "transactions", force: :cascade do |t|
-    t.datetime "date"
-    t.string   "status",           limit: 255
-    t.string   "details",          limit: 255
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.integer  "user_id",          limit: 4
-    t.string   "customer_id",      limit: 255
-    t.integer  "account_balance",  limit: 4
-    t.string   "currency",         limit: 255
-    t.string   "default_source",   limit: 255
-    t.boolean  "delinquent",       limit: 1
-    t.string   "description",      limit: 255
-    t.string   "card_id",          limit: 255
-    t.string   "source_url",       limit: 255
-    t.string   "subscription_id",  limit: 255
-    t.string   "plan_id",          limit: 255
-    t.integer  "amount",           limit: 4
-    t.string   "interval",         limit: 255
-    t.integer  "quantity",         limit: 4
-    t.string   "tax_percent",      limit: 255
-    t.string   "subscription_url", limit: 255
+  create_table "stripe_customers", force: :cascade do |t|
+    t.string   "customer_id",     limit: 255
+    t.string   "currency",        limit: 255
+    t.string   "default_source",  limit: 255
+    t.string   "description",     limit: 255
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "user_id",         limit: 4
+    t.integer  "account_balance", limit: 4
+    t.string   "source_url",      limit: 255
   end
 
-  add_index "transactions", ["user_id"], name: "index_transactions_on_user_id", using: :btree
+  add_index "stripe_customers", ["user_id"], name: "index_stripe_customers_on_user_id", using: :btree
+
+  create_table "stripe_subscriptions", force: :cascade do |t|
+    t.string   "subscription_id",    limit: 255
+    t.string   "status",             limit: 255
+    t.string   "tax_percent",        limit: 255
+    t.string   "subscription_url",   limit: 255
+    t.datetime "canceled_at"
+    t.string   "user_id",            limit: 255
+    t.string   "plan_id",            limit: 255
+    t.string   "amount",             limit: 255
+    t.string   "interval",           limit: 255
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "stripe_customer_id", limit: 4
+  end
+
+  add_index "stripe_subscriptions", ["stripe_customer_id"], name: "index_stripe_subscriptions_on_stripe_customer_id", using: :btree
+
+  create_table "transactions", force: :cascade do |t|
+    t.datetime "date"
+    t.string   "status",                 limit: 255
+    t.string   "details",                limit: 255
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.string   "customer_id",            limit: 255
+    t.integer  "amount",                 limit: 4
+    t.string   "currency",               limit: 255
+    t.string   "transaction_id",         limit: 255
+    t.string   "invoice_id",             limit: 255
+    t.string   "balance_transaction_id", limit: 255
+    t.string   "description",            limit: 255
+    t.string   "failure_code",           limit: 255
+    t.string   "failure_message",        limit: 255
+    t.boolean  "paid",                   limit: 1
+    t.string   "transaction_type",       limit: 255
+    t.string   "statement_descriptor",   limit: 255
+    t.integer  "stripe_customer_id",     limit: 4
+    t.string   "user_id",                limit: 255
+  end
+
+  add_index "transactions", ["stripe_customer_id"], name: "index_transactions_on_stripe_customer_id", using: :btree
 
   create_table "user_children", force: :cascade do |t|
     t.string   "relationship", limit: 255
@@ -167,7 +196,9 @@ ActiveRecord::Schema.define(version: 20160118121428) do
   add_foreign_key "progresses", "contents"
   add_foreign_key "progresses", "courses"
   add_foreign_key "progresses", "users"
-  add_foreign_key "transactions", "users"
+  add_foreign_key "stripe_customers", "users"
+  add_foreign_key "stripe_subscriptions", "stripe_customers"
+  add_foreign_key "transactions", "stripe_customers"
   add_foreign_key "user_children", "children"
   add_foreign_key "user_children", "users"
 end

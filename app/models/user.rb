@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   has_one :device_detail, dependent: :destroy
   has_many :player_usage_stats, dependent: :destroy
   has_many :progress, dependent: :destroy
+  has_one :stripe_customer, dependent: :destroy
   has_many :transactions, dependent: :destroy
 
   validates :f_name,:l_name, :type_of_subscription, presence: true
@@ -33,6 +34,19 @@ class User < ActiveRecord::Base
   def self.user_from_authentication(token)
     User.find_by_authentication_token(token.to_s)
   end
+
+  def self.user_from_stripe_customer(token)
+    where(stripe_customer_token:  token).first
+  end
+
+  def stripe_account?
+    stripe_customer.present?
+  end
+
+  def active_subscription?
+    stripe_customer.stripe_subscriptions.active.present?
+  end
+
 
   private
 
