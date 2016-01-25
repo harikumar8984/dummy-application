@@ -26,3 +26,7 @@ en:
   content_not_found: 'The resource you searching is not found in our system'
   course_not_found: 'The provided course is not found in our system'
   invalid_login: 'Invalid username or password'
+  already_stripe_account: 'User has already Stripe account. Please make a new subscription if your account is deactivated.'
+  no_stripe_account: 'No stripe account yet created. Please create a stripe account first.'
+  active_stripe_subscription: 'User has already an active stripe subscription.'
+  no_active_stripe_subscription: 'User dont have any active stripe subscription.'

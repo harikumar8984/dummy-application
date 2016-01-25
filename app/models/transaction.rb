@@ -1,40 +1,26 @@
 class Transaction < ActiveRecord::Base
   #extend StripeExt
-  belongs_to :user
+  belongs_to :stripe_customer
 
-  def save_with_payment(user, params)
-     plan_id = user.type_of_subscription.camelize unless user.type_of_subscription.nil?
-     if plan_id.nil?
-       self.errors.add(:base, "User don't provide any type of subscription")
-       return false
-     end
-    customer = StripeExt.create_customer(user.email, plan_id, params[:card_id], self)
-    if customer
-      user.update_stripe_customer_token(customer.id)
-      if user.transactions.blank?
-        user.transactions.create(create_json(customer))
-      else
-        user.transactions.first.update_attributes(create_json(customer))
+  def self.create_transaction(response, type)
+    user = User.user_from_stripe_customer(response['customer'])
+      if user
+        if user.stripe_account?
+            user.stripe_customer.transactions.create(create_json(user.id, response, type))
+        else
+          create(create_json(user.id, response, type))
+        end
+         UserMailer.transaction_mail(user, response).deliver
       end
-    end
+
   end
 
-  def create_json(customer)
-    subscription_details = {}
-    source_details = {customer_id: customer.id, account_balance: customer.account_balance, currency: customer.currency,
-                      default_source: customer.default_source, delinquent: customer.delinquent,
-                      description: customer.description, source_url: customer.sources.url }
-    unless customer.subscriptions.data[0].nil?
-      subscription_details= {subscription_id: customer.subscriptions.data[0].id,
-                             plan_id: customer.subscriptions.data[0].plan.nil? ? '' : customer.subscriptions.data[0].plan.id,
-                             amount: customer.subscriptions.data[0].plan.nil? ? '' : customer.subscriptions.data[0].plan.amount,
-                             interval: customer.subscriptions.data[0].plan.nil? ? '' : customer.subscriptions.data[0].plan.interval,
-                             quantity: customer.subscriptions.data[0].quantity,
-                             tax_percent: customer.subscriptions.data[0].tax_percent,
-                             subscription_url: customer.subscriptions.data[0].url}
-
-    end
-    source_details.merge(subscription_details)
+  def self.create_json(user_id, response, type)
+    {user_id: user_id, customer_id:  response['customer'], amount: response['amount'], currency: response['currency'],
+    transaction_id: response['id'], invoice_id: response['invoice'], status: response['paid'],
+    balance_transaction_id: response['balance_transaction'], description: response['description'],
+    failure_code: response['failure_code'], failure_message: response['failure_message'],
+    paid: response['paid'], transaction_type: type, statement_descriptor: response['statement_descriptor']}
   end
 
 end

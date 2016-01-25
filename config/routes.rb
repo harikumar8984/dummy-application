@@ -32,6 +32,7 @@ Nuryl::Application.routes.draw do
           post 'change_subscription_plan' => 'transactions#change_plan'
           post 'new_subscription' => 'transactions#new_subscription'
           post 'cancel_subscription' => 'transactions#cancel_subscription'
+          post 'webhook' => 'transactions#webhook'
         end
       end
     end

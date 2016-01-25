@@ -1,0 +1,32 @@
+<div style="height: auto;margin:auto;position:relative;font-size:14px;background-color:#FFFFFF;margin-top:50px;border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221); width:700px;">
+
+
+
+  <div style="width: 678px;height: 70px;background-color: #77CBEA;padding: 18px 0 0 22px">
+
+  </div>
+  <div style="padding-left:20px;line-height:25px;padding-bottom:15px;padding-right:10px">
+    <p>
+      <span style="font-weight:bold">Dear <%= @user.f_name %></span></p>
+    <p>
+    <%if @status%>
+           Your Payment is success. The amount of $<%=@amount > 0 ? @amount/100 : 0.00 %> is successfully debited from
+          your account. We are expecting your continuous support.
+    <%else%>
+        Your payment is failed. Please reactivate your subscription for continuing our service.
+      <br>
+      <br>
+        Error Code: <span> <%=@error_code%></span></p>
+        Error Message: <span> <%=@error_code%></span></p>
+    <%end%>
+
+    <div>Thank You,</div>
+    <div>Team Nuryl</div>
+
+  </div>
+
+  <div style="font-size:12px;color:#999999;height:20px;padding-left:20px;border-top:#D5D5D5 1px solid;padding-top:5px;">This is a system generated mail, Please Do Not Reply. <a href="#">Contact Support</a></div>
+  <div style="height: 21px;width:690px;color: #FFFFFF;background-color: #26232e;font-size: 11px;padding: 6px 0 0px 11px;">
+    ©2015 Nuryl All rights reserved.
+  </div>
+</div>

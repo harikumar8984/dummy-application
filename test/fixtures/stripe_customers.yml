@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  customer_id: MyString
+  currency: MyString
+  default_source: MyString
+  description: MyString
+
+two:
+  customer_id: MyString
+  currency: MyString
+  default_source: MyString
+  description: MyString

@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  subscription_id: MyString
+  status: MyString
+  tax_percent: MyString
+  subscription_url: MyString
+  canceled_at: 2016-01-22 12:31:34
+  customer_id: MyString
+  user_id: MyString
+
+two:
+  subscription_id: MyString
+  status: MyString
+  tax_percent: MyString
+  subscription_url: MyString
+  canceled_at: 2016-01-22 12:31:34
+  customer_id: MyString
+  user_id: MyString
