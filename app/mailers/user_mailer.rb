@@ -24,7 +24,7 @@ class UserMailer < ActionMailer::Base
         @content = "Your subscription de-activated."
       when 'active'
         body = "Subscription Activated"
-        @content = "Your subscription activated. You have choosen " + response['plan']['id'] + "plan."
+        @content = "Your subscription activated. You have choosen " + response['plan']['id'] + " plan."
       end
       mail(to: @user.email, subject: body)
   end

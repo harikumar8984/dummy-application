@@ -67,6 +67,8 @@ module StripeExt
           StripeSubscription.subscription_details_to_user(event_object, event_json['type'])
         when 'customer.subscription.created'
           StripeSubscription.subscription_details_to_user(event_object, event_json['type'])
+        # when 'customer.subscription.updated'
+        #   StripeSubscription.subscription_details_to_user(event_object, event_json['type'])
       end
     rescue Exception => ex
       return false

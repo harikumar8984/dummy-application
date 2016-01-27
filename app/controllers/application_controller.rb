@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   # # This is Devise's authentication
   # before_filter :authenticate_user!
   before_filter :authenticate_device
+  after_filter :account_info_on_response, :if => Proc.new { |c| !(c.response.body.include? "<html>") &&  (JSON.parse(c.response.body)['success'] == true)   }
 
   # def after_sign_in_path_for(resource)
   #   edit_user_registration_path
@@ -48,6 +49,18 @@ class ApplicationController < ActionController::Base
     user_token = request.headers["auth-token"].presence
     user       = user_token && User.find_by_authentication_token(user_token.to_s)
     user
+  end
+
+  def account_info_on_response
+    if current_user
+      user = User.user_from_authentication(current_user.authentication_token)
+      unless user.stripe_account?
+        response_body_json = JSON.parse(response.body).merge({stripe_account: false })
+      else
+        response_body_json = JSON.parse(response.body).merge({is_active: user.active_subscription? })
+      end
+      response.body = response_body_json.to_json
+    end
   end
 
 

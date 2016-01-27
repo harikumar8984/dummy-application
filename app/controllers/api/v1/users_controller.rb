@@ -5,10 +5,12 @@ class Api::V1::UsersController < ApplicationController
   respond_to :json
 
   def course_content
-    content = {content: []}
-    course_id = Course.where(criteria: params[:criteria]).pluck(:id).first
-    content = Course.content_structure(course_id) unless course_id.nil?
-    render :json => {:success => true, data: content }
+    unless has_stripe_account_active?
+      content = {content: []}
+      course_id = Course.where(criteria: params[:criteria]).pluck(:id).first
+      content = Course.content_structure(course_id) unless course_id.nil?
+      render :json => {:success => true, data: content }
+    end
   end
 
   def validate_unique_email
@@ -22,19 +24,21 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def get_content
-    content = Content.active.where(id: params[:content_id]).first
-    course = Course.where(id: params[:course_id]).first
-    if is_blank_course_content(course, content)
-      return render status: 200, :json=> {:success => false, messages: course.blank? ? [t('course_not_found')] : [t('content_not_found')] }
-    end
-    if content.is_file_exist?
-      song_url = Rails.env.production? ? content_url(content) : request.base_url.to_s + content_url(content)
-      progress = Progress.create(content_id: content.id, user_id: current_user.id, course_id: course.id,status: "TRANSMITTED")
-      #data = Rails.env.production? ? open(content.name.url) : File.open(content.name.path,'r')
-      return render status: 200, :json=> {:success => true, data: {url: song_url, title: content.title, artist: content.artist, creator: content.creator } }
-      #send_data data.read, :disposition => 'inline'
-    else
-      return render status: 200, :json=> {:success => false, messages: [t('content_not_found')] }
+    unless has_stripe_account_active?
+      content = Content.active.where(id: params[:content_id]).first
+      course = Course.where(id: params[:course_id]).first
+      if is_blank_course_content(course, content)
+        return render status: 200, :json=> {:success => false, messages: course.blank? ? [t('course_not_found')] : [t('content_not_found')] }
+      end
+      if content.is_file_exist?
+        song_url = Rails.env.production? ? content_url(content) : request.base_url.to_s + content_url(content)
+        progress = Progress.create(content_id: content.id, user_id: current_user.id, course_id: course.id,status: "TRANSMITTED")
+        #data = Rails.env.production? ? open(content.name.url) : File.open(content.name.path,'r')
+        return render status: 200, :json=> {:success => true, data: {url: song_url, title: content.title, artist: content.artist, creator: content.creator } }
+        #send_data data.read, :disposition => 'inline'
+      else
+        return render status: 200, :json=> {:success => false, messages: [t('content_not_found')] }
+      end
     end
   end
 
@@ -108,6 +112,11 @@ class Api::V1::UsersController < ApplicationController
     else
       return render status: 201, :json=> {:success => true, data: {data: "Profile updated" } }
     end
+  end
+
+  def has_stripe_account_active?
+    return render status: 200, :json=> {:success => false, data: [t('no_stripe_account')] } unless current_user.stripe_account?
+    return render status: 200, :json=> {:success => false, data: [t('no_active_stripe_subscription')] } unless current_user.active_subscription?
   end
 
 end
