@@ -34,6 +34,7 @@ class Content < ActiveRecord::Base
     unless info.tag.nil?
       self.title = info.tag.album if self.title.blank?
       self.artist =  info.tag.artist if self.artist.blank?
+      self.duration =  info.length.round(2) unless info.nil? && info.length.nil?
     end
     unless info.tag2.nil?
       self.creator = info.tag2.TCOM  if self.creator.blank?

@@ -64,12 +64,29 @@ RailsAdmin.config do |config|
     end
   end
 
+  config.model Content do
+    configure :duration do
+      read_only true
+    end
+  end
+
+  config.model 'Course' do
+    object_label_method do
+      :custom_label_method
+    end
+  end
+
 
   RailsAdmin::ApplicationController.class_eval do
     before_filter :authenticate_user!
     skip_before_action :is_device_id?
     skip_before_filter :authenticate_user_from_token!
     skip_before_filter :authenticate_device
+  end
+
+
+  def custom_label_method
+    "Course #{self.course_name}"
   end
 
 end
