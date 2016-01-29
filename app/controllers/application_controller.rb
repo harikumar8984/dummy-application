@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   # # This is Devise's authentication
   # before_filter :authenticate_user!
   before_filter :authenticate_device
-  after_filter :account_info_on_response, :if => Proc.new { |c| !(c.response.body.include? "html") &&  (JSON.parse(c.response.body)['success'] == true)   }
+  after_filter :account_info_on_response, :if => Proc.new { |c| (c.response.content_type == 'application/json') && (JSON.parse(c.response.body)['success'] == true) }
 
   # def after_sign_in_path_for(resource)
   #   edit_user_registration_path

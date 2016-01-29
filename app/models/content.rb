@@ -28,37 +28,39 @@ class Content < ActiveRecord::Base
   end
 
   def save_meta_data_content
-    #reading
-    reading_path = is_new? ? open(self.name.url) : self.name.path
-    info = Mp3Info.open(reading_path)
-    unless info.tag.nil?
-      self.title = info.tag.album if self.title.blank?
-      self.artist =  info.tag.artist if self.artist.blank?
-      self.duration =  info.length.round(2) unless info.nil? && info.length.nil?
-    end
-    unless info.tag2.nil?
-      self.creator = info.tag2.TCOM  if self.creator.blank?
-    end
+    if self.name.encrypted.content_type.include? 'audio'
+        #reading
+        reading_path = is_new? ? open(self.name.url) : self.name.path
+        info = Mp3Info.open(reading_path)
+        unless info.tag.nil?
+          self.title = info.tag.album if self.title.blank? || self.name_changed?
+          self.artist =  info.tag.artist if self.artist.blank? || self.name_changed?
+          self.duration =  info.length.round(2) unless info.nil? && info.length.nil?
+        end
+        unless info.tag2.nil?
+          self.creator = info.tag2.TCOM  if self.creator.blank? || self.name_changed?
+        end
 
-    #writing
-    if is_new?
-      open("/tmp/#{self.id}/#{info.tag.album}", 'wb') do |file|
-        file << open(self.name.url).read
-      end
-      writing_path = "/tmp/#{self.id}/#{info.tag.album}"
-    else
-      writing_path = self.name.path
+        #writing
+        if is_new?
+          open("/tmp/#{self.id}/#{info.tag.album}", 'wb') do |file|
+            file << open(self.name.url).read
+          end
+          writing_path = "/tmp/#{self.id}/#{info.tag.album}"
+        else
+          writing_path = self.name.path
+        end
+        Mp3Info.open(writing_path) do |mp3|
+          unless info.tag.nil?
+            mp3.tag.album = self.title unless self.title.blank?
+            mp3.tag.artist = self.artist unless self.artist.blank?
+          end
+          unless info.tag2.nil?
+            mp3.tag2.TCOM = self.creator unless self.creator.blank?
+          end
+        end
+        self.name = File.open("/tmp/#{self.id}/#{info.tag.album}") if is_new?
     end
-    Mp3Info.open(writing_path) do |mp3|
-      unless info.tag.nil?
-        mp3.tag.album = self.title unless self.title.blank?
-        mp3.tag.artist = self.artist unless self.artist.blank?
-      end
-      unless info.tag2.nil?
-        mp3.tag2.TCOM = self.creator unless self.creator.blank?
-      end
-    end
-    self.name = File.open("/tmp/#{self.id}/#{info.tag.album}") if is_new?
 
   end
 
