@@ -29,5 +29,13 @@ class UserMailer < ActionMailer::Base
       mail(to: @user.email, subject: body)
   end
 
+  def help_mail(params)
+    @user = params[:name]
+    @description = params[:description]
+    mail(from:params[:email], to:'support@nuryl.com', subject: 'nuryl help')
+  end
+
+
+
 end
 
