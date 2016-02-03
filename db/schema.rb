@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160125062753) do
+ActiveRecord::Schema.define(version: 20160203091204) do
 
   create_table "children", force: :cascade do |t|
     t.date     "dob"
@@ -60,6 +60,14 @@ ActiveRecord::Schema.define(version: 20160125062753) do
   end
 
   add_index "device_details", ["user_id"], name: "index_device_details_on_user_id", using: :btree
+
+  create_table "helps", force: :cascade do |t|
+    t.string   "name",        limit: 255
+    t.string   "email",       limit: 255
+    t.text     "description", limit: 65535
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
 
   create_table "player_usage_stats", force: :cascade do |t|
     t.integer  "duration",         limit: 4
