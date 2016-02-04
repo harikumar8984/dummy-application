@@ -77,18 +77,27 @@ class Api::V1::UsersController < ApplicationController
 
   def send_usage_statics_info
     user = user_from_auth_token
-    filter = case params[:filter]
-               when "7_Days" then 7.days
-               when "1_Month" then 1.month
-               when '1_Year' then 1.year
-               else  1.day
-             end
-    filter_date = Date.today() - filter
+    query_filter = 'date'
+    case params[:filter]
+       when "7_Days" then
+         filter_date =  1.week.ago.to_date + 1.day
+      when "1_Month" then
+         filter_date = 30.days.ago.to_date + 1.day
+       when '1_Year' then
+         filter_date =  1.year.ago.to_date.beginning_of_month.next_month
+         query_filter = 'month'
+      else
+        filter_date =  1.day.ago.to_date + 1.day
+     end
     data = []
-    usage_stats = user.player_usage_stats.select(" usage_date as usage_date, sum(duration) as duration").where("DATE(usage_date) >= ?", filter_date).group("date(usage_date)")
+    data = (filter_date..Date.today()).map{ |m| m.strftime('%Y%m') }.uniq.map{ |m| {month: Date::ABBR_MONTHNAMES[ Date.strptime(m, '%Y%m').mon ], duration: 0}} if params[:filter] == '1_Year'
+    Date.today().downto(filter_date){|date|  data << ({date: date, duration: 0})} unless params[:filter] == '1_Year'
+    usage_stats = user.player_usage_stats.select(" usage_date as usage_date, sum(duration) as duration").where("DATE(usage_date) >= ?", filter_date).group("#{query_filter}(usage_date)")
     usage_stats.each do |usage_status|
       if usage_status.usage_date
-        data << ({date: usage_status.usage_date.to_date, duration: usage_status.duration})
+        date_hash = data.find { |h| h[:month] == usage_status.usage_date.to_date.strftime("%b") } if params[:filter] == '1_Year'
+        date_hash = data.find { |h| h[:date] == usage_status.usage_date.to_date} unless params[:filter] == '1_Year'
+        date_hash[:duration] = usage_status.duration unless date_hash.blank?
       end
     end
     return render status: 200, :json=> {:success => true, data: data }
