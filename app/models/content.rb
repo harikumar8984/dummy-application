@@ -12,13 +12,13 @@ class Content < ActiveRecord::Base
   validates :status, inclusion: { in: %w(ACTIVE INACTIVE) , message: "%{value} is not a valid status" }
   validates :name, :status, :content_type, presence: true
   mount_uploader :name, ContentUploader
-  before_save :save_meta_data_content
+  #before_save :save_meta_data_content
   scope :active, -> { where(status: 'ACTIVE') }
 
   def content_type_enum
     [['VIDEO'],['AUDIO'],['TEXT']]
   end
-
+s
   def status_enum
     [['ACTIVE'],['INACTIVE']]
   end
@@ -28,7 +28,7 @@ class Content < ActiveRecord::Base
   end
 
   def save_meta_data_content
-    if self.name.encrypted.content_type.include? 'audio'
+    if self.name.content_type.include? 'audio'
         #reading
         reading_path = is_new? ? open(self.name.url) : self.name.path
         info = Mp3Info.open(reading_path)
@@ -65,11 +65,13 @@ class Content < ActiveRecord::Base
   end
 
   def is_new?
-    if !self.new_record? && Rails.env == 'production' && !self.name_changed?
+    if !self.new_record? && Rails.env == 'development' && !self.name_changed?
       true
     else
       false
     end
   end
+
+
 
 end
