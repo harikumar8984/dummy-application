@@ -18,7 +18,7 @@ class Content < ActiveRecord::Base
   def content_type_enum
     [['VIDEO'],['AUDIO'],['TEXT']]
   end
-s
+
   def status_enum
     [['ACTIVE'],['INACTIVE']]
   end
@@ -71,7 +71,5 @@ s
       false
     end
   end
-
-
 
 end
