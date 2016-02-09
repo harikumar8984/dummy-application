@@ -7,6 +7,9 @@ Nuryl::Application.routes.draw do
     root to: "sessions#new"
     match 'api/v1/user_registration' => 'api/v1/registrations#create', :via => :post
     match 'api/v1/help' => 'api/v1/helps#create', :via => :post
+    match '/api/v1/users/forget_password' => 'api/v1/passwords#create', :via => :post
+    match '/api/v1/users/password' => 'api/v1/passwords#update_password', :via => :put
+    match '/api/v1/users/change_password' => 'api/v1/passwords#update_password_api', :via => :put
   end
 
   namespace :api, defaults: { format: :json },
