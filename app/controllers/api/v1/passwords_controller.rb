@@ -15,7 +15,7 @@ class Api::V1::PasswordsController < Devise::PasswordsController
       @user.send_reset_password_instructions
       render :status => 201, :json => { :success => true}
     else
-      render :status => 422, :json => {   :success => false, :errors => 'Email not found' }
+      render :status => 200, :json => {   :success => false, :errors => 'Email not found' }
     end
   end
 

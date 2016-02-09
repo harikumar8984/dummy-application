@@ -21,7 +21,10 @@ class Course < ActiveRecord::Base
   end
 
   def criteria_enum
-    [['Welcome_Content'],['Month_5'],['Month_6'],['Month_7'], ['Month_8'], ['Month_9'], ['Month_10'], ['Month_11'], ['Year_1']]
+    [['Prenatal_5'],['Prenatal_6'],['Prenatal_7'],['Prenatal_8'], ['Prenatal_9'], ['Month_1'], ['Month_2'], ['Month_3'], ['Month_4'],
+    ['Month_5'], ['Month_6'], ['Month_7'], ['Month_8'], ['Month_9'], ['Month_10'], ['Month_11'], ['Month_12'],
+    ['Month_13'], ['Month_14'], ['Month_15'], ['Month_16'], ['Month_17'], ['Month_18'], ['Month_19'], ['Month_20'],
+    ['Month_21'], ['Month_22'], ['Month_23'], ['Month_24']]
   end
 
   def status_enum
