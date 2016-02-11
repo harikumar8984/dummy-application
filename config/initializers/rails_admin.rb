@@ -93,6 +93,11 @@ RailsAdmin.config do |config|
     object_label_method do
       :custom_label_method
     end
+    include_all_fields
+    field :contents do
+      searchable :name
+    end
+
     exclude_fields :created_at, :updated_at, :course_contents, :progress
   end
 
