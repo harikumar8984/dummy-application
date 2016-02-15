@@ -32,7 +32,8 @@ class Api::V1::UsersController < ApplicationController
       end
       if content.is_file_exist?
         song_url = Rails.env.production? ? content_url(content) : request.base_url.to_s + content_url(content)
-        progress = Progress.create(content_id: content.id, user_id: current_user.id, course_id: course.id,status: "TRANSMITTED")
+        #we don't have to verify this progress of transmitting data
+        #progress = Progress.create(content_id: content.id, user_id: current_user.id, course_id: course.id,status: "TRANSMITTED")
         #data = Rails.env.production? ? open(content.name.url) : File.open(content.name.path,'r')
         return render status: 200, :json=> {:success => true, data: {url: song_url, title: content.title, artist: content.artist, creator: content.creator } }
         #send_data data.read, :disposition => 'inline'
