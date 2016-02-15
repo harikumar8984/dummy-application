@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160203091204) do
+ActiveRecord::Schema.define(version: 20160215080151) do
 
   create_table "children", force: :cascade do |t|
     t.date     "dob"
@@ -32,6 +32,12 @@ ActiveRecord::Schema.define(version: 20160203091204) do
     t.string   "creator",      limit: 255
   end
 
+  create_table "course_categories", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "course_contents", force: :cascade do |t|
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
@@ -44,12 +50,15 @@ ActiveRecord::Schema.define(version: 20160203091204) do
   add_index "course_contents", ["course_id"], name: "index_course_contents_on_course_id", using: :btree
 
   create_table "courses", force: :cascade do |t|
-    t.string   "course_name", limit: 255
-    t.string   "criteria",    limit: 255
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.string   "status",      limit: 255
+    t.string   "course_name",        limit: 255
+    t.string   "criteria",           limit: 255
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "status",             limit: 255
+    t.integer  "course_category_id", limit: 4
   end
+
+  add_index "courses", ["course_category_id"], name: "index_courses_on_course_category_id", using: :btree
 
   create_table "device_details", force: :cascade do |t|
     t.string   "status",     limit: 255
@@ -67,6 +76,7 @@ ActiveRecord::Schema.define(version: 20160203091204) do
     t.text     "description", limit: 65535
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.string   "status",      limit: 255
   end
 
   create_table "player_usage_stats", force: :cascade do |t|
@@ -196,6 +206,7 @@ ActiveRecord::Schema.define(version: 20160203091204) do
 
   add_foreign_key "course_contents", "contents"
   add_foreign_key "course_contents", "courses"
+  add_foreign_key "courses", "course_categories"
   add_foreign_key "device_details", "users"
   add_foreign_key "player_usage_stats", "contents"
   add_foreign_key "player_usage_stats", "courses"
