@@ -39,16 +39,16 @@ RailsAdmin.config do |config|
     dashboard                     # mandatory
     index                         # mandatory
     new do
-      only ['Course', 'CourseContent', 'Content']
+      only ['Course', 'CourseContent', 'Content', 'CourseCategory']
     end
     export
     bulk_delete
     show
     edit do
-      only ['User','Course', 'CourseContent', 'Content']
+      only ['User','Course', 'CourseContent', 'Content', 'CourseCategory']
     end
     delete  do
-      only ['User', 'Course', 'CourseContent', 'Content']
+      only ['User', 'Course', 'CourseContent', 'Content', 'CourseCategory']
     end
     show_in_app
 
