@@ -7,7 +7,8 @@ class Api::V1::UsersController < ApplicationController
   def course_content
     unless has_stripe_account_active?
       content = {content: []}
-      course =  CourseCategory.where(name: params[:criteria]).first.course
+      course_category = CourseCategory.where(name: params[:criteria]).first
+      course =  course_category.course unless course_category.nil?
       content = Course.content_structure(course.id) unless course.nil?
       render :json => {:success => true, data: content }
     end
