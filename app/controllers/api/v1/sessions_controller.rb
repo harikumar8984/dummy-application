@@ -12,7 +12,7 @@ class Api::V1::SessionsController < Devise::SessionsController
       sign_in(:user, resource)
       authenticate_device
       resource.ensure_authentication_token!
-      return render :json=> {:success => true, :token => resource.authentication_token} if performed? == false
+      return render :json=> {:success => true, :token => resource.authentication_token, subscription_plan: resource.type_of_subscription } if performed? == false
     end
     failure
   end
