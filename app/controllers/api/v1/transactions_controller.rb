@@ -77,16 +77,22 @@ class  Api::V1::TransactionsController < ApplicationController
 
   def update_stripe_customer_plan_details(response)
     subscription = StripeSubscription.find_by_subscription_id(response.id)
+    update_subscription(response.plan.id) unless response.plan.nil?
     subscription.update_plan_details(response.plan) if subscription
   end
 
   def create_new_subscription(response)
     subscription_json = StripeSubscription.create_json(response, current_user)
+    update_subscription(response.plan.id) unless response.plan.nil?
     current_user.stripe_customer.stripe_subscriptions.create(subscription_json) if current_user.stripe_customer
   end
 
   def deactivate_subscription(response)
     StripeSubscription.update_with_status(response)
+  end
+
+  def update_subscription(plan)
+    current_user.update_type_of_subscription(plan)
   end
 
 end
