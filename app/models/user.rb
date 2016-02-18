@@ -31,6 +31,10 @@ class User < ActiveRecord::Base
     update_attributes(stripe_customer_token: token)
   end
 
+  def update_type_of_subscription(plan)
+    update_attributes(type_of_subscription: plan)
+  end
+
   def self.user_from_authentication(token)
     User.find_by_authentication_token(token.to_s)
   end
