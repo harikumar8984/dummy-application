@@ -93,7 +93,7 @@ RailsAdmin.config do |config|
     object_label_method do
       :custom_label_method
     end
-    exclude_fields :created_at, :updated_at, :course_contents, :progress
+    exclude_fields :created_at, :updated_at, :course_contents, :progress, :player_usage_stats
   end
 
   RailsAdmin::ApplicationController.class_eval do

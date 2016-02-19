@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160215092430) do
+ActiveRecord::Schema.define(version: 20160219075451) do
 
   create_table "children", force: :cascade do |t|
     t.date     "dob"
@@ -192,7 +192,6 @@ ActiveRecord::Schema.define(version: 20160215092430) do
     t.string   "f_name",                 limit: 255
     t.string   "l_name",                 limit: 255
     t.datetime "subscription_end_date"
-    t.string   "type_of_subscription",   limit: 255
     t.string   "status",                 limit: 255
     t.string   "authentication_token",   limit: 255
     t.datetime "confirmed_at"

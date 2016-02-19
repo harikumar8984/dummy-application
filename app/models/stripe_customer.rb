@@ -4,7 +4,7 @@ class StripeCustomer < ActiveRecord::Base
   has_many :stripe_subscriptions, dependent: :destroy
 
   def save_with_payment(user, params)
-    plan_id = user.type_of_subscription.camelize unless user.type_of_subscription.nil?
+    plan_id = params[:subscription_type].capitalize unless params[:subscription_type].nil?
     if plan_id.nil?
       self.errors.add(:base, "User don't provide any type of subscription")
       return false
