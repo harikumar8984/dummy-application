@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   has_one :stripe_customer, dependent: :destroy
   has_many :transactions, dependent: :destroy
 
-  validates :f_name,:l_name, :type_of_subscription, presence: true
+  validates :f_name,:l_name, presence: true
 
   def ensure_authentication_token!
     if authentication_token.blank?
@@ -29,10 +29,6 @@ class User < ActiveRecord::Base
 
   def update_stripe_customer_token(token)
     update_attributes(stripe_customer_token: token)
-  end
-
-  def update_type_of_subscription(plan)
-    update_attributes(type_of_subscription: plan)
   end
 
   def self.user_from_authentication(token)
@@ -49,6 +45,10 @@ class User < ActiveRecord::Base
 
   def active_subscription?
     stripe_customer.stripe_subscriptions.active.present?
+  end
+
+  def active_subscription_plan
+    stripe_customer.stripe_subscriptions.active.first.plan_id
   end
 
 

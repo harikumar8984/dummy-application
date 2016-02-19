@@ -8,7 +8,7 @@ module UserCommonMethodControllerConcern
   end
 
   def sign_up_params
-    params.permit( :email, :password, :f_name, :l_name, :type_of_subscription, :zipcode)
+    params.permit( :email, :password, :f_name, :l_name, :zipcode)
   end
 
   def update_params
