@@ -126,8 +126,19 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def has_stripe_account_active?
+    if params[:criteria] == 'beta_playlist_2'
+      return false
+    elsif params[:course_id]
+      beta_category = CourseCategory.where(name: 'beta_playlist_2').first
+      unless beta_category.nil? && beta_category.course.nil?
+        if params[:course_id].to_i == beta_category.course.id
+          return false
+        end
+      end
+    end
     return render status: 200, :json=> {:success => false, data: [t('no_stripe_account')] } unless current_user.stripe_account?
     return render status: 200, :json=> {:success => false, data: [t('no_active_stripe_subscription')] } unless current_user.active_subscription?
   end
+
 
 end
