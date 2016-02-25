@@ -2,6 +2,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   include ApiHelper
   include UserCommonMethodControllerConcern
   skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
+  skip_before_filter :is_device_id?, :only => :create
   skip_before_filter :authenticate_scope!, :only => [:update]
   skip_before_filter :authenticate_user_from_token!, :only => :create
   skip_before_filter :authenticate_device, :only => :create
@@ -12,7 +13,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
     #device = DeviceDetail.find_or_create_by(device_id: params[:device_id])
     if resource.save
       device_id = request.headers["device-id"]
-      if resource.device_detail.nil?
+      if device_id && resource.device_detail.nil?
         DeviceDetail.create(device_id: device_id, status: "Active", user_id: resource.id)
       end
       #device.update_attributes(status: 'active', user_id: resource.id)
@@ -28,7 +29,10 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       #UserMailer.user_registered_to_nuryl( resource, "Nuryl Registration").deliver
       if resource.active_for_authentication?
         resource.ensure_authentication_token!
-        return render status: 201, :json=> {:success => true, :auth_token => resource.authentication_token}
+        sign_in resource
+        redirect_to new_transaction_path
+        #hrr Registration only from desktop changes
+        #return render status: 201, :json=> {:success => true, :auth_token => resource.authentication_token
       else
         expire_session_data_after_sign_in!
         return render status: 201, :json => {:success => true}
