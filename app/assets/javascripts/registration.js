@@ -3,7 +3,7 @@ $(document).ready(function () {
     $(".clndr-cls").datepicker({
         clearBtn: true,
         autoclose: true,
-        format: 'dd-mm-yyyy'
+        format: 'dd/mm/yyyy'
     });
 
     $('#input_email').focusout(function(){
