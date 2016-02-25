@@ -9,6 +9,11 @@
   <%= tag :meta, :name => "stripe-key", :content => STRIPE_PUBLIC_KEY %>
   <%= csrf_meta_tags %>
 </head>
+
+<!-- Page Wrapper START-->
+
+<%= render partial: 'layouts/header' %>
+
 <body>
 
 <%= yield %>
