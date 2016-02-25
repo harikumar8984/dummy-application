@@ -7,20 +7,20 @@
         </div>
         <div class='panel-body'>
           <div class='col-lg-12 col-md-12 col-sm-12'>
-            <%= form_tag api_v1_user_registration_path, method:'post', class:'form-horizontal', id: 'user_registration' do %>
+            <%= form_tag api_v1_user_registration_path, method:'post', class:'form-horizontal', id: 'user_registration_form', html: {autocomplete: "off"} do %>
                 <div class="col-frm-hide">
                   <div class="form-group">
                     <label for='input_first_name' class='col-sm-3 control-label'>first name</label>
                     <div class="col-sm-9">
                       <%= text_field_tag "f_name", nil, class:'form-control',
-                                       id: 'input_first_name', placeholder: 'First name', :required => true%>
+                                       id: 'input_first_name', placeholder: 'First name', required: true%>
                     </div>
                   </div>
                   <div class="form-group">
                     <label for='input_last_name' class='col-sm-3 control-label'>last name</label>
                     <div class="col-sm-9">
                       <%= text_field_tag  "l_name", nil, class:'form-control',
-                                       id: 'input_last_name', placeholder: 'Last name', :required => true%>
+                                       id: 'input_last_name', placeholder: 'Last name', required: true%>
                     </div>
                   </div>
                   <div class="form-group">
@@ -31,21 +31,21 @@
                     <label for='input_email' class='col-sm-3 control-label'>email</label>
                     <div class="col-sm-9">
                       <%= email_field_tag "email", nil, class:'form-control',
-                                        id: 'input_email', placeholder: 'Please enter a valid email for your username', :required => true%>
+                                        id: 'input_email', placeholder: 'Please enter a valid email for your username', required: true,  autocomplete: :off %>
                     </div>
                   </div>
                   <div class='form-group'>
                     <label for='input_password' class='col-sm-3 control-label'>password <span style="text-transform: none" class="glyphicon glyphicon-question-sign blck reg-usr" aria-hidden="true"  data-placement="right" title="Minium 8 characters"></span></label>
                     <div class="col-sm-9">
                       <%= password_field_tag "password", nil, class:'form-control registration_input_password',
-                                           id: 'input_password', placeholder: "Minium 8 characters", :required => true %>
+                                           id: 'input_password', placeholder: "Minium 8 characters", required: true %>
                     </div>
                   </div>
                   <div class='form-group'>
                     <label for='input_zipcode' class='col-sm-3 control-label'>Baby Name</label>
                     <div class="col-sm-9">
                       <%= text_field_tag "baby_name", nil, class:'form-control',
-                                       id: 'input_zipcode', placeholder: 'Baby Name', :required => true%>
+                                       id: 'input_zipcode', placeholder: 'Baby Name', required: true%>
                     </div>
                   </div>
 
@@ -62,7 +62,7 @@
                 <label for='input_zipcode' class='col-sm-3 control-label'>DOB</label>
                 <div class="col-sm-9">
                <div class="input-group date">
-                <%= text_field_tag "dob", nil, class:'form-control clndr-cls', id: 'dob', placeholder: 'Your Baby Projected DOB', :required => true %><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                <%= text_field_tag "dob", nil, class:'form-control clndr-cls', id: 'dob', placeholder: 'Your Baby Projected DOB', required: true, readonly: true%><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                </div>
                 </div>
               </div>
