@@ -7,7 +7,7 @@ jQuery(function() {
 
 subscription = {
     setupForm: function() {
-        return $('#stripe_registration').submit(function() {
+        return $('#new_transaction').submit(function() {
             $('input[type=submit]').attr('disabled', true);
             if ($('#card_number').length) {
                 subscription.processCard();
@@ -28,10 +28,10 @@ subscription = {
         return Stripe.createToken(card, subscription.handleStripeResponse);
     },
     handleStripeResponse: function(status, response) {
-
         if (status === 200) {
-            $('#transaction_card_id').val(response.id);
-            return $('#stripe_registration')[0].submit();
+            alert(response.id)
+            $('#transaction_stripe_card_token').val(response.id);
+          //  return $('#new_transaction')[0].submit();
         } else {
             $('#stripe_error').text(response.error.message);
             return $('input[type=submit]').attr('disabled', false);

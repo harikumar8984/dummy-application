@@ -7,7 +7,6 @@ class  TransactionsController < ApplicationController
   respond_to :json
 
   def new
-    @auth_token = current_user.authentication_token if current_user
     @subscription = Transaction.new
   end
 

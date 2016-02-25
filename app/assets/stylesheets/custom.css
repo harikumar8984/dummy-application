@@ -1,16 +1,15 @@
-
-
-
-body {
-
-    background: url(bg-photo.jpg) no-repeat center center fixed;
+html {
+    background: url(bg-photo.jpg) no-repeat center center fixed !important;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
 }
 
-
+body {
+    margin:50px 0px; padding:0px;
+    text-align:center;
+}
 
 #Content {
     width:500px;
@@ -28,4 +27,3 @@ body {
 .message{
     color: brown;
 }
-

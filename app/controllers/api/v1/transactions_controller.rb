@@ -1,8 +1,8 @@
 class  Api::V1::TransactionsController < ApplicationController
-  skip_before_filter :is_device_id?, :only => [:webhook,:new, :create]
+  skip_before_filter :is_device_id?, :only => [:webhook,:new]
   skip_before_filter :authenticate_scope!, :only => [:webhook,:new]
   skip_before_filter :authenticate_user_from_token!, :only =>  [:webhook,:new]
-  skip_before_filter :authenticate_device, :only => [:webhook,:new, :create]
+  skip_before_filter :authenticate_device, :only => [:webhook,:new]
   before_filter :intialize_transaction, :except => [:webhook, :create]
   respond_to :json
 

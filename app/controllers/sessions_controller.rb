@@ -31,7 +31,6 @@ class SessionsController < Devise::SessionsController
   def new
     if user_signed_in? && current_user.admin?
       redirect_to rails_admin_path
-      @user = User.new
     else
       super
     end
