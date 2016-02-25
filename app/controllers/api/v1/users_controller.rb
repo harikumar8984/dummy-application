@@ -1,5 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   include UserCommonMethodControllerConcern
+  skip_before_filter :is_device_id?, :only => :validate_unique_email
   skip_before_filter :authenticate_user_from_token!, :only => :validate_unique_email
   skip_before_filter :authenticate_device, :only => :validate_unique_email
   respond_to :json

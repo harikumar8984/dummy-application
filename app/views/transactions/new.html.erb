@@ -1,31 +1,60 @@
-<%= form_for @subscription do |f| %>
-    <% if @subscription.errors.any? %>
-        <div class="error_messages">
-          <h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this subscription from being saved:</h2>
-          <ul>
-            <% @subscription.errors.full_messages.each do |msg| %>
-                <li><%= msg %></li>
-            <% end %>
-          </ul>
-        </div>
-    <% end %>
 
+<div>
+  <p> This Page is under construction</p>
 
-    <div class="field">
-      <%= label_tag :card_number, "Credit Card Number " %>
-      <%= text_field_tag :card_number, nil, name: nil %>
-    </div>
-    <div class="field">
-      <%= label_tag :card_code, "Security Code on Card (CVV)" %>
-      <%= text_field_tag :card_code, nil, name: nil %>
-    </div>
-    <div class="field">
-      <%= label_tag :card_month, "Card Expiration" %>
-      <%= select_month nil, {add_month_numbers_true: true}, {name: nil, id: "card_month"}%>
-      <%= select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "card_year"}%>
-    </div>
-    <div class="actions"><%= f.submit "Subscribe" %></div>
-<% end %>
-<div id="stripe_error">
-  <noscript>JavaScript is not enabled and is required for this form. First enable it in your web browser settings.</noscript>
 </div>
+
+<!--<%= form_tag subscripe_api_transactions_path, method:'post', class:'form-horizontal', id: 'stripe_registration' do %>-->
+    <!--<% if @subscription.errors.any? %>-->
+        <!--<div class="error_messages">-->
+          <!--<h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this subscription from being saved:</h2>-->
+          <!--<ul>-->
+            <!--<% @subscription.errors.full_messages.each do |msg| %>-->
+                <!--<li><%= msg %></li>-->
+            <!--<% end %>-->
+          <!--</ul>-->
+        <!--</div>-->
+    <!--<% end %>-->
+    <!--<div class="form">-->
+
+
+    <!--<%= hidden_field_tag :card_id %>-->
+    <!--<%= hidden_field_tag :auth_token, @auth_token%>-->
+
+      <!--<div class="form-group">-->
+        <!--<label for='input_email' class='col-sm-3 control-label'>Credit Card Number</label>-->
+        <!--<div class="col-sm-9">-->
+            <!--<%= text_field_tag :card_number, nil, name: nil %>-->
+        <!--</div>-->
+      <!--</div>-->
+
+      <!--<div class="form-group">-->
+        <!--<label for='input_email' class='col-sm-3 control-label'>Security Code on Card (CVV)</label>-->
+        <!--<div class="col-sm-9">-->
+            <!--<%= text_field_tag :card_code, nil, name: nil %>-->
+       <!--</div>-->
+     <!--</div>-->
+
+      <!--<div class="form-group">-->
+        <!--<label for='input_email' class='col-sm-3 control-label'>Card Expiration</label>-->
+        <!--<div class="col-sm-9">-->
+            <!--<%= select_month nil, {add_month_numbers_true: true}, {name: nil, id: "card_month"}%>-->
+            <!--<%= select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "card_year"}%>-->
+        <!--</div>-->
+     <!--</div>-->
+
+      <!--<div class="form-group">-->
+        <!--<label for='inputEmail3' class='col-sm-3 control-label'>Subscription Plan</label>-->
+        <!--<div class="col-sm-9">-->
+          <!--<%= select_tag "subscription_type", "<option>Monthly</option><option>Yearly</option>".html_safe,{class: "form-control input-small"} %>-->
+        <!--</div>-->
+      <!--</div>-->
+
+    <!--<%= button_tag(type: 'submit', class: "btn btm-sm-pri btn-primary actions") do %>-->
+        <!--<span class="gtsrt-icon"></span> <span >Subscribe</span>-->
+    <!--<% end %>-->
+      <!--</div>-->
+<!--<% end %>-->
+<!--<div id="stripe_error">-->
+  <!--<noscript>JavaScript is not enabled and is required for this form. First enable it in your web browser settings.</noscript>-->
+<!--</div>-->
