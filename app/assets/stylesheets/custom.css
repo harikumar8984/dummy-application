@@ -26,7 +26,7 @@ body {
 }
 
 
-#stripe_error{
+#stripe_error,.message{
     color: brown;
     padding: 5px;
 }
