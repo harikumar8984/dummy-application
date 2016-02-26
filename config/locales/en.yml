@@ -30,3 +30,4 @@ en:
   no_stripe_account: 'No stripe account yet created. Please create a stripe account first.'
   active_stripe_subscription: 'User has already an active stripe subscription.'
   no_active_stripe_subscription: 'User do not have any active stripe subscription.'
+  download_nurl_app: 'You will receive an email to download the Nuryl app'

@@ -3,6 +3,7 @@ class  TransactionsController < ApplicationController
   skip_before_filter :authenticate_scope!, :only => :new
   skip_before_filter :authenticate_user_from_token!, :only => :new
   skip_before_filter :authenticate_device, :only => :new
+  before_filter :authenticate_user!
 
   respond_to :json
 

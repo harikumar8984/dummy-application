@@ -27,5 +27,18 @@ body {
 
 .message{
     color: brown;
+    padding: 5px;
 }
 
+.payment_form{
+    max-width : 550px !important;
+    padding: 10px;
+}
+
+.payment-head{
+    margin-left: 40%;
+}
+
+.payment_lbl{
+    font-size: 25px !important;
+}

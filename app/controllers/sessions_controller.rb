@@ -13,10 +13,14 @@ class SessionsController < Devise::SessionsController
     resource = User.find_for_database_authentication(:email => params[:user][:email])
     return failure unless resource
     #only for admin sign in
-    if resource.valid_password?(params[:user][:password]) && resource.admin?
+    if resource.valid_password?(params[:user][:password])
       sign_in(:user, resource)
       resource.ensure_authentication_token!
+      if resource.admin?
       redirect_to rails_admin_path
+      else
+        redirect_to new_transaction_path
+      end
       return
     end
     failure

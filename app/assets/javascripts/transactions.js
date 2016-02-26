@@ -1,21 +1,26 @@
 var subscription;
+var paymentInitialized = false;
 
 jQuery(function() {
+    if(paymentInitialized) return;
     Stripe.setPublishableKey($('meta[name="stripe-key"]').attr('content'));
+    paymentInitialized = true;
     return subscription.setupForm();
 });
 
 subscription = {
-    setupForm: function() {
-        return $('#stripe_registration').submit(function() {
-            $('input[type=submit]').attr('disabled', true);
-            if ($('#card_number').length) {
-                subscription.processCard();
-                return false;
-            } else {
-                return true;
-            }
-        });
+    setupForm: function(i) {
+            return $('.payment-btn').bind('click', (function (e) {
+                $('.payment-btn').attr('disabled', 'disabled');
+                if ($('#card_number').length) {
+                    subscription.processCard();
+                    return false;
+                } else {
+                    $is_submitted = true;
+                    return true;
+                }
+            }));
+
     },
     processCard: function() {
         var card;
@@ -30,11 +35,13 @@ subscription = {
     handleStripeResponse: function(status, response) {
 
         if (status === 200) {
-            $('#transaction_card_id').val(response.id);
-            return $('#stripe_registration')[0].submit();
-        } else {
+            $('#card_id').val(response.id);
+            $('.payment-btn').attr('disabled', 'disabled');
+            $('#stripe_registration')[0].submit();
+        }
+        else {
             $('#stripe_error').text(response.error.message);
-            return $('input[type=submit]').attr('disabled', false);
+            return  $('.payment-btn').attr('disabled', false);
         }
     }
 };

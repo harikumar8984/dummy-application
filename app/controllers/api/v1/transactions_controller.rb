@@ -11,12 +11,21 @@ class  Api::V1::TransactionsController < ApplicationController
   end
 
   def create
-    return render status: 200, :json=> {:success => false, data: [t('already_stripe_account')] } if current_user.stripe_account?
+    #return render status: 200, :json=> {:success => false, data: [t('already_stripe_account')] } if current_user.stripe_account?
+    if current_user.stripe_account?
+      flash[:message] =t('already_stripe_account')
+      return redirect_to :back
+    end
     @stripe_customer = StripeCustomer.new
     if @stripe_customer.save_with_payment(current_user, params)
-      return render status: 201, :json=> {:success => true, data: 'Stripe account created' }
+      sign_out current_user
+      flash[:message] =t('download_nurl_app')
+      redirect_to root_path
+      #return render status: 201, :json=> {:success => true, data: 'Stripe account created' }
     else
-      return render status: 200, :json=> {:success => false, data: @stripe_customer.errors.messages }
+      #return render status: 200, :json=> {:success => false, data: @stripe_customer.errors.messages }
+      flash[:message] =  @stripe_customer.errors.messages
+      return redirect_to :back
     end
   end
 
