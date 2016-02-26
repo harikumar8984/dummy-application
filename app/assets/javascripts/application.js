@@ -15,4 +15,4 @@
 //= require bootstrap.min
 //= require bootstrap-datepicker
 //= require transactions.js
-//= require_tree .
+//= require registration.js

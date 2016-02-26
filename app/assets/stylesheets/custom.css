@@ -25,7 +25,8 @@ body {
     cursor:pointer;
 }
 
-.message{
+
+#stripe_error{
     color: brown;
     padding: 5px;
 }

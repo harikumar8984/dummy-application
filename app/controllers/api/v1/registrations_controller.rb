@@ -12,10 +12,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
     build_resource(sign_up_params.merge!(status: 'ACTIVE'))
     #device = DeviceDetail.find_or_create_by(device_id: params[:device_id])
     if resource.save
-      device_id = request.headers["device-id"]
-      if device_id && resource.device_detail.nil?
-        DeviceDetail.create(device_id: device_id, status: "Active", user_id: resource.id)
-      end
+      create_device_details(resource)
       #device.update_attributes(status: 'active', user_id: resource.id)
       #creating child of user
       dob_format if params[:dob]

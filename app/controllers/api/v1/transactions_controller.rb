@@ -1,8 +1,8 @@
 class  Api::V1::TransactionsController < ApplicationController
-  skip_before_filter :is_device_id?, :only => [:webhook,:new, :create]
+  skip_before_filter :is_device_id?, :only => [:webhook,:new,:create,:get_subscription_amount]
   skip_before_filter :authenticate_scope!, :only => [:webhook,:new]
   skip_before_filter :authenticate_user_from_token!, :only =>  [:webhook,:new]
-  skip_before_filter :authenticate_device, :only => [:webhook,:new, :create]
+  skip_before_filter :authenticate_device, :only => [:webhook,:new,:create,:get_subscription_amount]
   before_filter :intialize_transaction, :except => [:webhook, :create]
   respond_to :json
 
@@ -35,7 +35,7 @@ class  Api::V1::TransactionsController < ApplicationController
     unless plan
       return render status: 200, :json=> {:success => false, data: @transaction.errors.messages }
     else plan
-      return render status: 200, :json=> {:success => true, data: {amount: plan.amount > 0 ? plan.amount/100 : 0.00 } }
+      return render status: 200, :json=> {:success => true, data: {amount: plan.amount > 0 ? (plan.amount.to_f/100) : 0.00 } }
     end
   end
 

@@ -1,11 +1,17 @@
 var subscription;
-var paymentInitialized = false;
+var pagelod = false;
 
-jQuery(function() {
-    if(paymentInitialized) return;
+$(document).ready(function () {
+    if(pagelod) return;
+    get_subscription_amount('Monthly');
+    $('.subscription_type').on("change",function() {
+        $('#stripe_error .message').text('');
+        get_subscription_amount($(this).val());
+    });
     Stripe.setPublishableKey($('meta[name="stripe-key"]').attr('content'));
-    paymentInitialized = true;
+    pagelod = true;
     return subscription.setupForm();
+
 });
 
 subscription = {
@@ -45,3 +51,19 @@ subscription = {
         }
     }
 };
+
+
+function get_subscription_amount(type){
+    $.ajax({
+        type: "GET",
+        url: '/api/v1/transactions/subscription_amount?subscription_type='+type+'&auth_token='+ $('#auth_token').val(), //sumbits it to the given url of the form
+        dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+    }).success(function (json) {
+        if (json['success'] == true){
+            $('#input_sub_amount').val('$'+parseFloat(json['data']['amount']).toFixed(2));
+        }
+        else{
+            $('#stripe_error .message').text(json['data']['base'][0]);
+        }
+    });
+}

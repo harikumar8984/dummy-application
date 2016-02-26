@@ -1,4 +1,5 @@
 class Api::V1::SessionsController < Devise::SessionsController
+  include UserCommonMethodControllerConcern
   prepend_before_filter :require_no_authentication, :only => [:create]
   skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
   skip_before_filter :authenticate_user_from_token!, :only => :create
@@ -10,7 +11,7 @@ class Api::V1::SessionsController < Devise::SessionsController
     return failure unless resource
     if resource.valid_password?(params[:password])
       sign_in(:user, resource)
-      authenticate_device
+      authenticate_device unless create_device_details(resource)
       resource.ensure_authentication_token!
       plan = ''
       plan = resource.active_subscription_plan if  resource.stripe_account? && resource.active_subscription?
