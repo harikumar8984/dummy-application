@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160224063510) do
+ActiveRecord::Schema.define(version: 20160229053713) do
 
   create_table "children", force: :cascade do |t|
     t.date     "dob"
@@ -31,6 +31,9 @@ ActiveRecord::Schema.define(version: 20160224063510) do
     t.string   "artist",          limit: 255
     t.string   "creator",         limit: 255
     t.string   "marketing_label", limit: 255
+    t.string   "licensing",       limit: 255
+    t.string   "licensing_group", limit: 255
+    t.string   "CAE_IPI",         limit: 255
   end
 
   create_table "course_categories", force: :cascade do |t|
