@@ -12,10 +12,13 @@ class  Api::V1::TransactionsController < ApplicationController
 
   def create
     #return render status: 200, :json=> {:success => false, data: [t('already_stripe_account')] } if current_user.stripe_account?
-    if current_user.stripe_account?
+   if current_user.user_type != params[:user_type]
+     flash[:message] =t('user_type_mismatch')
+     return redirect_to :back
+  elsif current_user.stripe_account?
       flash[:message] =t('already_stripe_account')
       return redirect_to :back
-    end
+  end
     @stripe_customer = StripeCustomer.new
     if @stripe_customer.save_with_payment(current_user, params)
       sign_out current_user
