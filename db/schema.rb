@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160229053713) do
+ActiveRecord::Schema.define(version: 20160301045611) do
 
   create_table "children", force: :cascade do |t|
     t.date     "dob"
@@ -201,6 +201,10 @@ ActiveRecord::Schema.define(version: 20160229053713) do
     t.datetime "confirmed_at"
     t.string   "zipcode",                limit: 255
     t.string   "stripe_customer_token",  limit: 255
+    t.string   "user_type",              limit: 255
+    t.string   "gifter_first_name",      limit: 255
+    t.string   "gifter_last_name",       limit: 255
+    t.string   "gifter_email",           limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

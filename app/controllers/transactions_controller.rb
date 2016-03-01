@@ -9,6 +9,7 @@ class  TransactionsController < ApplicationController
 
   def new
     @auth_token = current_user.authentication_token if current_user
+    @user_type = params[:user_type]
     @subscription = Transaction.new
   end
 

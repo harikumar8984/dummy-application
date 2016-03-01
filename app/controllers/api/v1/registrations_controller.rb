@@ -27,7 +27,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       if resource.active_for_authentication?
         resource.ensure_authentication_token!
         sign_in resource
-        redirect_to new_transaction_path
+        redirect_to new_transaction_path(user_type: resource.user_type)
         #hrr Registration only from desktop changes
         #return render status: 201, :json=> {:success => true, :auth_token => resource.authentication_token
       else

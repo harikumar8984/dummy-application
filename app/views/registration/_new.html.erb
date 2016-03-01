@@ -8,16 +8,46 @@
         <div class='panel-body'>
           <div class='col-lg-12 col-md-12 col-sm-12'>
             <%= form_tag api_v1_user_registration_path, method:'post', class:'form-horizontal', id: 'user_registration_form', html: {autocomplete: "off"} do %>
+                <%= hidden_field_tag :user_type, @user_type %>
                 <div class="col-frm-hide">
+
+                  <%if @user_type == 'gift'%>
+                      <div class="form-group">
+                        <label for='input_first_name' class='col-sm-3 control-label'>Gifter’s First Name</label>
+                        <div class="col-sm-9">
+                          <%= text_field_tag "gifter_first_name", nil, class:'form-control',
+                                             id: 'input_gifter_first_name', placeholder: 'Gifter First name', required: true%>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for='input_first_name' class='col-sm-3 control-label'>Gifter’s Last Name</label>
+                        <div class="col-sm-9">
+                          <%= text_field_tag "gifter_last_name", nil, class:'form-control',
+                                             id: 'input_gifter_last_name', placeholder: 'Gifter Last name', required: true%>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for='input_first_name' class='col-sm-3 control-label'>Gifter’s Email</label>
+                        <div class="col-sm-9">
+                          <%= email_field_tag "gifter_email", nil, class:'form-control',
+                                             id: 'input_gifter_email', placeholder: 'Gifter Email', required: true%>
+                        </div>
+                      </div>
+
+                  <%end%>
+
+
                   <div class="form-group">
-                    <label for='input_first_name' class='col-sm-3 control-label'>first name</label>
+                    <label for='input_first_name' class='col-sm-3 control-label'>First Name</label>
                     <div class="col-sm-9">
                       <%= text_field_tag "f_name", nil, class:'form-control',
                                        id: 'input_first_name', placeholder: 'First name', required: true%>
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for='input_last_name' class='col-sm-3 control-label'>last name</label>
+                    <label for='input_last_name' class='col-sm-3 control-label'>Last Name</label>
                     <div class="col-sm-9">
                       <%= text_field_tag  "l_name", nil, class:'form-control',
                                        id: 'input_last_name', placeholder: 'Last name', required: true%>
@@ -28,14 +58,14 @@
                   </div>
 
                   <div class="form-group">
-                    <label for='input_email' class='col-sm-3 control-label'>email</label>
+                    <label for='input_email' class='col-sm-3 control-label'>Email</label>
                     <div class="col-sm-9">
                       <%= email_field_tag "email", nil, class:'form-control',
                                         id: 'input_email', placeholder: 'Please enter a valid email for your username', required: true,  autocomplete: :off %>
                     </div>
                   </div>
                   <div class='form-group'>
-                    <label for='input_password' class='col-sm-3 control-label'>password <span style="text-transform: none" class="glyphicon glyphicon-question-sign blck reg-usr" aria-hidden="true"  data-placement="right" title="Minium 8 characters"></span></label>
+                    <label for='input_password' class='col-sm-3 control-label'>Password <span style="text-transform: none" class="glyphicon glyphicon-question-sign blck reg-usr" aria-hidden="true"  data-placement="right" title="Minium 8 characters"></span></label>
                     <div class="col-sm-9">
                       <%= password_field_tag "password", nil, class:'form-control registration_input_password',
                                            id: 'input_password', placeholder: "Minium 8 characters", required: true, minlength: 8 %>
