@@ -1,3 +1,7 @@
+#require Rails.root.join('lib', 'rails_admin_auditor_registration.rb')
+#1RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::AuditorRegistration)
+
+
 RailsAdmin.config do |config|
 
   ### Popular gems integration
@@ -36,10 +40,10 @@ RailsAdmin.config do |config|
   ### More at https://github.com/sferik/rails_admin/wiki/Base-configuration
 
   config.actions do
-    dashboard                     # mandatory
+    dashboard
     index                         # mandatory
     new do
-      only ['Course', 'CourseContent', 'Content', 'CourseCategory']
+      only ['User', 'Course', 'CourseContent', 'Content', 'CourseCategory']
     end
     export
     bulk_delete
@@ -52,16 +56,23 @@ RailsAdmin.config do |config|
     end
     show_in_app
 
+
     ## With an audit adapter, you can add:
     # history_index
     # history_show
   end
+
+
 
   config.model User do
     update do
       field :f_name
       field :l_name
     end
+  end
+
+  config.model Child do
+    parent User
   end
 
   config.model Content do
