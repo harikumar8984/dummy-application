@@ -1,10 +1,17 @@
-# This is extended concern common metods of user & registration controller
+# This is extended concern common metods of user & registrations controller
 module UserCommonMethodControllerConcern
   extend ActiveSupport::Concern
 
+  #HRR can send date in any format
   def dob_format
-    format = params[:dob].include?("/") ? "%m/%d/%Y" : "%m-%d-%Y"
-    params[:dob] = Date.strptime(params[:dob], format) rescue nil
+    begin
+      date_format = Date.parse(params[:dob])
+    rescue ArgumentError
+      format = params[:dob].include?("/") ? "%m/%d/%Y" : "%m-%d-%Y"
+      date_format = Date.strptime(params[:dob], format) rescue nil
+    ensure
+      params[:dob] = date_format
+    end
   end
 
   def sign_up_params

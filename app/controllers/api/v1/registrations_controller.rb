@@ -2,11 +2,12 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   include ApiHelper
   include UserCommonMethodControllerConcern
   skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
-  skip_before_filter :is_device_id?, :only => :create
+  skip_before_filter :is_device_id?, :only => [:create, :new]
   skip_before_filter :authenticate_scope!, :only => [:update]
-  skip_before_filter :authenticate_user_from_token!, :only => :create
-  skip_before_filter :authenticate_device, :only => :create
+  skip_before_filter :authenticate_user_from_token!, :only => [:create, :new]
+  skip_before_filter :authenticate_device, :only => [:create, :new]
   respond_to :json
+  #layout "rails_admin/application", :only => [:new]
 
   def create
     build_resource(sign_up_params.merge!(status: 'ACTIVE'))
@@ -39,6 +40,17 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       return render :status => 200, :json => {:success => false, :errors => resource.errors}
     end
   end
+
+
+  def new
+    @user_type = params[:user_type] || 'standard'
+    @user = User.new
+  end
+
+  # def new_auditor
+  #   @user_type = params[:user_type]
+  #   @user = User.new
+  # end
 
 
 end

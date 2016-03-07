@@ -1,0 +1,34 @@
+
+<body class='rails_admin'>
+<div class='label label-warning' id='loading' style='display:none; position:fixed; right:20px; bottom:20px; z-index:100000'>Loading...</div>
+<nav class='navbar navbar-default navbar-fixed-top'>
+  <div class='container-fluid'>
+    <div class='navbar-header'>
+      <button class='navbar-toggle collapsed' data-target='#secondary-navigation' data-toggle='collapse' type='button'>
+        <span class='sr-only'>Toggle navigation</span>
+        <span class='icon-bar'></span>
+        <span class='icon-bar'></span>
+        <span class='icon-bar'></span>
+      </button>
+      <a class='navbar-brand pjax' href='/rails_admin/'>
+        Nuryl
+        <small>Admin</small>
+      </a>
+    </div>
+    <div class='collapse navbar-collapse' id='secondary-navigation'>
+      <ul class='nav navbar-nav navbar-right root_links'>
+        <li><a href="/api/v1/transactions/new">Auditor Registration</a></li>
+        <li class='dashboard_root_link'><a class="pjax" href="/rails_admin/">Dashboard</a></li>
+        <li><a href="/">Home</a></li>
+        <li class='edit_user_root_link'><a href="/rails_admin/user/25/edit"><img alt="" src="http://www.gravatar.com/avatar/ba657f9cd35a5ea843ed485d3e3b7f6a?s=30" /><span>admin@nuryl.com</span></a></li>
+        <li><a rel="nofollow" data-method="delete" href="/users/sign_out"><span class="label label-danger">Log out</span></a></li>
+      </ul>
+
+    </div>
+  </div>
+
+</nav>
+<div class='container-fluid'>
+
+</div>
+</body>

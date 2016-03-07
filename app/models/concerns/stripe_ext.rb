@@ -55,6 +55,11 @@ module StripeExt
   end
 
 
+  def self.get_all_plan
+    Stripe::Plan.all
+  end
+
+
   def self.webhook(event_json)
     begin
       event_object = event_json['data']['object']

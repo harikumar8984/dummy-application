@@ -4,15 +4,15 @@ var pagelod = false;
 $(document).ready(function () {
     if(pagelod) return;
 
-    if ($('#user_type').val()== 'beta')
-        get_subscription_amount('Beta');
-    else
-        get_subscription_amount('Monthly');
-
-    $('.subscription_type').on("change",function() {
-        $('#stripe_error .message').text('');
-        get_subscription_amount($(this).val());
-    });
+    //if ($('#user_type').val()== 'beta')
+    //    get_subscription_amount('Beta');
+    //else
+    //    get_subscription_amount('Monthly');
+    //
+    //$('.subscription_type').on("change",function() {
+    //    $('#stripe_error .message').text('');
+    //    get_subscription_amount($(this).val());
+    //});
     Stripe.setPublishableKey($('meta[name="stripe-key"]').attr('content'));
     pagelod = true;
     return subscription.setupForm();
@@ -56,7 +56,6 @@ subscription = {
         }
     }
 };
-
 
 function get_subscription_amount(type){
     $.ajax({

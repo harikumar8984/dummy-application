@@ -1,0 +1,22 @@
+<div class="registration-body">
+<div class="page-fixed page-background">
+  <div class="page-content-inner">
+    <div id="tab-links" class="clearfix tab-links">
+      <a class="tab-link external registration-tab-link active">
+        <img src="/assets/registration.png" alt="" width="58px">
+        <span class="label"><%=@user_type == 'gift' ? 'GIFT NURYL' : @user_type.camelize.to_s + ' User Signup'%></span>
+      </a>
+      <a class="tab-link external nuryl-tab-link">
+        <img src="assets/nuryl_logo.png" alt="" width="58px">
+        <span class="label">Nuryl</span>
+      </a>
+    </div>
+    <div class="form-wrapper">
+      <%= render partial: 'new', locals: { user: User.new } %>
+    </div>
+  </div>
+</div>
+</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js"></script>
+

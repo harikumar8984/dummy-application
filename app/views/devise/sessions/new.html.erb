@@ -1,29 +1,52 @@
-<title>Nuryl</title>
-
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-    <div class="module form-module">
-      <div class="toggle"><i class="fa fa-times fa-pencil"></i>
-
+<div class="page-fixed page-background">
+  <div class="page-content-inner">
+    <div class="form-wrapper">
+      <div class="logo">
+        <!-- <img src="assets/logo.png" alt=""> -->
+        <img src="assets/logo_middle.png" alt="">
+        <!-- <span>NURYL</span> -->
       </div>
-      <div class="form">
-        <div class="message"><%= flash[:message] %></div>
-        <h2 style = 'text-align:center'>Log in</h2>
-        <form>
-          <%= f.email_field :email, autofocus: true , placeholder: 'Email'%>
-          <%= f.password_field :password, autocomplete: "off", placeholder: 'Password' %>
-          <%= f.submit "Log in", class: 'sbt_btn'%>
-          <div class="col-lg-12 col-md-12 col-sm-12">
-            <div class="mrg-top-5 text-center" style="padding-left: 5px">
-              <a href='#' data-toggle='modal' class= 'login-cont-a' data-target='.signup-modal'>SIGN UP</a>
+      <div id="tab-links" class="tab-links" data-name="login">
+        <a href="#login-tab" class="tab-link login-tab-link active" data-name="login">
+          <img src="assets/login.png" alt="" width="45px">
+          <span class="label">Login</span>
+        </a>
+        <a href="#signup-tab" class="tab-link signup-tab-link" data-name="signup">
+          <img src="assets/signup.png" alt="" width="57px">
+          <span class="label">Signup</span>
+        </a>
+      </div>
+      <div class="tabs">
+        <div id="login-tab" class="tab login-tab active">
+          <div class="message"><%= flash[:message] %></div>
+          <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+
+
+            <div class="form-row">
+              <%= f.email_field :email, autofocus: true , placeholder: 'Email', required: true%>
             </div>
-          </div>
-        </form>
-      </div>
+            <div class="form-row">
+              <%= f.password_field :password, autocomplete: "off", placeholder: 'Password', required: true %>
+            </div>
+            <div class="submit-wrapper">
+              <%= button_tag(type: 'submit', class: "button submit-button") do %>
+                  <span >Login <img src="assets/arrow_right.png" alt="" width="18px"> </span>
+              <% end %>
+            </div>
+          <%end%>
+        </div>
+        <div id="signup-tab" class="tab signup-tab">
+          <%= render partial: 'registrations/new', locals: { user: User.new } %>
+        </div>
+        </div>
     </div>
-    <%= render partial: 'registration/new', locals: { user: @user } %>
+  </div>
+</div>
 
-    </div>
-<% end %>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js"></script>
+
+
 
 
 

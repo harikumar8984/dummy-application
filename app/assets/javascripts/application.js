@@ -11,8 +11,5 @@
 // about supported directives.
 //
 //= require jquery.min
-//= require jquery_ujs
-//= require bootstrap.min
-//= require bootstrap-datepicker
-//= require transactions.js
 //= require registration.js
+//= require app.js
