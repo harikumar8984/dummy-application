@@ -1,5 +1,6 @@
-  <%= form_tag '/api/v1/users', method:'post',  id: 'user_registration_form', html: {autocomplete: "off"} do %>
-   <%= hidden_field_tag :user_type, @user_type %>
+  <%= form_tag '/api/v1/users', method:'post',  id: 'user_registration_form', :format => :html do %>
+      <%= hidden_field_tag :html_format, true %>
+      <%= hidden_field_tag :user_type, @user_type %>
       <div class="clearfix">
         <%if @user_type == 'gift'%>
             <div class="form-row">

@@ -11,24 +11,33 @@ class  Api::V1::TransactionsController < ApplicationController
   end
 
   def create
-    #return render status: 200, :json=> {:success => false, data: [t('already_stripe_account')] } if current_user.stripe_account?
-   if current_user.user_type != params[:user_type]
-     flash[:message] =t('user_type_mismatch')
-     return redirect_to :back
-  elsif current_user.stripe_account?
-      flash[:message] =t('already_stripe_account')
-      return redirect_to :back
+    if params[:html_format]
+     if current_user.user_type != params[:user_type]
+       flash[:message] =t('user_type_mismatch')
+       return redirect_to :back
+    elsif current_user.stripe_account?
+        flash[:message] =t('already_stripe_account')
+        return redirect_to :back
+     end
+   else
+     return render status: 200, :json=> {:success => false, data: [t('already_stripe_account')] } if current_user.stripe_account?
   end
     @stripe_customer = StripeCustomer.new
     if @stripe_customer.save_with_payment(current_user, params)
-      sign_out current_user
-      flash[:message] =t('download_nurl_app')
-      redirect_to root_path
-      #return render status: 201, :json=> {:success => true, data: 'Stripe account created' }
+      if params[:html_format]
+        sign_out current_user
+        flash[:message] =t('download_nurl_app')
+        redirect_to root_path
+      else
+        return render status: 201, :json=> {:success => true, data: 'Stripe account created' }
+      end
     else
-      #return render status: 200, :json=> {:success => false, data: @stripe_customer.errors.messages }
-      flash[:message] =  @stripe_customer.errors.messages
-      return redirect_to :back
+      if params[:html_format]
+        flash[:message] =  @stripe_customer.errors.messages
+        return redirect_to :back
+      else
+        return render status: 200, :json=> {:success => false, data: @stripe_customer.errors.messages }
+      end
     end
   end
 
