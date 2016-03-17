@@ -32,7 +32,7 @@ class UserMailer < ActionMailer::Base
   def help_mail(params)
     @user = params[:name]
     @description = params[:description]
-    mail(from:params[:email], to:'support@nuryl.com', subject: 'nuryl help')
+    mail(from:params[:email], to: ENV['Support_Email'], subject: 'nuryl help')
   end
 
 

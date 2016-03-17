@@ -32,6 +32,7 @@ gem 'activerecord-import'
 gem 'ruby-mp3info'
 gem 'newrelic_rpm'
 gem 'stripe'
+gem 'freshdesk'
 
 
 # Use ActiveModel has_secure_password
