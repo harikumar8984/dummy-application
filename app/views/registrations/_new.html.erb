@@ -1,5 +1,6 @@
-  <%= form_tag '/api/v1/users', method:'post', class:'signup-form', id: 'user_registration_form', html: {autocomplete: "off"} do %>
-   <%= hidden_field_tag :user_type, @user_type %>
+  <%= form_tag '/api/v1/users', method:'post', class:'signup-form', :format => :html, id: 'user_registration_form' do %>
+      <%= hidden_field_tag :html_format, true %>
+      <%= hidden_field_tag :user_type, @user_type %>
       <div class="clearfix">
       <div class="form-row">
         <%= text_field_tag "f_name", nil, id: 'input_first_name', placeholder: 'First Name', required: true%>

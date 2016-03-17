@@ -13,6 +13,7 @@
     </div>
     <div class="form-wrapper">
       <%= form_tag subscripe_api_transactions_path, method:'post', class:'form-horizontal', id: 'stripe_registration' do %>
+       <%= hidden_field_tag :html_format, true %>
        <%= hidden_field_tag :user_type, @user_type %>
        <%= hidden_field_tag :card_id %>
        <%= hidden_field_tag :auth_token, @auth_token%>

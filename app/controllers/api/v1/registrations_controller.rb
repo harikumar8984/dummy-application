@@ -28,9 +28,13 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       if resource.active_for_authentication?
         resource.ensure_authentication_token!
         sign_in resource
-        redirect_to new_transaction_path(user_type: resource.user_type)
         #hrr Registration only from desktop changes
-        #return render status: 201, :json=> {:success => true, :auth_token => resource.authentication_token
+        #added an extra parameter for detecction the format
+         if params[:html_format]
+           return redirect_to new_transaction_path(user_type: resource.user_type)
+         else
+          return render status: 201, :json=> {:success => true, :auth_token => resource.authentication_token }
+        end
       else
         expire_session_data_after_sign_in!
         return render status: 201, :json => {:success => true}
@@ -46,11 +50,6 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
     @user_type = params[:user_type] || 'standard'
     @user = User.new
   end
-
-  # def new_auditor
-  #   @user_type = params[:user_type]
-  #   @user = User.new
-  # end
 
 
 end
