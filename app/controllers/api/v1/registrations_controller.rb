@@ -2,19 +2,18 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   include ApiHelper
   include UserCommonMethodControllerConcern
   skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
+  skip_before_filter :is_device_id?, :only => [:create, :new]
   skip_before_filter :authenticate_scope!, :only => [:update]
-  skip_before_filter :authenticate_user_from_token!, :only => :create
-  skip_before_filter :authenticate_device, :only => :create
+  skip_before_filter :authenticate_user_from_token!, :only => [:create, :new]
+  skip_before_filter :authenticate_device, :only => [:create, :new]
   respond_to :json
+  #layout "rails_admin/application", :only => [:new]
 
   def create
     build_resource(sign_up_params.merge!(status: 'ACTIVE'))
     #device = DeviceDetail.find_or_create_by(device_id: params[:device_id])
     if resource.save
-      device_id = request.headers["device-id"]
-      if resource.device_detail.nil?
-        DeviceDetail.create(device_id: device_id, status: "Active", user_id: resource.id)
-      end
+      create_device_details(resource)
       #device.update_attributes(status: 'active', user_id: resource.id)
       #creating child of user
       dob_format if params[:dob]
@@ -28,7 +27,10 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       #UserMailer.user_registered_to_nuryl( resource, "Nuryl Registration").deliver
       if resource.active_for_authentication?
         resource.ensure_authentication_token!
-        return render status: 201, :json=> {:success => true, :auth_token => resource.authentication_token}
+        sign_in resource
+        redirect_to new_transaction_path(user_type: resource.user_type)
+        #hrr Registration only from desktop changes
+        #return render status: 201, :json=> {:success => true, :auth_token => resource.authentication_token
       else
         expire_session_data_after_sign_in!
         return render status: 201, :json => {:success => true}
@@ -38,6 +40,17 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       return render :status => 200, :json => {:success => false, :errors => resource.errors}
     end
   end
+
+
+  def new
+    @user_type = params[:user_type] || 'standard'
+    @user = User.new
+  end
+
+  # def new_auditor
+  #   @user_type = params[:user_type]
+  #   @user = User.new
+  # end
 
 
 end

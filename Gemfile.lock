@@ -203,6 +203,9 @@ GEM
     font-awesome-rails (4.5.0.0)
       railties (>= 3.2, < 5.0)
     formatador (0.2.5)
+    freshdesk (0.2)
+      nokogiri
+      rest-client
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     haml (4.0.7)
@@ -348,6 +351,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   devise
   fog
+  freshdesk
   jbuilder (~> 2.0)
   jquery-rails
   mysql2 (~> 0.3.18)

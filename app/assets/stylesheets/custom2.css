@@ -1,0 +1,74 @@
+/**
+ * Custom style for Registration and Payment
+ */
+.payment-body .form-wrapper,
+.registration-body .form-wrapper {
+   padding-top: 0;
+   width: 543px;
+}
+.payment-body .form-wrapper .form-row,
+.registration-body .form-wrapper .form-row{
+   width: 543px;
+}
+.payment-body .submit-button,
+.registration-body .submit-button {
+   border: 2px solid #ffffff;
+}
+.payment-body .tab-links,
+.registration-body .tab-links {
+   text-align: center;
+   height: 130px;
+}
+.payment-body .tab-links .tab-link,
+.registration-body .tab-links .tab-link {
+   position: static;
+   display: inline-block;
+   width: initial;
+   height: initial;
+   margin-left: 92px;
+   margin-right: 92px;
+}
+.payment-body .tab-links .tab-link img,
+.registration-body .tab-links .tab-link img {
+   vertical-align: middle;
+   margin-right: 10px;
+}
+.payment-body .tab-links .tab-link span,
+.registration-body .tab-links .tab-link span {
+   display: inline-block;
+   vertical-align: middle;
+}
+.payment-body .tab-links .payment-tab-link,
+.registration-body .tab-links .registration-tab-link {
+   margin-left: 0;
+}
+.payment-body .tab-links .nuryl-tab-link,
+.registration-body .tab-links .nuryl-tab-link {
+   margin-right: 0;
+}
+.dob input {
+   padding-right: 50px;
+   min-height: 51px;
+}
+.dob img {
+   position: absolute;
+   right: 19px;
+   top: 14px;
+}
+
+/**
+ * PAYMENTS
+ */
+.payment-body .tab-links .tab-link {
+   margin-left: 68px;
+   margin-right: 68px;
+}
+.payment-body .tab-links .payment-tab-link {
+   margin-left: 0;
+}
+.payment-body .tab-links .nuryl-tab-link {
+   margin-right: 0;
+}
+.payment-body .expyr .form-row {
+   width: 262px;
+}
