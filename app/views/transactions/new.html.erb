@@ -1,31 +1,60 @@
-<%= form_for @subscription do |f| %>
-    <% if @subscription.errors.any? %>
-        <div class="error_messages">
-          <h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this subscription from being saved:</h2>
-          <ul>
-            <% @subscription.errors.full_messages.each do |msg| %>
-                <li><%= msg %></li>
-            <% end %>
-          </ul>
+<div class = "payment-body">
+<div class="page-fixed page-background">
+  <div class="page-content-inner">
+    <div id="tab-links" class="clearfix tab-links">
+      <a class="tab-link external payment-tab-link active">
+        <img src="/assets/credit_card.png" alt="" width="58px">
+        <span class="label">Payment Details</span>
+      </a>
+      <a class="tab-link external nuryl-tab-link">
+        <img src="/assets/nuryl_logo.png" alt="" width="58px">
+        <span class="label">Nuryl</span>
+      </a>
+    </div>
+    <div class="form-wrapper">
+      <%= form_tag subscripe_api_transactions_path, method:'post', class:'form-horizontal', id: 'stripe_registration' do %>
+       <%= hidden_field_tag :html_format, true %>
+       <%= hidden_field_tag :user_type, @user_type %>
+       <%= hidden_field_tag :card_id %>
+       <%= hidden_field_tag :auth_token, @auth_token%>
+       <div id="stripe_error">
+        <div class="message">
+          <%= flash[:message] %>
+          <noscript>JavaScript is not enabled and is required for this form. First enable it in your web browser settings.</noscript>
         </div>
-    <% end %>
+       </div>
 
+          <div class="form-row">
+            <%= text_field_tag :card_number, nil, name: nil, placeholder: "Credit Card Number", required: true%>
+        </div>
+        <div class="form-row">
+          <%= text_field_tag :card_code, nil, name: nil,  placeholder: "Security Code (CVV)", required: true %>
+        </div>
+        <div class="form-group expyr clearfix">
+          <div class="pull-left form-row width-50">
+            <%= select_month nil, {add_month_numbers_true: true}, {name: nil, id: "card_month"}%>
+          </div>
+          <div class="pull-right form-row width-50">
+            <%= select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "card_year"}%>
+          </div>
+        </div>
+        <div class="form-row">
+          <%= select_tag(:subscription_type, options_for_select(@plan)) %>
+        </div>
 
-    <div class="field">
-      <%= label_tag :card_number, "Credit Card Number " %>
-      <%= text_field_tag :card_number, nil, name: nil %>
+        <div class="submit-wrapper">
+          <%= button_tag(type: 'submit' , class: "button submit-button payment-btn") do %>
+               <span >Subscribe <img src="/assets/check.png" alt="" width="18px"></span>
+          <% end %>
+        </div>
+
+      <%end%>
     </div>
-    <div class="field">
-      <%= label_tag :card_code, "Security Code on Card (CVV)" %>
-      <%= text_field_tag :card_code, nil, name: nil %>
-    </div>
-    <div class="field">
-      <%= label_tag :card_month, "Card Expiration" %>
-      <%= select_month nil, {add_month_numbers_true: true}, {name: nil, id: "card_month"}%>
-      <%= select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "card_year"}%>
-    </div>
-    <div class="actions"><%= f.submit "Subscribe" %></div>
-<% end %>
-<div id="stripe_error">
-  <noscript>JavaScript is not enabled and is required for this form. First enable it in your web browser settings.</noscript>
+  </div>
 </div>
+</div>
+
+<%= javascript_include_tag "transactions" %>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js"></script>
+

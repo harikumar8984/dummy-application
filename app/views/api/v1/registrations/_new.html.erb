@@ -1,0 +1,53 @@
+  <%= form_tag '/api/v1/users', method:'post',  id: 'user_registration_form', :format => :html do %>
+      <%= hidden_field_tag :html_format, true %>
+      <%= hidden_field_tag :user_type, @user_type %>
+      <div class="clearfix">
+        <%if @user_type == 'gift'%>
+            <div class="form-row">
+                <%= text_field_tag "gifter_first_name", nil, id: 'input_gifter_first_name', placeholder: 'Your First Name', required: true%>
+
+            </div>
+            <div class="form-row">
+                <%= text_field_tag "gifter_last_name", nil, id: 'input_gifter_last_name', placeholder: 'Your Last Name', required: true%>
+              </div>
+             <div class="form-row">
+                <%= email_field_tag "gifter_email", nil, id: 'input_gifter_email', placeholder: 'Your Email', required: true%>
+              </div>
+        <%end%>
+
+      <div class="form-row">
+        <%= text_field_tag "f_name", nil, id: 'input_first_name', placeholder: @user_type == 'gift' ? 'Receivers First Name' : 'First Name', required: true%>
+      </div>
+      <div class="form-row">
+        <%= text_field_tag  "l_name", nil,  id: 'input_last_name', placeholder: @user_type == 'gift' ? 'Receivers Last Name' : 'Last Name', required: true%>
+      </div>
+      <div class="form-row">
+        <div class='error-email-label'></div>
+        <%= email_field_tag "email", nil, id: 'input_email', placeholder: @user_type == 'gift' ? 'Receivers Email' : 'Email', required: true,  autocomplete: :off %>
+       </div>
+        <div class="form-row">
+          <%= password_field_tag "password", nil,  id: 'input_password', placeholder: "Minium 8 characters", required: true, minlength: 8 %>
+        </div>
+
+      <div class="form-row">
+        <%= text_field_tag "baby_name", nil, id: 'input_baby_name', placeholder: 'Baby Name', required: true%>
+      </div>
+      <div class="form-row">
+        <%= select_tag "relationship", "<option>Mother</option><option>Father</option><option>Guardian</option>".html_safe %>
+      </div>
+
+      <div class="form-row dob">
+        <input id="dob" name="dob" type="date" placeholder="Baby's D.O.B"  required>
+        <img src="assets/calendar.png" alt="" class="pe-no" width="23px">
+      </div>
+
+      <div class="form-row">
+        <%= text_field_tag "zipcode", nil,  id: 'input_zipcode', placeholder: 'Zip code'%>
+      </div>
+    </div>
+    <div class="submit-wrapper">
+      <%= button_tag(type: 'submit', class: "button submit-button sign-up-button") do %>
+          <span class="gtsrt-icon"></span> <span >Signup <img src="assets/check.png" alt="" width="18px"></span>
+      <% end %>
+    </div>
+  <%end%>

@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.1'
 # Use mysql2 as the database for Active Record
 gem 'mysql2', '~> 0.3.18'
-#For admin page
+#For rails_admin page
 gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
@@ -33,6 +33,10 @@ gem 'ruby-mp3info'
 gem 'newrelic_rpm'
 gem 'stripe'
 gem 'freshdesk'
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4b532472e89a50fa3effc4bef73c32008ce78b23
 
 
 # Use ActiveModel has_secure_password

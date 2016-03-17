@@ -12,11 +12,15 @@ class SessionsController < Devise::SessionsController
   def create
     resource = User.find_for_database_authentication(:email => params[:user][:email])
     return failure unless resource
-    #only for admin sign in
-    if resource.valid_password?(params[:user][:password]) && resource.admin?
+    #only for rails_admin sign in
+    if resource.valid_password?(params[:user][:password])
       sign_in(:user, resource)
       resource.ensure_authentication_token!
+      if resource.admin?
       redirect_to rails_admin_path
+      else
+        redirect_to new_transaction_path(user_type: resource.user_type)
+      end
       return
     end
     failure
@@ -31,7 +35,9 @@ class SessionsController < Devise::SessionsController
   def new
     if user_signed_in? && current_user.admin?
       redirect_to rails_admin_path
+      @user = User.new
     else
+      @user_type = params[:user_type] || 'standard'
       super
     end
   end

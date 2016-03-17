@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   # via parameters. However, anyone could use Rails's token
   # authentication features to get the token from a header.
   def authenticate_user_from_token!
-    user_token = request.headers["auth-token"].presence
+    user_token = request.headers["auth-token"].presence || params[:auth_token]
     user       = user_token && User.find_by_authentication_token(user_token.to_s)
     if user
       sign_in user, store: false
@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
   end
 
   def user_from_auth_token
-    user_token = request.headers["auth-token"].presence
+    user_token = request.headers["auth-token"].presence || params[:auth_token]
     user       = user_token && User.find_by_authentication_token(user_token.to_s)
     user
   end
@@ -55,9 +55,9 @@ class ApplicationController < ActionController::Base
     if current_user
       user = User.user_from_authentication(current_user.authentication_token)
       unless user.stripe_account?
-        response_body_json = JSON.parse(response.body).merge({stripe_account: false })
+        response_body_json = JSON.parse(response.body).merge({stripe_account: false }) rescue response.body
       else
-        response_body_json = JSON.parse(response.body).merge({is_active: user.active_subscription? })
+        response_body_json = JSON.parse(response.body).merge({is_active: user.active_subscription? }) rescue response.body
       end
       response.body = response_body_json.to_json
     end
