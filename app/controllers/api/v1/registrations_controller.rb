@@ -24,7 +24,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
        child.user_child.update_attributes(relationship: params[:relationship])
       end
       #HRR Mail functionality turning off
-      #UserMailer.user_registered_to_nuryl( resource, "Nuryl Registration").deliver
+      UserMailer.user_registered_to_nuryl( resource, "Nuryl Registration").deliver
       if resource.active_for_authentication?
         resource.ensure_authentication_token!
         sign_in resource
