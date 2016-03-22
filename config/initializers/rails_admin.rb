@@ -68,12 +68,11 @@ RailsAdmin.config do |config|
     update do
       field :f_name
       field :l_name
+      field :password
     end
   end
 
-  config.model Child do
-    parent User
-  end
+
 
   config.model Content do
     configure :duration do
