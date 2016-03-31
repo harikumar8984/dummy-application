@@ -55,13 +55,12 @@ class ApplicationController < ActionController::Base
     if current_user
       user = User.user_from_authentication(current_user.authentication_token)
       unless user.stripe_account?
-        response_body_json = JSON.parse(response.body).merge({stripe_account: false }) rescue response.body
+        response_body_json = JSON.parse(response.body).merge({has_account: false }) rescue response.body
       else
         response_body_json = JSON.parse(response.body).merge({is_active: user.active_subscription? }) rescue response.body
       end
       response.body = response_body_json.to_json
     end
   end
-
 
 end
