@@ -8,7 +8,7 @@ class StripeSubscription < ActiveRecord::Base
   def self.create_json(subscription, user)
     plan_details = {}
     subscription_details = {subscription_id: subscription.id, status: subscription.status,
-     tax_percent: subscription.tax_percent, subscription_url: subscription.url, user_id: user.id }
+     tax_percent: subscription.tax_percent, subscription_url: subscription.url, user_id: user.id ,  payment_type: 'stripe'}
 
     unless subscription.plan.nil?
       plan_details= {
@@ -17,6 +17,10 @@ class StripeSubscription < ActiveRecord::Base
 
     end
     subscription_details.merge(plan_details)
+  end
+
+  def self.save_with_in_app_subscription(user, params)
+      user.stripe_customer.stripe_subscriptions.create(iap_subscription_json(user, params)) if user.stripe_customer
   end
 
   def update_plan_details(plan)
@@ -32,6 +36,14 @@ class StripeSubscription < ActiveRecord::Base
   def self.update_with_status(response)
     subscription = where(subscription_id:  response['id']).first
     subscription.update_attributes(status: response['status']) if subscription
+  end
+
+  def self.iap_subscription_json(user, params)
+    {status: 'active', plan_id: params[:duration], amount:  params[:amount], interval: params[:duration], payment_type: 'iap'}
+  end
+
+  def self.update_with_in_app_subscription(user, status)
+    user.active_subscription.update_attributes(status: status)
   end
 
 

@@ -47,8 +47,16 @@ class User < ActiveRecord::Base
     stripe_customer.stripe_subscriptions.active.present?
   end
 
+  def active_subscription
+    stripe_customer.stripe_subscriptions.active.first
+  end
+
   def active_subscription_plan
     stripe_customer.stripe_subscriptions.active.first.plan_id
+  end
+
+  def has_subscription?
+    stripe_customer.stripe_subscriptions.present?
   end
 
 
