@@ -53,5 +53,6 @@ Rails.application.configure do
   ENV['FreshDesk_Url'] = 'https://nuryl.freshdesk.com/'
   ENV['FreshDesk_Api_Key'] = 'euXCFjG0kIMOlNRzuuU'
   ENV['Support_Email'] = 'harikumar8984@gmail.com'
+  ENV['In_App_Purchase_Subscription'] = 'com.nuryl.subscribe.'
 
 end

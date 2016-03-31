@@ -118,9 +118,9 @@ class  Api::V1::TransactionsController < ApplicationController
     subscrition_type = []
     all_plan[:data].each do |plan|
       if user_type == 'beta' && plan.id == 'Beta' || plan.id == 'Monthly'
-        subscrition_type << 'com.nuryl.purchase.'+plan.id.downcase
+        subscrition_type << ENV['In_App_Purchase_Subscription']+plan.id.downcase
       elsif plan.id != 'Beta' && user_type != 'beta'
-        subscrition_type << 'com.nuryl.purchase.'+plan.id.downcase
+        subscrition_type << ENV['In_App_Purchase_Subscription']+plan.id.downcase
       end
     end
     return render status: 200, :json=> {:success => true, data: subscrition_type }
