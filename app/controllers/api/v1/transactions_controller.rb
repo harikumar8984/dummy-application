@@ -1,4 +1,5 @@
 class  Api::V1::TransactionsController < ApplicationController
+  include UserCommonMethodControllerConcern
   skip_before_filter :is_device_id?, :only => [:webhook,:new,:create,:get_subscription_amount]
   skip_before_filter :authenticate_scope!, :only => [:webhook,:new]
   skip_before_filter :authenticate_user_from_token!, :only =>  [:webhook,:new]
@@ -23,7 +24,7 @@ class  Api::V1::TransactionsController < ApplicationController
      return render status: 200, :json=> {:success => false, data: [t('already_stripe_account')] } if current_user.stripe_account?
   end
     @stripe_customer = StripeCustomer.new
-    if @stripe_customer.save_with_payment(current_user, params)
+    if @stripe_customer.save_with_stripe_payment(current_user, params)
       if params[:html_format]
         sign_out current_user
         flash[:message] =t('download_nurl_app')
@@ -110,6 +111,40 @@ class  Api::V1::TransactionsController < ApplicationController
     StripeSubscription.update_with_status(response)
   end
 
+  #type of subscription for IOS APP
+  def get_subscription_type
+    all_plan = StripeExt.get_all_plan
+    user_type = current_user.user_type
+    subscrition_type = []
+    all_plan[:data].each do |plan|
+      if user_type == 'beta' && plan.id == 'Beta' || plan.id == 'Monthly'
+        subscrition_type << 'com.nuryl.purchase.'+plan.id.downcase
+      elsif plan.id != 'Beta' && user_type != 'beta'
+        subscrition_type << 'com.nuryl.purchase.'+plan.id.downcase
+      end
+    end
+    return render status: 200, :json=> {:success => true, data: subscrition_type }
+  end
+
+  def in_app_purchase_details
+    if !current_user.stripe_account?
+      stripe_customer = StripeCustomer.new
+      stripe_customer.save_with_in_app_payment(current_user, params)
+      StripeSubscription.save_with_in_app_subscription(current_user, params)
+     elsif (!current_user.has_subscription? || (current_user.has_subscription? && !current_user.active_subscription?))
+       StripeSubscription.save_with_in_app_subscription(current_user, params)
+    end
+    params[:purchase_date] = dob_format(params[:purchase_date]) if params[:purchase_date]
+    Transaction.save_with_in_app_transaction(current_user, params)
+    return render status: 201, :json=> {:success => true, data: {data: "IAP details updated" } }
+  end
+
+  def cancel_in_app_subscription
+    return render status: 200, :json=> {:success => false, data: [t('no_stripe_account')] } unless current_user.stripe_account?
+    return render status: 200, :json=> {:success => false, data: [t('no_active_stripe_subscription')] } unless current_user.active_subscription?
+    StripeSubscription.update_with_in_app_subscription(current_user, 'canceled')
+    return render status: 201, :json=> {:success => true, data: {data: "Subscription deactivated" } }
+  end
 
 end
 

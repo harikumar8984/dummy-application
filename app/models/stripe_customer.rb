@@ -3,7 +3,7 @@ class StripeCustomer < ActiveRecord::Base
   has_many :transactions, dependent: :destroy
   has_many :stripe_subscriptions, dependent: :destroy
 
-  def save_with_payment(user, params)
+  def save_with_stripe_payment(user, params)
     plan_id = params[:subscription_type].capitalize unless params[:subscription_type].nil?
     if plan_id.nil?
       self.errors.add(:base, "User don't provide any type of subscription")
@@ -18,13 +18,19 @@ class StripeCustomer < ActiveRecord::Base
     end
   end
 
+  def save_with_in_app_payment(user, params)
+    StripeCustomer.create(create_iap_json(user, params))
+  end
+
   def create_json(customer, user)
     {customer_id: customer.id, account_balance: customer.account_balance, currency: customer.currency,
     default_source: customer.default_source, description: customer.description,
-    source_url: customer.sources.url, user_id: user.id }
+    source_url: customer.sources.url, user_id: user.id, payment_type: 'stripe' }
   end
 
-
+  def create_iap_json(user, params)
+    {customer_id: params[:apple_id],  currency: params[:currency],user_id: user.id, payment_type: 'iap' }
+  end
 
 
 end
