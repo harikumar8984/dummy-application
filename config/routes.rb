@@ -8,7 +8,6 @@ Nuryl::Application.routes.draw do
     match 'api/v1/user_registration' => 'api/v1/registrations#create', :via => :post
     match 'api/v1/help' => 'api/v1/helps#create', :via => :post
     match '/api/v1/users/forget_password' => 'api/v1/passwords#create', :via => :post
-    match '/api/v1/users/password' => 'api/v1/passwords#update_password', :via => :put
     match '/api/v1/users/change_password' => 'api/v1/passwords#update_password_api', :via => :put
     match '/api/v1/help/help_desk_webhook' => 'api/v1/helps#help_desk_webhook', :via => :post
     match 'user_registration' => 'api/v1/registrations#new', :via => :get
