@@ -20,14 +20,6 @@ class Api::V1::PasswordsController < Devise::PasswordsController
   end
 
 
-  def update_password
-    user = User.find_by_reset_password_token(params[:api_user][:reset_password_token])
-    user.update(password:  params[:api_user][:password], password_confirmation: params[:api_user][:password_confirmation]) if user
-    flash[:notice] = user.nil? ? 'Invalid reset password token' : user.errors.messages.blank? ? 'Password Updated': user.errors.messages
-    redirect_to :back
-  end
-
-
    def update_password_api
     user = user_from_auth_token
      if user
