@@ -17,7 +17,7 @@ class Transaction < ActiveRecord::Base
 
   def self.create_json(user_id, response, type)
     {user_id: user_id, customer_id:  response['customer'], amount: response['amount'], currency: response['currency'],
-    transaction_id: response['id'], invoice_id: response['invoice'], status: response['paid'],
+    transaction_id: response['id'], invoice_id: response['invoice'], status: response['status'],
     balance_transaction_id: response['balance_transaction'], description: response['description'],
     failure_code: response['failure_code'], failure_message: response['failure_message'],
     paid: response['paid'], transaction_type: type, statement_descriptor: response['statement_descriptor'],

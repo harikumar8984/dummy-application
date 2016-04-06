@@ -33,6 +33,11 @@ gem 'ruby-mp3info'
 gem 'newrelic_rpm'
 gem 'stripe'
 gem 'freshdesk'
+gem 'yajl-ruby'
+gem 'mysql'
+gem 'fastercsv'
+gem 'vtiger'
+
 
 
 # Use ActiveModel has_secure_password
