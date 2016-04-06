@@ -48,7 +48,6 @@ namespace :VtigerCrmIntegration do
   #   end
   #
   # def updated_today(obj_model)
-  #   binding.pry
   #   models =  obj_model.constantize.where("updated_at >= ? || created_at >= ?", Time.zone.now.beginning_of_day , Time.zone.now.beginning_of_day).group(:user_id) rescue []
   #   models.each do |model|
   #     unless model.user.nil?
