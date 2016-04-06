@@ -94,18 +94,20 @@ namespace :VtigerCrmIntegration do
   end
 
   def create_device_hash(user, device_detail)
-      {cf_823: device_detail.device_id, cf_829: device_detail.created_at, cf_831: device_detail.updated_at.to_date,
-       cf_827: device_detail.status, cf_833: user.sign_in_count, cf_835: user.current_sign_in_at.to_date,
-       cf_839: user.last_sign_in_at.to_date, cf_837: user.current_sign_in_ip, cf_841: user.last_sign_in_ip}
+      {cf_823: device_detail.device_id, cf_829: device_detail.created_at ? device_detail.created_at.to_date : '' ,
+       cf_831: device_detail.updated_at ? device_detail.updated_at.to_date : '',
+       cf_827: device_detail.status, cf_833: user.sign_in_count, cf_835: user.current_sign_in_at ? user.current_sign_in_at.to_date : '',
+       cf_839: user.last_sign_in_at ? user.last_sign_in_at.to_date : '', cf_837: user.current_sign_in_ip, cf_841: user.last_sign_in_ip}
   end
 
   def create_children_hash(children)
-    {cf_853: children.name, cf_851: children.dob, cf_855: children.created_at.to_date, cf_857: children.updated_at.to_date}
+    {cf_853: children.name, cf_851: children.dob, cf_855: children.created_at ? children.created_at.to_date : '',
+     cf_857: children.updated_at ? children.updated_at.to_date : ''}
   end
 
   def create_payment_hash(payment)
-    {cf_861: payment.customer_id, cf_865: payment.source_url, cf_867: payment.created_at.to_date,
-     cf_869: payment.updated_at.to_date, cf_911: payment.payment_type}
+    {cf_861: payment.customer_id, cf_865: payment.source_url, cf_867: payment.created_at ? payment.created_at.to_date : '',
+     cf_869: payment.updated_at ? payment.updated_at.to_date : '', cf_911: payment.payment_type}
   end
 
   def create_transaction_hash(user, transaction)
