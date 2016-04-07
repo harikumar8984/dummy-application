@@ -12,42 +12,41 @@ namespace :VtigerCrmIntegration do
     desc "Updating CRM with CMS latest data"
     task :update_cms_crm => :environment do |t,args|
       login_vtiger
-      #first update all users created today
-      user_created_today
-      #user updated today
-      today =  Time.zone.now.beginning_of_day
+      #first update all users created yesterday
+      user_created_yesterday
+      yesterday = Time.now - 365.day
       user = User.all.each do |user|
-        if ( (user.updated_at >= today  || user.created_at >= today) ||
-            (user.children && user.children.first.updated_at >= today  || user.children.first.created_at >= today) ||
-            (user.stripe_customer && (user.stripe_customer.first.updated_at >= today  || user.stripe_customer.first.created_at >= today)) ||
-            (user.transactions.last && (user.transactions.last.updated_at >= today  || user.transactions.last.created_at >= today)) ||
-            (user.player_usage_stats.last &&  (user.player_usage_stats.last.updated_at >= today  || user.player_usage_stats.last.created_at >= today)) )
+        if ( (user.updated_at >= yesterday  || user.created_at >= yesterday) ||
+            (user.children && user.children.first.updated_at >= yesterday  || user.children.first.created_at >= yesterday) ||
+            (user.stripe_customer && (user.stripe_customer.first.updated_at >= yesterday  || user.stripe_customer.first.created_at >= yesterday)) ||
+            (user.transactions.last && (user.transactions.last.updated_at >= yesterday  || user.transactions.last.created_at >= yesterday)) ||
+            (user.player_usage_stats.last &&  (user.player_usage_stats.last.updated_at >= yesterday  || user.player_usage_stats.last.created_at >= yesterday)) )
           update_crm_object(user)
         end
       end
     end
 
-    def user_created_today
+    def user_created_yesterday
       user = User.where("created_at >= ?", Time.zone.now.beginning_of_day)
       user.each do |user|
         @cmd.find_contact_by_email_or_add(nil, user.l_name, user.email, create_user_list_hash(user) )
       end
     end
 
-    # def is_updated_today(model)
+    # def is_updated_yesterday(model)
     #  result = model.where("updated_at >= ? || created_at >= ?", Time.zone.now.beginning_of_day , Time.zone.now.beginning_of_day) rescue []
     #  result.blank? ? false : true
     # end
 
 
-  # def user_updated_today
+  # def user_updated_yesterday
   #     user = User.where("updated_at >= ? AND created_at < ?", Time.zone.now.beginning_of_day , Time.zone.now.beginning_of_day)
   #     user.each do |user|
   #       update_crm_object(user)
   #     end
   #   end
   #
-  # def updated_today(obj_model)
+  # def updated_yesterday(obj_model)
   #   models =  obj_model.constantize.where("updated_at >= ? || created_at >= ?", Time.zone.now.beginning_of_day , Time.zone.now.beginning_of_day).group(:user_id) rescue []
   #   models.each do |model|
   #     unless model.user.nil?
@@ -88,8 +87,8 @@ namespace :VtigerCrmIntegration do
 
 
   def create_user_hash(user)
-     {firstname: user.f_name, cf_809: user.id, cf_811: user.user_type, cf_813: user.subscription_end_date,
-      cf_815: user.stripe_account? ? user.active_subscription? : false, cf_817: user.zipcode, cf_821: user.authentication_token}
+     {firstname: user.f_name, cf_809: user.id, cf_917: user.user_type, cf_813: user.subscription_end_date,
+      cf_915: user.stripe_account? ? user.active_subscription? : false, cf_817: user.zipcode, cf_821: user.authentication_token}
   end
 
   def create_device_hash(user, device_detail)
@@ -119,10 +118,10 @@ namespace :VtigerCrmIntegration do
     year_usage_stats = usage_stats(player_usage_stats ,  1.year.ago.to_date + 1.day)
     daily_usage_stats = usage_stats(player_usage_stats ,  1.day.ago.to_date + 1.day)
     total_usage_stats = usage_stats(player_usage_stats ,  nil)
-    {cf_895: daily_usage_stats.first.duration.to_f > 0 ? (daily_usage_stats.first.duration.to_f/60).round(2)  : '0.00',
-     cf_897: month_usage_stats.first.duration.to_f > 0 ? (month_usage_stats.first.duration.to_f/60).round(2) : '0.00',
-     cf_899: year_usage_stats.first.duration.to_f > 0 ? (year_usage_stats.first.duration.to_f/60).round(2) : '0.00',
-     cf_907: total_usage_stats.first.duration.to_f > 0 ? (total_usage_stats.first.duration.to_f/60).round(2) : '0.00'
+    {cf_895: daily_usage_stats.first.duration.nil? ? '00:00:00' : Time.at(daily_usage_stats.first.duration).utc.strftime("%H:%M:%S"),
+     cf_897: month_usage_stats.first.duration.nil? ? '00:00:00' : Time.at(month_usage_stats.first.duration).utc.strftime("%H:%M:%S"),
+     cf_899: year_usage_stats.first.duration.nil? ? '00:00:00'  : Time.at(year_usage_stats.first.duration).utc.strftime("%H:%M:%S"),
+     cf_913: total_usage_stats.first.duration.nil? ? '00:00:00' : Time.at(total_usage_stats.first.duration).utc.strftime("%H:%M:%S")
     }
   end
 
