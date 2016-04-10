@@ -52,7 +52,6 @@ class ApplicationController < ActionController::Base
   end
 
   def account_info_on_response
-    binding.pry
     if current_user
       user = User.user_from_authentication(current_user.authentication_token)
       unless user.stripe_account?
