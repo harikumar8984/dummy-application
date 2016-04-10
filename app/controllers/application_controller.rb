@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   # # This is Devise's authentication
   # before_filter :authenticate_user!
   before_filter :authenticate_device
-  after_filter :account_info_on_response, :if => Proc.new { |c| (c.response.content_type == 'application/json') && !(request.xhr?) && (JSON.parse(c.response.body)['success'] == true) }
+  after_filter :account_info_on_response, :if => Proc.new { |c| (c.response.content_type == 'application/json') && !(request.xhr?) && (JSON.parse(c.response.body)['success'] == true rescue false) }
 
   # def after_sign_in_path_for(resource)
   #   edit_user_registration_path
@@ -52,9 +52,11 @@ class ApplicationController < ActionController::Base
   end
 
   def account_info_on_response
+    binding.pry
     if current_user
       user = User.user_from_authentication(current_user.authentication_token)
       unless user.stripe_account?
+
         response_body_json = JSON.parse(response.body).merge({user_type: user.user_type, has_account: false }) rescue response.body
       else
         response_body_json = JSON.parse(response.body).merge({user_type: user.user_type, is_active: user.active_subscription? }) rescue response.body
