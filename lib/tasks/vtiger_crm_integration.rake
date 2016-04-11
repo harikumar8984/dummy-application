@@ -111,7 +111,7 @@ namespace :VtigerCrmIntegration do
   def create_transaction_hash(user, transaction)
     {cf_871: transaction.transaction_id, cf_873: transaction.purchase_date ? transaction.purchase_date.to_date : '',
      cf_905: transaction.status , cf_881: transaction.amount, cf_885: transaction.paid, cf_887: transaction.failure_code,
-     cf_929: transaction.interval}
+     cf_929: user.active_subscription.interval}
   end
 
   def create_player_usage_stats_hash(user, player_usage_stats)
