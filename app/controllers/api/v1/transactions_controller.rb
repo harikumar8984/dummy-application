@@ -127,15 +127,17 @@ class  Api::V1::TransactionsController < ApplicationController
   end
 
   def in_app_purchase_details
-    if !current_user.stripe_account?
+    user = user_from_auth_token
+    if !user.stripe_account?
       stripe_customer = StripeCustomer.new
-      stripe_customer.save_with_in_app_payment(current_user, params)
-      StripeSubscription.save_with_in_app_subscription(current_user, params)
-     elsif (!current_user.has_subscription? || (current_user.has_subscription? && !current_user.active_subscription?))
-       StripeSubscription.save_with_in_app_subscription(current_user, params)
+      stripe_customer.save_with_in_app_payment(user, params)
+      user = user_from_auth_token
+      StripeSubscription.save_with_in_app_subscription(user, params)
+     elsif (!user.has_subscription? || (user.has_subscription? && !user.active_subscription?))
+       StripeSubscription.save_with_in_app_subscription(user, params)
     end
     params[:purchase_date] = dob_format(params[:purchase_date]) if params[:purchase_date]
-    Transaction.save_with_in_app_transaction(current_user, params)
+    Transaction.save_with_in_app_transaction(user, params)
     return render status: 201, :json=> {:success => true, data: {data: "IAP details updated" } }
   end
 

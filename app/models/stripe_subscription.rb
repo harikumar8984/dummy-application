@@ -39,7 +39,7 @@ class StripeSubscription < ActiveRecord::Base
   end
 
   def self.iap_subscription_json(user, params)
-    {status: 'active', plan_id: params[:duration], amount:  params[:amount], interval: params[:duration], payment_type: 'iap'}
+    {user_id: user.id , status: 'active', plan_id: params[:duration], amount:  params[:amount], interval: params[:duration], payment_type: 'iap'}
   end
 
   def self.update_with_in_app_subscription(user, status)
