@@ -17,7 +17,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       #device.update_attributes(status: 'active', user_id: resource.id)
       #creating child of user
       params[:dob] = dob_format(params[:dob]) if params[:dob]
-      child = resource.children.create(dob: params[:dob], name: params[:baby_name])
+      child = resource.children.create(dob: params[:dob], name: params[:baby_name], gender: params[:baby_gender])
       unless child.errors.messages.blank?
         return render :status => 200, :json => {:success => false, :auth_token => resource.authentication_token, :errors => child.errors.messages}
       else
