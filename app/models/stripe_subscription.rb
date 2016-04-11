@@ -1,7 +1,5 @@
 class StripeSubscription < ActiveRecord::Base
   belongs_to :stripe_customers
-  has_many :transactions
-
   scope :active, -> { where(status: 'active') }
 
 
