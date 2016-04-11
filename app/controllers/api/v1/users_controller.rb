@@ -109,7 +109,7 @@ class Api::V1::UsersController < ApplicationController
   def edit_profile
     user = user_from_auth_token
     child = user.children.first
-    data = {f_name: user.f_name, l_name: user.l_name, baby_name: child.name, dob: child.dob, zipcode: user.zipcode}
+    data = {f_name: user.f_name, l_name: user.l_name, baby_name: child.name, dob: child.dob, zipcode: user.zipcode, gender: child.gender}
     return render status: 200, :json=> {:success => true, data: data }
   end
 
