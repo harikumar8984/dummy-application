@@ -14,7 +14,7 @@ namespace :VtigerCrmIntegration do
       login_vtiger
       #first update all users created yesterday
       user_created_yesterday
-      yesterday = Time.now - 1.day
+      yesterday = Time.now - 365.day
       user = User.all.each do |user|
         if ( (user.updated_at >= yesterday  || user.created_at >= yesterday) ||
             (user.children && user.children.first.updated_at >= yesterday  || user.children.first.created_at >= yesterday) ||
@@ -110,15 +110,20 @@ namespace :VtigerCrmIntegration do
 
   def create_transaction_hash(user, transaction)
     {cf_871: transaction.transaction_id, cf_873: transaction.purchase_date ? transaction.purchase_date.to_date : '',
-     cf_905: transaction.status , cf_881: transaction.amount, cf_885: transaction.paid, cf_887: transaction.failure_code}
+     cf_905: transaction.status , cf_881: transaction.amount, cf_885: transaction.paid, cf_887: transaction.failure_code,
+     cf_929: transaction.interval}
   end
 
   def create_player_usage_stats_hash(user, player_usage_stats)
-    month_usage_stats = usage_stats(player_usage_stats , 30.days.ago.to_date + 1.day)
-    year_usage_stats = usage_stats(player_usage_stats ,  1.year.ago.to_date + 1.day)
-    daily_usage_stats = usage_stats(player_usage_stats ,  1.day.ago.to_date + 1.day)
+    month_usage_stats = usage_stats(player_usage_stats , Date.today.at_beginning_of_month)
+    year_usage_stats = usage_stats(player_usage_stats ,  Date.today.at_beginning_of_year)
+    daily_usage_stats_1 = usage_daily_stats(player_usage_stats ,  Date.today)
+    daily_usage_stats_2 = usage_daily_stats(player_usage_stats ,  Date.today - 1.day)
+    daily_usage_stats_3 = usage_daily_stats(player_usage_stats ,  Date.today - 2.day)
     total_usage_stats = usage_stats(player_usage_stats ,  nil)
-    {cf_895: daily_usage_stats.first.duration.nil? ? '00:00:00' : Time.at(daily_usage_stats.first.duration).utc.strftime("%H:%M:%S"),
+    {cf_923: daily_usage_stats_1.first.duration.nil? ? '00:00:00' : Time.at(daily_usage_stats_1.first.duration).utc.strftime("%H:%M:%S"),
+     cf_925: daily_usage_stats_2.first.duration.nil? ? '00:00:00' : Time.at(daily_usage_stats_2.first.duration).utc.strftime("%H:%M:%S"),
+     cf_927: daily_usage_stats_3.first.duration.nil? ? '00:00:00' : Time.at(daily_usage_stats_3.first.duration).utc.strftime("%H:%M:%S"),
      cf_897: month_usage_stats.first.duration.nil? ? '00:00:00' : Time.at(month_usage_stats.first.duration).utc.strftime("%H:%M:%S"),
      cf_899: year_usage_stats.first.duration.nil? ? '00:00:00'  : Time.at(year_usage_stats.first.duration).utc.strftime("%H:%M:%S"),
      cf_913: total_usage_stats.first.duration.nil? ? '00:00:00' : Time.at(total_usage_stats.first.duration).utc.strftime("%H:%M:%S")
@@ -131,6 +136,10 @@ namespace :VtigerCrmIntegration do
     else
       player_usage_stats.select("sum(duration) as duration").order(usage_date: :desc)
     end
+  end
+
+  def usage_daily_stats(player_usage_stats, filter_date)
+    player_usage_stats.select("sum(duration) as duration").where("DATE(usage_date) = ?", filter_date).order(usage_date: :desc)
   end
 
 end

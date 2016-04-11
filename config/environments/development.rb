@@ -54,5 +54,7 @@ Rails.application.configure do
   ENV['FreshDesk_Api_Key'] = 'euXCFjG0kIMOlNRzuuU'
   ENV['Support_Email'] = 'harikumar8984@gmail.com'
   ENV['In_App_Purchase_Subscription'] = 'com.nuryl.subscribe.'
-
+  ENV['VTIGER_USERNAME'] = 'HARI'
+  ENV['VTIGER_KEY'] = 'JZSpZjKgqfpha2v'
+  ENV['VTIGER_URL'] = 'vtiger.nuryl.com'
 end

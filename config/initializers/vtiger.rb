@@ -19,9 +19,9 @@ module Vtiger
 end
 
 Vtiger::Api.api_settings = {
-    username: 'Hari',
-    key: 'JZSpZjKgqfpha2v',
-    url: 'vtiger.nuryl.com',
+    username: ENV['VTIGER_USERNAME'],
+    key:  ENV['VTIGER_KEY'],
+    url: ENV['VTIGER_URL'],
     element_type: 'Contacts'
 }
 
