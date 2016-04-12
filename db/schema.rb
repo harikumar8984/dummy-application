@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160411103447) do
+ActiveRecord::Schema.define(version: 20160412070946) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
@@ -83,11 +83,12 @@ ActiveRecord::Schema.define(version: 20160411103447) do
   add_index "courses", ["course_category_id"], name: "index_courses_on_course_category_id", using: :btree
 
   create_table "device_details", force: :cascade do |t|
-    t.string   "status",     limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.integer  "user_id",    limit: 4
-    t.string   "device_id",  limit: 255
+    t.string   "status",      limit: 255
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "user_id",     limit: 4
+    t.string   "device_id",   limit: 255
+    t.string   "device_type", limit: 255
   end
 
   add_index "device_details", ["user_id"], name: "index_device_details_on_user_id", using: :btree

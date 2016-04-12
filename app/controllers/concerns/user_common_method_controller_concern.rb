@@ -19,8 +19,9 @@ module UserCommonMethodControllerConcern
 
   def create_device_details(user)
     device_id = request.headers["device-id"]
+    device_type = request.user_agent.include?("iPhone") ? 'iPhone' : 'Android'
     if device_id && user.device_detail.nil?
-      DeviceDetail.create(device_id: device_id, status: "Active", user_id: user.id)
+      DeviceDetail.create(device_id: device_id, status: "Active", user_id: user.id, device_type: device_type)
       return true
     end
     false
