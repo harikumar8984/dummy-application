@@ -111,7 +111,7 @@ namespace :VtigerCrmIntegration do
   end
 
   def create_transaction_hash(user, transaction)
-     if transaction.payment_type == stripe
+     if transaction.payment_type == 'stripe'
       amount =  transaction.amount > 0 ? (transaction.amount.to_f/ 100).to_f : 0.00
      else
        amount = transaction.amount
