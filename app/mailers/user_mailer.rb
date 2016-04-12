@@ -11,6 +11,7 @@ class UserMailer < ActionMailer::Base
     @user = user
     @status = true  if response['paid']
     @amount = response['amount']
+    @interval = response['statement_descriptor']
     @error_code = response['failure_code']
     @error_message = response['failure_message']
     body = @status ? "Payment Sucess" : "Payment Failed"
@@ -22,10 +23,12 @@ class UserMailer < ActionMailer::Base
    case response['status']
       when 'canceled'
         body = "Subscription Deactivated"
-        @content = "Your subscription de-activated."
+        @content = "Your subscription account with Nuryl has been cancelled.
+        We are sorry to see you leave but hope that you have enjoyed your Nuryl experience!"
       when 'active'
         body = "Subscription Activated"
-        @content = "Your subscription activated. You have choosen " + response['plan']['id'] + " plan."
+        plan =  response['plan']['id'] == 'Beta' ? 'Yearly' : response['plan']['id']
+        @content = "Thank you for subscribing to Nuryl's" + plan + " subscription. We hope you enjoy your experience with us!"
       end
       mail(to: @user.email, subject: body)
   end

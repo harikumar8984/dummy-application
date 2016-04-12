@@ -10,8 +10,16 @@
       <span style="font-weight:bold">Dear <%= @user.f_name %></span></p>
     <p>
     <%if @status%>
-           Your Payment is success. The amount of $<%=@amount > 0 ? @amount/100 : 0.00 %> is successfully debited from
-          your account. We are expecting your continuous support.
+          <%if @interval && @interval.include?('Monthly')%>
+              You have chosen a monthly subscription to Nuryl and your account has been debited $<%=@amount > 0 ? (@amount.to_f/100).to_f : 0.00 %> for this month.
+              This will be a recurring payment for each consecutive month after this.
+              Thank you for subscribing and for your interest in Nuryl!
+          <%else%>
+              You have chosen a yearly subscription to Nuryl and your account has been debited $<%=@amount > 0 ? (@amount.to_f/100).to_f : 0.00 %>.
+              This payment will reoccur after 12 months.
+              Thank you for subscribing and your interest in Nuryl!
+    <%end%>
+
     <%else%>
         Your payment is failed. Please reactivate your subscription for continuing our service.
       <br>
