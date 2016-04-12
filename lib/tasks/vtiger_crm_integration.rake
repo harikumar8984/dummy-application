@@ -97,7 +97,7 @@ namespace :VtigerCrmIntegration do
   def create_device_hash(device_detail)
       {cf_823: device_detail.device_id, cf_829: device_detail.created_at ? device_detail.created_at.to_date : '' ,
        cf_831: device_detail.updated_at ? device_detail.updated_at.to_date : '',
-       cf_827: device_detail.status}
+       cf_827: device_detail.status, cf_825: device_detail.device_type}
   end
 
   def create_children_hash(children)
