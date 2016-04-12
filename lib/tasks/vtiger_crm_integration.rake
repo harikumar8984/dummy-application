@@ -14,7 +14,7 @@ namespace :VtigerCrmIntegration do
       login_vtiger
       #first update all users created yesterday
       user_created_yesterday
-      yesterday = Time.now - 1.day
+      yesterday = Time.now - 365.day
       user = User.all.each do |user|
         if ( (user.updated_at >= yesterday  || user.created_at >= yesterday) ||
             (user.children && user.children.first.updated_at >= yesterday  || user.children.first.created_at >= yesterday) ||
@@ -72,7 +72,7 @@ namespace :VtigerCrmIntegration do
 
   def create_user_list_hash(user)
     device_details = {}
-    device_details = create_device_hash(user, user.device_detail) unless user.device_detail.nil?
+    device_details = create_device_hash(user.device_detail) unless user.device_detail.nil?
     children_details = {}
     children_details = create_children_hash(user.children.first) unless user.children.blank?
     payment_details = {}
@@ -80,7 +80,7 @@ namespace :VtigerCrmIntegration do
     transaction_details = {}
     transaction_details = create_transaction_hash(user , user.transactions.last) if user.stripe_account? && user.active_subscription? && user.transactions.last
     player_usage_details = {}
-    player_usage_details = create_player_usage_stats_hash(user, user.player_usage_stats)
+    player_usage_details = create_player_usage_stats_hash(user.player_usage_stats)
     create_user_hash(user).merge(device_details).merge(children_details).merge(payment_details).merge(transaction_details).merge(player_usage_details)
   end
 
@@ -88,14 +88,16 @@ namespace :VtigerCrmIntegration do
 
   def create_user_hash(user)
      {firstname: user.f_name, cf_809: user.id, cf_917: user.user_type, cf_813: user.subscription_end_date,
-      cf_915: user.stripe_account? ? user.active_subscription? : false, cf_817: user.zipcode, cf_821: user.authentication_token}
+      cf_915: user.stripe_account? ? user.active_subscription? : false, cf_817: user.zipcode, cf_821: user.authentication_token,
+      cf_835: user.current_sign_in_at ? user.current_sign_in_at.to_date : '',
+      cf_839: user.last_sign_in_at ? user.last_sign_in_at.to_date : '', cf_837: user.current_sign_in_ip, cf_841: user.last_sign_in_ip,
+      cf_833: user.sign_in_count}
   end
 
-  def create_device_hash(user, device_detail)
+  def create_device_hash(device_detail)
       {cf_823: device_detail.device_id, cf_829: device_detail.created_at ? device_detail.created_at.to_date : '' ,
        cf_831: device_detail.updated_at ? device_detail.updated_at.to_date : '',
-       cf_827: device_detail.status, cf_833: user.sign_in_count, cf_835: user.current_sign_in_at ? user.current_sign_in_at.to_date : '',
-       cf_839: user.last_sign_in_at ? user.last_sign_in_at.to_date : '', cf_837: user.current_sign_in_ip, cf_841: user.last_sign_in_ip}
+       cf_827: device_detail.status}
   end
 
   def create_children_hash(children)
@@ -114,7 +116,7 @@ namespace :VtigerCrmIntegration do
      cf_929: user.active_subscription.interval}
   end
 
-  def create_player_usage_stats_hash(user, player_usage_stats)
+  def create_player_usage_stats_hash(player_usage_stats)
     month_usage_stats = usage_stats(player_usage_stats , Date.today.at_beginning_of_month)
     year_usage_stats = usage_stats(player_usage_stats ,  Date.today.at_beginning_of_year)
     daily_usage_stats_1 = usage_daily_stats(player_usage_stats ,  Date.today)
