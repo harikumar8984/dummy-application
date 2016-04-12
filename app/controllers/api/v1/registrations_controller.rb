@@ -11,9 +11,11 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
 
   def create
     build_resource(sign_up_params.merge!(status: 'ACTIVE'))
+    puts request.user_agent.include?("Android") ? 'Android' : 'Iphone'
     #device = DeviceDetail.find_or_create_by(device_id: params[:device_id])
     if resource.save
       create_device_details(resource)
+      puts request.user_agent.include?("Android") ? 'Android' : 'Iphone'
       #device.update_attributes(status: 'active', user_id: resource.id)
       #creating child of user
       params[:dob] = dob_format(params[:dob]) if params[:dob]
