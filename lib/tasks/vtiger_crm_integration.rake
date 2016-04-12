@@ -111,8 +111,14 @@ namespace :VtigerCrmIntegration do
   end
 
   def create_transaction_hash(user, transaction)
+     if transaction.payment_type == stripe
+      amount =  transaction.amount > 0 ? (transaction.amount.to_f/ 100).to_f : 0.00
+     else
+       amount = transaction.amount
+     end
+
     {cf_871: transaction.transaction_id, cf_873: transaction.purchase_date ? transaction.purchase_date.to_date : '',
-     cf_905: transaction.status , cf_881: transaction.amount, cf_885: transaction.paid, cf_887: transaction.failure_code,
+     cf_905: transaction.status , cf_881: amount, cf_885: transaction.paid, cf_887: transaction.failure_code,
      cf_929: user.active_subscription.interval}
   end
 
