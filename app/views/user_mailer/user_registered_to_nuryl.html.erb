@@ -588,11 +588,23 @@
 
                                           <h1 class="null" style="display: block;margin: 0;padding: 0;font-family: Helvetica;font-size: 26px;font-style: normal;font-weight: normal;line-height: 125%;letter-spacing: normal;text-align: left;color: #00535E !important;"><span style="color:#666666"><img align="right" height="375" src="https://gallery.mailchimp.com/4bd2d38a9791411f892ceebda/images/e7ebf0f0-5046-44cb-93e3-98a3c82241a8.jpg" style="width: 189px;height: 375px;margin: 0px 0px 0px 12px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="189"><br>
 <br>
-<span style="font-size:32px">Welcome to Nuryl</span></span></h1>
+
+    <%if @device_type == 'Android'%>
+     <span style="font-size:32px">Welcome to Nuryl</span></span></h1>
+                                          <br>
+                                          <span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif"><span style="color:#000000">Thank you for downloading Nuryl from the Google Play Store and signing up to be a user. Please read the important information below about the current release of our app. There are several steps you'll need to follow.&nbsp; </span></span></span>
+                                        </td>
+                                      </tr>
+   <%else%>
+     <span style="font-size:32px">Welcome to Nuryl</span></span></h1>
                                           <br>
                                           <span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif"><span style="color:#000000">Thank you for downloading Nuryl from the App Store and signing up to be a user. Please read the important information below about the current release of our app.&nbsp;</span></span></span>
                                         </td>
                                       </tr>
+
+
+            <%end%>
+
                                       </tbody></table>
 
                                   </td>
@@ -634,20 +646,42 @@
                                           <br>
                                           <br>
 <span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif"><span style="color:#000000">Dear <%= @user.f_name %>,<br>
+
+  <%if @device_type == 'Android'%>
+
+      <br>
+    Thank you so much for signing up for Nuryl, the only baby brain training app of it's kind. Now that you've downloaded our ground breaking education program for babies, it's time to get started.&nbsp;<br>
+    <br>
+    The current version of our app is set to FREE. Nuryl is a subscription based app that will cost $9.99 per month. Right now, you can download and use the current playlist as much as you want to "test drive" Nuryl for the next 7 days absolutely free of charge.<br>
+    <br>
+    Since you're one of our first users during this phase in our development, you can subscribe at any time from within the app and take advantage of the special yearly offer of $79.99 per year. That's nearly $40 off the regular subscription price! Subscribing right now unlocks the playlist that is specifically designed for your baby's age. You'll get a new playlist every month for fresh listening of Nuryl's special High Information Music</span></span><span style="color: #000000;"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif"><span class="st">℠</span></span></span><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif"><span style="color: #000000;">. </span></span></span><br>
+                                              <br>
+                                              <br>
+                                              <span style="font-size:16px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif"><span style="color: #000000;"><strong>Watch the How-To Video Here</strong></span></span></span><br>
+    <span style="font-size:14px"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif"><span style="color:#000000">Our informative How-To video can be found here: </span><a href="http://www.nuryl.com/what-is-nuryl/" target="_blank" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #404448;font-weight: normal;text-decoration: underline;"><span style="color:#000000">Nuryl How-To Video</span></a><br>
+    <br>
+    <span style="color:#000000">In this video, you'll find more information on how to use the Nuryl app, recommended listening time, and special feature highlights.&nbsp;<br>
+    <br>
+    We're so happy you chose to start using Nuryl with your baby. Your journey begins right now.&nbsp;<br>
+    <br>
+
+  <%else%>
+      <br>
+    Thank you so much for signing up for Nuryl, the only baby brain training app of it's kind. Now that you've downloaded our ground breaking education program for babies, it's time to get started.&nbsp;<br>
+    <br>
+    The current version of our app is set to FREE. Nuryl is a subscription based app that will cost $9.99 per month. Right now, you can download and use the current playlist as much as you want to "test drive" our app while our developers are adding our subscription pages. This will allow you to use Nuryl for the next 7-10 days absolutely free of charge.&nbsp;<br>
+    <br>
+    Since you're one of our first users during this phase in our development, we have a special offer that we will send you at the end of this initial 7-10 days, so keep an eye out for that email as it will be coming to you soon.&nbsp;<br>
+    <br>
+    Our "How-To" video can be found here: </span><a href="https://itunes.apple.com/us/app/nuryl/id1059621665?ls=1&amp;mt=8" target="_blank" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #404448;font-weight: normal;text-decoration: underline;"><span style="color:#000000">Nuryl How-To Video</span></a><span style="color:#000000">&nbsp;<br>
+    <br>
+    In this video, you'll find more information on how to use the Nuryl app, recommended listening time, and special feature highlights.&nbsp;<br>
+    <br>
+    We're so happy you chose to start using Nuryl with your baby. Your journey begins right now.&nbsp;<br>
+    <br>
+  <%end%>
 <br>
-Thank you so much for signing up for Nuryl, the only baby brain training app of it's kind. Now that you've downloaded our ground breaking education program for babies, it's time to get started.&nbsp;<br>
-<br>
-The current version of our app is set to FREE. Nuryl is a subscription based app that will cost $9.99 per month. Right now, you can download and use the current playlist as much as you want to "test drive" our app while our developers are adding our subscription pages. This will allow you to use Nuryl for the next 7-10 days absolutely free of charge.&nbsp;<br>
-<br>
-Since you're one of our first users during this phase in our development, we have a special offer that we will send you at the end of this initial 7-10 days, so keep an eye out for that email as it will be coming to you soon.&nbsp;<br>
-<br>
-Our "How-To" video can be found here: </span><a href="https://itunes.apple.com/us/app/nuryl/id1059621665?ls=1&amp;mt=8" target="_blank" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #404448;font-weight: normal;text-decoration: underline;"><span style="color:#000000">Nuryl How-To Video</span></a><span style="color:#000000">&nbsp;<br>
-<br>
-In this video, you'll find more information on how to use the Nuryl app, recommended listening time, and special feature highlights.&nbsp;<br>
-<br>
-We're so happy you chose to start using Nuryl with your baby. Your journey begins right now.&nbsp;<br>
-<br>
-<br>
+
 Sincerely,</span></span><br>
 <span style="color: #000000;"><span style="font-family:trebuchet ms,lucida grande,lucida sans unicode,lucida sans,tahoma,sans-serif">The Nuryl Team</span></span></span><br>
                                           <br>

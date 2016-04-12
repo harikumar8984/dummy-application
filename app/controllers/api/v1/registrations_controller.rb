@@ -13,6 +13,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
     build_resource(sign_up_params.merge!(status: 'ACTIVE'))
     #device = DeviceDetail.find_or_create_by(device_id: params[:device_id])
     if resource.save
+      device_type = request.user_agent.include?("iPhone") ? 'iPhone' : 'Android'
       create_device_details(resource)
       #device.update_attributes(status: 'active', user_id: resource.id)
       #creating child of user
@@ -24,7 +25,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
        child.user_child.update_attributes(relationship: params[:relationship])
       end
       #HRR Mail functionality turning off
-      UserMailer.user_registered_to_nuryl( resource, "Welcome to Nuryl!").deliver
+      UserMailer.user_registered_to_nuryl( resource, device_type,  "Welcome to Nuryl!").deliver
       if resource.active_for_authentication?
         resource.ensure_authentication_token!
         sign_in resource

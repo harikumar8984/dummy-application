@@ -1,8 +1,9 @@
 class UserMailer < ActionMailer::Base
   default from: "admin@nuryl.com"
 
-  def user_registered_to_nuryl(user, body)
+  def user_registered_to_nuryl(user, device_type, body)
     @user = user
+    @device_type = device_type
     mail(to: @user.email, subject: body)
   end
 
