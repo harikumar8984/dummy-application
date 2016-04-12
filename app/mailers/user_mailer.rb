@@ -28,7 +28,7 @@ class UserMailer < ActionMailer::Base
       when 'active'
         body = "Subscription Activated"
         plan =  response['plan']['id'] == 'Beta' ? 'Yearly' : response['plan']['id']
-        @content = "Thank you for subscribing to Nuryl's" + plan + " subscription. We hope you enjoy your experience with us!"
+        @content = "Thank you for subscribing to Nuryl's " + plan + " subscription. We hope you enjoy your experience with us!"
       end
       mail(to: @user.email, subject: body)
   end
