@@ -10,6 +10,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   #layout "rails_admin/application", :only => [:new]
 
   def create
+    params[:user_type] = params[:user_type] || 'beta'
     build_resource(sign_up_params.merge!(status: 'ACTIVE'))
     #device = DeviceDetail.find_or_create_by(device_id: params[:device_id])
     if resource.save
