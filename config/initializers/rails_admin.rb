@@ -70,6 +70,15 @@ RailsAdmin.config do |config|
       field :l_name
       field :password
     end
+
+    list do
+      field :id
+      field :f_name
+      field :l_name
+      field :email
+      field :created_at
+      field :current_sign_in_at
+    end
   end
 
 
