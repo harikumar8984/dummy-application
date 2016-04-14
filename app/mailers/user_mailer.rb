@@ -11,7 +11,6 @@ class UserMailer < ActionMailer::Base
     @user = user
     @status = true  if response['paid']
     @amount = response['amount']
-    @interval = response['statement_descriptor']
     @error_code = response['failure_code']
     @error_message = response['failure_message']
     body = @status ? "Payment Sucess" : "Payment Failed"
