@@ -27,7 +27,7 @@ class  Api::V1::TransactionsController < ApplicationController
     if @stripe_customer.save_with_stripe_payment(current_user, params)
       if params[:html_format]
         sign_out current_user
-        flash[:message] =t('download_nurl_app')
+        flash[:message] =t('subscription_sucess')
         redirect_to root_path
       else
         return render status: 201, :json=> {:success => true, data: 'Stripe account created' }

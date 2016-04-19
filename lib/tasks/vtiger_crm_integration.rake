@@ -14,7 +14,7 @@ namespace :VtigerCrmIntegration do
       login_vtiger
       #first update all users created yesterday
       user_created_yesterday
-      yesterday = Time.now - 365.day
+      yesterday = Time.now - 1.day
       user = User.all.each do |user|
         if ( (user.updated_at >= yesterday  || user.created_at >= yesterday) ||
             (user.children && user.children.first.updated_at >= yesterday  || user.children.first.created_at >= yesterday) ||
