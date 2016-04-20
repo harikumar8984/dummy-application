@@ -37,7 +37,7 @@ class SessionsController < Devise::SessionsController
       redirect_to rails_admin_path
       @user = User.new
     else
-      @user_type = params[:user_type] || 'standard'
+      @user_type = params[:user_type] || 'beta'
       super
     end
   end
