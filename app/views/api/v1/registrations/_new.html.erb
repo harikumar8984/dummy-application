@@ -26,7 +26,7 @@
         <%= email_field_tag "email", nil, id: 'input_email', placeholder: @user_type == 'gift' ? 'Receivers Email' : 'Email', required: true,  autocomplete: :off %>
        </div>
         <div class="form-row">
-          <%= password_field_tag "password", nil,  id: 'input_password', placeholder: "Minium 8 characters", required: true, minlength: 8 %>
+          <%= password_field_tag "password", nil,  id: 'input_password', placeholder: "Password min 8 chars", required: true, minlength: 8 %>
         </div>
 
       <div class="form-row">
