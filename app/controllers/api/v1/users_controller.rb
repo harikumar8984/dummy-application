@@ -118,7 +118,13 @@ class Api::V1::UsersController < ApplicationController
     @user = user_from_auth_token
     @user.update_attributes(update_params)
     params[:dob] = dob_format(params[:dob]) if params[:dob]
-    child = @user.children.first.update_attributes(dob: params[:dob], name: params[:baby_name],gender: params[:baby_gender])
+    child = @user.children.first
+    if child.nil?
+      child = @user.children.create(dob: params[:dob], name: params[:baby_name], gender: params[:baby_gender])
+    else
+      child = @user.children.first.update_attributes(dob: params[:dob], name: params[:baby_name],gender: params[:baby_gender])
+    end
+
     unless child
       return render :status => 200, :json => {:success => false, :errors => "Child data not updated"}
     else
