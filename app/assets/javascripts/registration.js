@@ -9,7 +9,7 @@ $(document).ready(function () {
 
 
     $('#input_baby_dob').datepicker({
-        format: 'dd/mm/yyyy'
+        format: 'mm/dd/yyyy'
     });
 
 });

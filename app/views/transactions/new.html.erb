@@ -30,7 +30,7 @@
         <div class="form-row">
           <%= text_field_tag :card_code, nil, name: nil,  placeholder: "Security Code (CVV)", required: true %>
         </div>
-        <div class="form-group expyr clearfix">
+        <div class="expyr clearfix">
           <div class="pull-left form-row width-50">
             <%= select_month nil, {add_month_numbers_true: true}, {name: nil, id: "card_month"}%>
           </div>
