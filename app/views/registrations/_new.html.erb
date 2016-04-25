@@ -19,7 +19,7 @@
         <%= email_field_tag "email", nil, id: 'input_email', placeholder: 'Email', required: true,  autocomplete: :off %>
       </div>
       <div class="form-row dob">
-        <input id="dob" name="dob" type="date" placeholder="Baby's D.O.B"  required>
+        <input id="dob" name="dob" type="date" placeholder="Baby's D.O.B"  required onkeydown="return false">
         <img src="assets/calendar.png" alt="" class="pe-no" width="23px">
       </div>
       <div class="form-row">
