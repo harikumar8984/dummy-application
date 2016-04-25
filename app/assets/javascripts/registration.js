@@ -6,7 +6,14 @@ $(document).ready(function () {
     $('#input_email').on('keyup', (function(event) {
         $('.error-email-label').hide();
     }));
+
+
+    $('#input_baby_dob').datepicker({
+        format: 'dd/mm/yyyy'
+    });
+
 });
+
 
 function is_email_unique(){
     var email_str = $('#input_email').val();

@@ -37,6 +37,7 @@ gem 'yajl-ruby'
 gem 'mysql'
 gem 'fastercsv'
 gem 'vtiger'
+gem 'bootstrap-datepicker-rails'
 
 
 

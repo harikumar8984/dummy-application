@@ -13,3 +13,4 @@
 //= require jquery.min
 //= require registration.js
 //= require app.js
+//= require bootstrap-datepicker

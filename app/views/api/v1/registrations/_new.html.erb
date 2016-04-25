@@ -35,11 +35,9 @@
       <div class="form-row">
         <%= select_tag "relationship", "<option>Mother</option><option>Father</option><option>Guardian</option>".html_safe %>
       </div>
-
-      <div class="form-row dob">
-        <input id="dob" name="dob" type="date" placeholder="Baby's D.O.B"  required onkeydown="return false">
-        <img src="assets/calendar.png" alt="" class="pe-no" width="23px">
-      </div>
+        <div class="form-row dob">
+        <%= text_field_tag "dob", nil, id: 'input_baby_dob', placeholder: "Baby's D.O.B", required: true, readonly: true%>
+       </div>
 
       <div class="form-row">
         <%= text_field_tag "zipcode", nil,  id: 'input_zipcode', placeholder: 'Zip code'%>
