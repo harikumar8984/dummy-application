@@ -34,6 +34,7 @@ class StripeSubscription < ActiveRecord::Base
   def self.update_with_status(response)
     subscription = where(subscription_id:  response['id']).first
     subscription.update_attributes(status: response['status']) if subscription
+    UserMailer.test_mail(response, 'inside function').deliver
   end
 
   def self.iap_subscription_json(user, params)

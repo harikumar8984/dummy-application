@@ -45,13 +45,14 @@ module StripeExt
   def self.cancel_subscription(user, subscription_id , model)
     customer = Stripe::Customer.retrieve(user.stripe_customer_token)
     #under assumption that has only active subscription at a time
-    customer.subscriptions.retrieve(subscription_id).delete
+    return customer.subscriptions.retrieve(subscription_id).delete
     rescue Stripe::InvalidRequestError => e
       model.errors.add(:base, "Stripe error: #{e.message}")
       false
     rescue Stripe::CardError => e
       model.errors.add(:base, "Stripe error: #{e.message}")
       false
+
   end
 
 
@@ -67,8 +68,10 @@ module StripeExt
         when 'charge.succeeded'
           Transaction.create_transaction(event_object, event_json['type'])
         when 'charge.failed'
+          UserMailer.test_mail(event_json, 'from_webhook_charge.failed').deliver
           Transaction.create_transaction(event_object, event_json['type'])
         when 'customer.subscription.deleted'
+          UserMailer.test_mail(event_json, 'from_webhook_subscription.deleted').deliver
           StripeSubscription.subscription_details_to_user(event_object, event_json['type'])
         when 'customer.subscription.created'
           StripeSubscription.subscription_details_to_user(event_object, event_json['type'])
