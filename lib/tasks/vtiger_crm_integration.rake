@@ -16,13 +16,13 @@ namespace :VtigerCrmIntegration do
       #user_created_yesterday
       yesterday = Time.now - 365.day
       user = User.all.each do |user|
-        # if ( (user.updated_at >= yesterday  || user.created_at >= yesterday) ||
-        #     (user.children && user.children.first.updated_at >= yesterday  || user.children.first.created_at >= yesterday) ||
-        #     (user.stripe_customer && (user.stripe_customer.updated_at >= yesterday  || user.stripe_customer.created_at >= yesterday)) ||
-        #     (user.transactions.last && (user.transactions.last.updated_at >= yesterday  || user.transactions.last.created_at >= yesterday)) ||
-        #     (user.player_usage_stats.last &&  (user.player_usage_stats.last.updated_at >= yesterday  || user.player_usage_stats.last.created_at >= yesterday)) )
-        update_crm_object(user)
-        #end
+        if ( (user.updated_at >= yesterday  || user.created_at >= yesterday) ||
+            (user.children && user.children.first.updated_at >= yesterday  || user.children.first.created_at >= yesterday) ||
+            (user.stripe_customer && (user.stripe_customer.updated_at >= yesterday  || user.stripe_customer.created_at >= yesterday)) ||
+            (user.transactions.last && (user.transactions.last.updated_at >= yesterday  || user.transactions.last.created_at >= yesterday)) ||
+            (user.player_usage_stats.last &&  (user.player_usage_stats.last.updated_at >= yesterday  || user.player_usage_stats.last.created_at >= yesterday)) )
+          update_crm_object(user)
+        end
       end
     end
 
@@ -60,15 +60,12 @@ namespace :VtigerCrmIntegration do
   def  update_crm_object(user)
     object = @cmd.query_element_by_email(user.email, 'Contacts')
     if object[0]
-      if user.email == 'etapiero@gmail.com'
-        puts 'Hari is updating V-tiger Content'
-      end
       @cmd.updateobject({lastname: user.l_name, email: user.email, id: object[1], assigned_user_id: '8'}.merge(create_user_list_hash(user)))
     end
   end
 
   def login_vtiger
-    @cmd = Vtiger::Commandos.new()
+    @cmd = Vtiger::Commands.new()
     @cmd.challenge({})
     @cmd.login({})
   end
