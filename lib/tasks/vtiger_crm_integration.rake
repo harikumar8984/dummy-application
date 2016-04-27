@@ -60,12 +60,15 @@ namespace :VtigerCrmIntegration do
   def  update_crm_object(user)
     object = @cmd.query_element_by_email(user.email, 'Contacts')
     if object[0]
+      if user.email == 'etapiero@gmail.com'
+        puts 'Hari is updating V-tiger Content'
+      end
       @cmd.updateobject({lastname: user.l_name, email: user.email, id: object[1], assigned_user_id: '8'}.merge(create_user_list_hash(user)))
     end
   end
 
   def login_vtiger
-    @cmd = Vtiger::Commands.new()
+    @cmd = Vtiger::Commandos.new()
     @cmd.challenge({})
     @cmd.login({})
   end
