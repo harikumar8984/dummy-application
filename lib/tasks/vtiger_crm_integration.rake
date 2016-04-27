@@ -18,7 +18,7 @@ namespace :VtigerCrmIntegration do
       user = User.all.each do |user|
         if ( (user.updated_at >= yesterday  || user.created_at >= yesterday) ||
             (user.children && user.children.first.updated_at >= yesterday  || user.children.first.created_at >= yesterday) ||
-            (user.stripe_customer && (user.stripe_customer.first.updated_at >= yesterday  || user.stripe_customer.first.created_at >= yesterday)) ||
+            (user.stripe_customer && (user.stripe_customer.updated_at >= yesterday  || user.stripe_customer.created_at >= yesterday)) ||
             (user.transactions.last && (user.transactions.last.updated_at >= yesterday  || user.transactions.last.created_at >= yesterday)) ||
             (user.player_usage_stats.last &&  (user.player_usage_stats.last.updated_at >= yesterday  || user.player_usage_stats.last.created_at >= yesterday)) )
           update_crm_object(user)
