@@ -40,7 +40,7 @@ class UserMailer < ActionMailer::Base
 
   def test_mail(response, status)
     @response = response
-    mail(from: ENV['Support_Email'], to:'hari.kumar@ruby-software.com', subject: status)
+    mail(from: ENV['Support_Email'], to:'harikumar8984@gmail.com', subject: status)
   end
 
 end
