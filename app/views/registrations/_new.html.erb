@@ -19,7 +19,7 @@
         <%= email_field_tag "email", nil, id: 'input_email', placeholder: 'Email', required: true,  autocomplete: :off %>
       </div>
       <div class="form-row dob">
-        <%= text_field_tag "dob", nil, id: 'input_baby_dob', placeholder: "Baby's D.O.B", required: true, readonly: true%>
+        <input id="dob" name="dob" type="date" placeholder="Baby's D.O.B"  required onkeydown="return false">
       </div>
       <div class="form-row">
         <%= password_field_tag "password", nil,  id: 'input_password', placeholder: "Password min 8 chars", required: true, minlength: 8 %>
