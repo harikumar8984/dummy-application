@@ -7,27 +7,14 @@ $(document).ready(function () {
         $('.error-email-label').hide();
     }));
 
-
-    $('#input_baby_dob').datepicker({
-        format: 'mm/dd/yyyy',
-        defaultDate: "+1w",
-        showAnim: false,
-        maxDate: "+0d",
-        changeMonth: true,
-        changeYear: true,
-        yearRange: "-150:+0"
-    }).focus(function () {
-        $(this).blur()
-    });
-
-    //if (!Modernizr.touch || !Modernizr.inputtypes.date) {
-    //    $('input[type=date]')
-    //        .attr('type', 'text')
-    //        .datepicker({
-    //            // Consistent format with the HTML5 picker
-    //            dateFormat: 'mm/dd/yyyy'
-    //        });
-    //}
+    if (!Modernizr.touch || !Modernizr.inputtypes.date) {
+        $('input[type=date]')
+            .attr('type', 'text')
+            .datepicker({
+                // Consistent format with the HTML5 picker
+                format: 'mm/dd/yyyy'
+            });
+    }
 
 });
 
