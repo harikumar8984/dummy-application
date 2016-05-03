@@ -1,4 +1,15 @@
 $(document).ready(function () {
+
+    $('#input_zipcode').blur(function(){
+        var zipcode = $(this).val();
+        var zipRegex = /^((\d{5}-\d{4})|(\d{5})|([AaBbCcEeGgHhJjKkLlMmNnPpRrSsTtVvXxYy]\d[A-Za-z]\s?\d[A-Za-z]\d))$/;
+        
+        if (!zipRegex.test(zipcode))
+            $('#zipcode').text('Invalid Format');
+        else   
+            $('#zipcode').text('');   
+    });
+
     $('#input_email').focusout(function(event){
         is_email_unique();
     });
