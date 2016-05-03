@@ -7,14 +7,18 @@ class  Api::V1::HelpsController < ApplicationController
   respond_to :json
 
   def create
-   help_obj =  Help.create(help_params.merge(status: 'new'))
+    help_obj = Help.new(help_params.merge(status: 'new'))
     # begin
     #   @client.post_tickets(help_desk_params(help_obj.id))
     # rescue Exception => ex
     #   return render :status => 404, :json => {:success => false, data: "Fresh Desk error: #{ex.message}"}
     # end
-    UserMailer.help_mail(help_params).deliver
-    return render :status => 201, :json => {:success => true}
+    if help_obj.save
+      UserMailer.help_mail(help_params).deliver
+      return render :status => 201, :json => {:success => true}
+    else
+      return render :status => 200, :json => {:success => false, :errors => help_obj.errors}
+    end
   end
 
 

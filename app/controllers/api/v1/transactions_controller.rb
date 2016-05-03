@@ -145,6 +145,7 @@ class  Api::V1::TransactionsController < ApplicationController
   def cancel_in_app_subscription
     return render status: 200, :json=> {:success => false, data: [t('no_stripe_account')] } unless current_user.stripe_account?
     return render status: 200, :json=> {:success => false, data: [t('no_active_stripe_subscription')] } unless current_user.active_subscription?
+    return render status: 200, :json=> {:success => false, data: [t('no_active_stripe_subscription')] } unless current_user.active_subscription.payment_type == 'iap'
     StripeSubscription.update_with_in_app_subscription(current_user, 'canceled')
     return render status: 201, :json=> {:success => true, data: {data: "Subscription deactivated" } }
   end
