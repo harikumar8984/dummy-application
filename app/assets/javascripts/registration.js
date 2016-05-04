@@ -4,10 +4,10 @@ $(document).ready(function () {
         var zipcode = $(this).val();
         var zipRegex = /^((\d{5}-\d{4})|(\d{5})|([AaBbCcEeGgHhJjKkLlMmNnPpRrSsTtVvXxYy]\d[A-Za-z]\s?\d[A-Za-z]\d))$/;
         
-        if (!zipRegex.test(zipcode))
-            $('#zipcode').text('Invalid Format');
+        if (zipRegex.test(zipcode) || zipcode == '')
+            $('#zipcode').text('');
         else   
-            $('#zipcode').text('');   
+          $('#zipcode').text('Invalid Format');
     });
 
     $('#input_email').focusout(function(event){
