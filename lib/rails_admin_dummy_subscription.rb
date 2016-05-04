@@ -34,9 +34,9 @@ module RailsAdmin
             elsif (!user.has_subscription? || (user.has_subscription? && !user.active_subscription?))
               user.stripe_customer.stripe_subscriptions.create(subscription_json) if user.stripe_customer
             else
-              flash[:notice] = "#{@object.f_name} already had stripe subscriptions"
+              flash[:notice] = "#{@object.f_name} already had active subscriptions"
             end
-            flash[:notice] = "You have add dummy stripe subscription for user #{@object.f_name}."  if flash[:notice].blank?
+            flash[:notice] = "You have add dummy subscription for user #{@object.f_name}."  if flash[:notice].blank?
             redirect_to back_or_index
           end
         end
