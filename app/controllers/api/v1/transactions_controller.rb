@@ -150,5 +150,11 @@ class  Api::V1::TransactionsController < ApplicationController
     return render status: 201, :json=> {:success => true, data: {data: "Subscription deactivated" } }
   end
 
+
+  def subscription_status
+      status = current_user.stripe_account? ? current_user.active_subscription? ? 'active' : 'canceled' : 'no_account'
+      return render status: 200, :json=> {:success => true, data: {subscription_status: status } }
+  end
+
 end
 

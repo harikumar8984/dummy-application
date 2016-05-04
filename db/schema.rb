@@ -173,6 +173,7 @@ ActiveRecord::Schema.define(version: 20160412070946) do
     t.string   "details",                limit: 255
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
+    t.integer  "user_id",                limit: 4
     t.string   "customer_id",            limit: 255
     t.integer  "amount",                 limit: 4
     t.string   "currency",               limit: 255
@@ -186,12 +187,12 @@ ActiveRecord::Schema.define(version: 20160412070946) do
     t.string   "transaction_type",       limit: 255
     t.string   "statement_descriptor",   limit: 255
     t.integer  "stripe_customer_id",     limit: 4
-    t.string   "user_id",                limit: 255
     t.string   "payment_type",           limit: 255
     t.datetime "purchase_date"
   end
 
   add_index "transactions", ["stripe_customer_id"], name: "index_transactions_on_stripe_customer_id", using: :btree
+  add_index "transactions", ["user_id"], name: "index_transactions_on_user_id", using: :btree
 
   create_table "user_children", force: :cascade do |t|
     t.string   "relationship", limit: 255
@@ -248,6 +249,7 @@ ActiveRecord::Schema.define(version: 20160412070946) do
   add_foreign_key "stripe_customers", "users"
   add_foreign_key "stripe_subscriptions", "stripe_customers"
   add_foreign_key "transactions", "stripe_customers"
+  add_foreign_key "transactions", "users"
   add_foreign_key "user_children", "children"
   add_foreign_key "user_children", "users"
 end
