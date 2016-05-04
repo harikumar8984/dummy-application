@@ -1,6 +1,8 @@
 #require Rails.root.join('lib', 'rails_admin_auditor_registration.rb')
 #1RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::AuditorRegistration)
 
+require Rails.root.join('lib', 'rails_admin_dummy_subscription.rb')
+RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::DummySubscription)
 
 RailsAdmin.config do |config|
 
@@ -56,13 +58,28 @@ RailsAdmin.config do |config|
     end
     show_in_app
 
+    dummy_subscription do
+     visible do
+       bindings[:abstract_model].model.to_s == 'User'
+     end
+    end
+
+    # approve_ad do
+    #   visible do
+    #      if bindings[:abstract_model].model.to_s == 'User'
+    #        bindings[:abstract_model].model.all.each do |user|
+    #          user.stripe_customer.nil? ? true : false
+    #        end
+    #      end
+    #
+    #     end
+    #end
+
 
     ## With an audit adapter, you can add:
     # history_index
     # history_show
   end
-
-
 
   config.model User do
     update do
