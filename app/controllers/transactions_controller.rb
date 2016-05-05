@@ -4,7 +4,7 @@ class  TransactionsController < ApplicationController
   skip_before_filter :authenticate_user_from_token!, :only => [:new, :get_stripe_plan]
   skip_before_filter :authenticate_device, :only => [:new, :get_stripe_plan]
   before_filter :authenticate_user!
-  force_ssl if: :ssl_configured?
+  #force_ssl if: :ssl_configured?
   respond_to :json
 
   def new
@@ -33,9 +33,9 @@ class  TransactionsController < ApplicationController
     end
   end
 
-  def ssl_configured?
-    !Rails.env.development?
-  end
+  # def ssl_configured?
+  #   !Rails.env.development?
+  # end
 
 end
 
