@@ -1,9 +1,11 @@
 class UserMailer < ActionMailer::Base
   default from: "admin@nuryl.com"
 
-  def user_registered_to_nuryl(user, device_type, body)
+  def user_registered_to_nuryl_with_template(user, device_type, body, context)
     @user = user
-    @device_type = device_type
+    content = MailTemplate.find_by_device_type_and_context(device_type, context).content
+    template = Liquid::Template.parse(content)
+    @template = template.render('name' => @user.f_name).html_safe
     mail(to: @user.email, subject: body)
   end
 
