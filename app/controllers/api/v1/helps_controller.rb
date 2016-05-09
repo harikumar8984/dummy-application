@@ -1,8 +1,8 @@
 class  Api::V1::HelpsController < ApplicationController
-  skip_before_filter :is_device_id?, :only => [:create, :help_desk_webhook]
-  skip_before_filter :authenticate_scope!, :only => [:create, :help_desk_webhook]
-  skip_before_filter :authenticate_user_from_token!, :only =>  [:create, :help_desk_webhook]
-  skip_before_filter :authenticate_device, :only => [:create, :help_desk_webhook]
+  skip_before_filter :is_device_id?, :only => [:create]
+  skip_before_filter :authenticate_scope!, :only => [:create]
+  skip_before_filter :authenticate_user_from_token!, :only =>  [:create]
+  skip_before_filter :authenticate_device, :only => [:create]
   #before_filter :fresh_desk_intialize, :only => [:create]
   respond_to :json
 

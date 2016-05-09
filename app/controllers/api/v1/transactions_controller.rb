@@ -115,6 +115,7 @@ class  Api::V1::TransactionsController < ApplicationController
   #type of subscription for IOS APP
   def get_subscription_type
     all_plan = StripeExt.get_all_plan
+    if all_plan
     user_type = current_user.user_type
     subscrition_type = []
     all_plan[:data].each do |plan|
@@ -123,6 +124,9 @@ class  Api::V1::TransactionsController < ApplicationController
       elsif plan.id != 'Beta' && user_type != 'beta'
         subscrition_type << ENV['In_App_Purchase_Subscription']+plan.id.downcase
       end
+    end
+    else
+      return render status: 200, :json=> {:success => false, data: 'stripe error' }
     end
     return render status: 200, :json=> {:success => true, data: subscrition_type }
   end

@@ -2,62 +2,63 @@ module StripeExt
   extend ActiveSupport::Concern
 
   def self.retrieve_plan(id, model)
-    return Stripe::Plan.retrieve(id)
-    rescue Stripe::InvalidRequestError => e
-     model.errors.add(:base, "Stripe error: #{e.message}")
-     false
+    begin
+      return Stripe::Plan.retrieve(id)
+    rescue => e
+      model.errors.add(:base, "Stripe error: #{e.message}")
+      false
+    end
   end
 
   def self.create_customer(email, plan, card, model)
-    Stripe::Customer.create(email: email, plan: plan , card: card)
-    rescue Stripe::InvalidRequestError => e
+    begin
+      Stripe::Customer.create(email: email, plan: plan , card: card)
+    rescue => e
       model.errors.add(:base, "Stripe error: #{e.message}")
       false
-    rescue Stripe::CardError => e
-      model.errors.add(:base, "Stripe error: #{e.message}")
-      false
+    end
   end
 
   def self.change_plan(plan_id, subscription_id, user, model)
-    customer = Stripe::Customer.retrieve(user.stripe_customer_token)
-    subscription = customer.subscriptions.retrieve(subscription_id)
-    subscription.plan = plan_id
-    return subscription.save
-    rescue Stripe::InvalidRequestError => e
+    begin
+      customer = Stripe::Customer.retrieve(user.stripe_customer_token)
+      subscription = customer.subscriptions.retrieve(subscription_id)
+      subscription.plan = plan_id
+      return subscription.save
+    rescue  => e
       model.errors.add(:base, "Stripe error: #{e.message}")
       false
-    rescue Stripe::CardError => e
-      model.errors.add(:base, "Stripe error: #{e.message}")
-      false
+    end
   end
 
   def self.new_subscription(id, user, model)
-    customer = Stripe::Customer.retrieve(user.stripe_customer_token)
-    return customer.subscriptions.create(:plan => id)
-   rescue Stripe::InvalidRequestError => e
-    model.errors.add(:base, "Stripe error: #{e.message}")
-    false
-  rescue Stripe::CardError => e
-    model.errors.add(:base, "Stripe error: #{e.message}")
-    false
+    begin
+      customer = Stripe::Customer.retrieve(user.stripe_customer_token)
+      return customer.subscriptions.create(:plan => id)
+    rescue => e
+      model.errors.add(:base, "Stripe error: #{e.message}")
+      false
+    end
   end
 
   def self.cancel_subscription(user, subscription_id , model)
-    customer = Stripe::Customer.retrieve(user.stripe_customer_token)
-    #under assumption that has only active subscription at a time
-    return customer.subscriptions.retrieve(subscription_id).delete
-    rescue Stripe::InvalidRequestError => e
+    begin
+      customer = Stripe::Customer.retrieve(user.stripe_customer_token)
+      #under assumption that has only active subscription at a time
+      return customer.subscriptions.retrieve(subscription_id).delete
+    rescue => e
       model.errors.add(:base, "Stripe error: #{e.message}")
       false
-    rescue Stripe::CardError => e
-      model.errors.add(:base, "Stripe error: #{e.message}")
-      false
-
+    end
   end
 
 
   def self.get_all_plan
-    Stripe::Plan.all
+    begin
+      Stripe::Plan.all
+    rescue => e
+      false
+    end
   end
 
 
