@@ -38,6 +38,7 @@ gem 'mysql'
 gem 'fastercsv'
 gem 'vtiger'
 gem 'bootstrap-datepicker-rails'
+gem 'liquid-rails'
 
 
 
@@ -62,5 +63,6 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  gem 'mailcatcher'
 end
 
