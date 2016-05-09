@@ -3,10 +3,12 @@ class UserMailer < ActionMailer::Base
 
   def user_registered_to_nuryl_with_template(user, device_type, body, context)
     @user = user
-    content = MailTemplate.find_by_device_type_and_context(device_type, context).content
-    template = Liquid::Template.parse(content)
-    @template = template.render('name' => @user.f_name).html_safe
-    mail(to: @user.email, subject: body)
+    content = MailTemplate.find_by_device_type_and_context(device_type, context).content rescue nil
+    unless  content.nil?
+      template = Liquid::Template.parse(content)
+      @template = template.render('name' => @user.f_name).html_safe
+      mail(to: @user.email, subject: body)
+    end
   end
 
   def transaction_mail(user, response)
