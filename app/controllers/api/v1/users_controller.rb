@@ -61,7 +61,7 @@ class Api::V1::UsersController < ApplicationController
         return render status: 200, :json=> {:success => false, messages: course.blank? ? [t('course_not_found')] : [t('content_not_found')] }
       end
       usage_status[1].each do |usage|
-        stats = PlayerUsageStat.where(user_id: user_id, device_detail_id: device_details.id, course_id: course.id, content_id: content.id, usage_date: usage[0].to_date ).first
+        stats = PlayerUsageStat.where(user_id: user_id, device_detail_id: device_details.id, course_id: course.id, content_id: content.id, usage_date: usage.flatten[0].to_date ).first
         if stats
           stats.update_attributes(duration: stats.duration.to_i + usage[1].to_i)
         else
