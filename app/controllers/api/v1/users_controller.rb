@@ -55,6 +55,7 @@ class Api::V1::UsersController < ApplicationController
     device_details = DeviceDetail.where(device_id: request.headers["device-id"]).first
     values = []
     columns = [:user_id, :device_detail_id, :course_id, :content_id, :usage_date, :duration ]
+    puts params[:usage_status]
     usage_status_json.each do |usage_status|
       content = Content.active.where(id: usage_status[0]).first
       if is_blank_course_content(course, content)
