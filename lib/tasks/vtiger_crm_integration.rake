@@ -2,18 +2,20 @@ namespace :VtigerCrmIntegration do
 
   desc "Import all existing users to CRM"
   task :import_users => :environment do |t,args|
-    login_vtiger
-    user = User.all.each do |user|
-      hash = create_user_list_hash(user)
-      @cmd.find_contact_by_email_or_add(nil, user.l_name, user.email,hash )
+    if [1,4,7, 10,13, 16, 19, 22].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
+      login_vtiger
+      user = User.where("created_at >=?" ,Time.now - 1.day)
+      user.each do |user|
+        hash = create_user_list_hash(user)
+        @cmd.find_contact_by_email_or_add(nil, user.l_name, user.email,hash )
+      end
     end
    end
 
     desc "Updating CRM with CMS latest data"
     task :update_cms_crm => :environment do |t,args|
+      if [3,6, 9,12, 15, 18,21, 24].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
       login_vtiger
-      #first update all users created yesterday
-      #user_created_yesterday
       yesterday = Time.now - 365.day
       user = User.all.each do |user|
         if ( (user.updated_at >= yesterday  || user.created_at >= yesterday) ||
@@ -24,6 +26,7 @@ namespace :VtigerCrmIntegration do
           update_crm_object(user)
         end
       end
+      end
     end
 
     def user_created_yesterday
@@ -33,29 +36,6 @@ namespace :VtigerCrmIntegration do
       end
     end
 
-    # def is_updated_yesterday(model)
-    #  result = model.where("updated_at >= ? || created_at >= ?", Time.zone.now.beginning_of_day , Time.zone.now.beginning_of_day) rescue []
-    #  result.blank? ? false : true
-    # end
-
-
-  # def user_updated_yesterday
-  #     user = User.where("updated_at >= ? AND created_at < ?", Time.zone.now.beginning_of_day , Time.zone.now.beginning_of_day)
-  #     user.each do |user|
-  #       update_crm_object(user)
-  #     end
-  #   end
-  #
-  # def updated_yesterday(obj_model)
-  #   models =  obj_model.constantize.where("updated_at >= ? || created_at >= ?", Time.zone.now.beginning_of_day , Time.zone.now.beginning_of_day).group(:user_id) rescue []
-  #   models.each do |model|
-  #     unless model.user.nil?
-  #       user = model.user
-  #       update_crm_object(user)
-  #    end
-  #    end
-  #
-  # end
 
   def  update_crm_object(user)
     object = @cmd.query_element_by_email(user.email, 'Contacts')
