@@ -2,6 +2,9 @@ class StripeSubscription < ActiveRecord::Base
   belongs_to :stripe_customers
   scope :active, -> { where(status: 'active') }
 
+  def status_enum
+    [['active'],['canceled']]
+  end
 
   def self.create_json(subscription, user)
     plan_details = {}
