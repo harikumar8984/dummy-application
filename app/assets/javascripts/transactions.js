@@ -4,6 +4,17 @@ var pagelod = false;
 $(document).ready(function () {
     if(pagelod) return;
 
+    $('.rkv_choose_plan').click(function(){
+        show_payment_form($(this))
+    });
+    if ( window.location.search.indexOf('stripe_error=true') > 0) {
+        $('#plan_select_form').hide();
+        $('#payment_form').show();
+        $('#payment_form .rkv_items_list_container .rkv_susbcription_title').text('Nuryl ' +  $('#payment_form #subscription_type').val() + ' Subscription')
+        $('#payment_form .rkv_items_list_container .rkv_price').text( $('#payment_form #amount').val());
+        $('#payment_form .rkv_subscription_table .rkv_total_amount').text( $('#payment_form #amount').val());
+    }
+
     //if ($('#user_type').val()== 'beta')
     //    get_subscription_amount('Beta');
     //else
@@ -70,4 +81,14 @@ function get_subscription_amount(type){
             $('#stripe_error .message').text(json['data']['base'][0]);
         }
     });
+}
+
+function show_payment_form(this_evt){
+    $('#plan_select_form').hide();
+    $('#payment_form').show();
+    $('#payment_form #subscription_type').val((this_evt).parent().find('.rkv_plan_name').text());
+    $('#payment_form #amount').val((this_evt).parent().find('.nuryl_price').text());
+    $('#payment_form .rkv_items_list_container .rkv_susbcription_title').text('Nuryl ' + (this_evt).parent().find('.rkv_plan_name').text() + ' Subscription')
+    $('#payment_form .rkv_items_list_container .rkv_price').text((this_evt).parent().find('.nuryl_price').text());
+    $('#payment_form .rkv_subscription_table .rkv_total_amount').text((this_evt).parent().find('.nuryl_price').text());
 }

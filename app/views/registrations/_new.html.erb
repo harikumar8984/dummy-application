@@ -1,41 +1,39 @@
-  <%= form_tag '/api/v1/users', method:'post', class:'signup-form', :format => :html, id: 'user_registration_form' do %>
-      <%= hidden_field_tag :html_format, true %>
-      <%= hidden_field_tag :user_type, @user_type %>
-      <div class="clearfix">
-      <div class="form-row">
-        <%= text_field_tag "f_name", nil, id: 'input_first_name', placeholder: 'First Name', required: true%>
+    <div class="rkv_form_wrapper" id= 'sign-up-form'>
+      <h1 style="color: #8A8989">&nbsp;</h1>
+      <h1>Create an Account</h1>
+      <div class="rkv_form_container" >
+        <div class="rkv_form create_account">
+          <div class="message_cust"><%= flash[:message] %></div>
+          <div class="message"><%= flash[:error] %></div>
+          <%= form_tag '/registration', method:'post', class:'signup-form', :format => :html, id: 'user_registration_form' do %>
+            <%= hidden_field_tag :user_type, @user_type %>
+            <div class="rkv_row">
+              <%= text_field_tag "f_name", nil, style:"background-position: 15px 10px" , class:"rkv_input_icon rkv_fname", id: 'input_first_name', placeholder: 'First Name', required: true%>
+            </div>
+              <div class="rkv_row">
+                <%= text_field_tag "l_name", nil, style:"background-position: 15px 10px" , class:"rkv_input_icon rkv_lname", id: 'input_last_name', placeholder: 'Last Name', required: true%>
+              </div>
+            <div class="rkv_row">
+              <div class='error-email-label'></div>
+              <%= email_field_tag "email", nil, style:"background-position: 15px -75px", class:"rkv_input_icon rkv_email" , id: 'input_email', placeholder: 'Email', required: true,  autocomplete: :off %>
+            </div>
+            <div class="rkv_row">
+              <%= password_field_tag "password", nil,  style:"background-position: 15px -165px", class:"rkv_input_icon rkv_password", id: 'input_password', placeholder: "Password min 8 chars", required: true, minlength: 8 %>
+            </div>
+            <div class="rkv_row">
+              <%= button_tag(type: 'submit', class: "rkv_button sign-up-button") do %>
+                  <span >Signup </span>
+              <% end %>
+            </div>
+          <%end%>
+          <p class="rkv_terms" id = 'sign-in-link'><a href="#">Sign-in</a></p>
+        </div>
       </div>
-      <div class="form-row">
-        <%= text_field_tag  "l_name", nil,  id: 'input_last_name', placeholder: 'Last Name', required: true%>
-      </div>
-      <div class="form-row">
-        <%= text_field_tag "baby_name", nil, id: 'input_baby_name', placeholder: 'Baby Name', required: true%>
-      </div>
-      <div class="form-row">
-        <%= select_tag "relationship", "<option>Mother</option><option>Father</option><option>Guardian</option>".html_safe %>
-      </div>
-      <div class="form-row">
-        <div class='error-email-label'></div>
-        <%= email_field_tag "email", nil, id: 'input_email', placeholder: 'Email', required: true,  autocomplete: :off %>
-      </div>
-      <div class="form-row dob">
-        <input id="dob" name="dob" type="date" placeholder="Baby's D.O.B"  required onkeydown="return false">
-      </div>
-      <div class="form-row">
-        <%= password_field_tag "password", nil,  id: 'input_password', placeholder: "Password min 8 chars", required: true, minlength: 8 %>
-      </div>
-      <div class="form-row">
-        <div id ="zipcode"></div>
-        <%= text_field_tag "zipcode", nil,  id: 'input_zipcode', placeholder: 'zipcode'%>
-      </div>
-    </div>
-    <div class="submit-wrapper">
-      <%= button_tag(type: 'submit', class: "button submit-button sign-up-button") do %>
-          <span class="gtsrt-icon"></span> <span >Signup <img src="assets/check.png" alt="" width="18px"></span>
-      <% end %>
+      <p class="rkv_terms">By signing up, you agree to our <a href="">Terms of Services</a></p>
     </div>
 
 
 
 
-  <%end%>
+
+

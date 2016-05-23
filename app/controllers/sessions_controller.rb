@@ -19,7 +19,7 @@ class SessionsController < Devise::SessionsController
       if resource.admin?
       redirect_to rails_admin_path
       else
-        redirect_to new_transaction_path(user_type: resource.user_type)
+        redirect_to resource.children.blank? ? new_children_path(user_id: resource.id) : new_transaction_path(user_type: resource.user_type)
       end
       return
     end
@@ -29,7 +29,7 @@ class SessionsController < Devise::SessionsController
 
   def failure
     flash[:message] = t('devise.sessions.invalid_login')
-    redirect_to root_path
+    redirect_to root_path(invalid_login: true)
   end
 
   def new

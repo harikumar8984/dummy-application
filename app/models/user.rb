@@ -39,6 +39,10 @@ class User < ActiveRecord::Base
     where(stripe_customer_token:  token).first
   end
 
+  def self.from_user_id(id)
+    where(id:  id).first
+  end
+
   def stripe_account?
     stripe_customer.present?
   end

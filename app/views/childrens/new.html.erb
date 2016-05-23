@@ -1,0 +1,67 @@
+<div class="rkv_wrapper">
+  <div class="rkv_form_wrapper">
+    <h1 style="color: #8A8989">NEXT:</h1>
+    <h1>Tell Us About You and Your Baby</h1>
+    <div class="rkv_form_container">
+      <div class="rkv_form" style="height: 360px">
+        <%= form_tag '/childrens', method:'post', class:'children-create-form', :format => :html, id: 'children-create-form' do %>
+            <div class="message"><%= flash[:error] %></div>
+            <%= hidden_field_tag :user_id, @user_id %>
+            <div class="rkv_row" style="padding: 8px 5px">
+            <label class="rkv_field_title">I am my baby's:</label>
+            <div class="rkv_radio_wrapper">
+
+              <%= radio_button_tag "relationship", 'Mother', id: 'radio_relationship_mother'%>
+              <label for="relation1">Mother</label>
+            </div>
+            <div class="rkv_radio_wrapper">
+              <%= radio_button_tag "relationship", 'Father', id: 'radio_relationship_father'%>
+              <label for="relation2">Father</label>
+            </div>
+            <div class="rkv_radio_wrapper">
+              <%= radio_button_tag "relationship", 'Guardian', id: 'radio_relationship_guardian'%>
+              <label for="relation3">Guardian</label>
+            </div>
+          </div>
+          <div class="rkv_row" style="padding: 8px 5px; margin: 8px 0 23px">
+            <label class="rkv_field_title">My baby is a:</label>
+            <div class="rkv_radio_wrapper">
+              <%= radio_button_tag "gender", 'Boy', id: 'radio_gender_boy'%>
+              <label for="baby_gender1">Boy</label>
+            </div>
+            <div class="rkv_radio_wrapper">
+              <%= radio_button_tag "gender", 'Girl', id: 'radio_gender_girl'%>
+              <label for="baby_gender2">Girl</label>
+            </div>
+            <div class="rkv_radio_wrapper">
+              <%= radio_button_tag "gender", 'Not Yet Known', id: 'radio_gender_not_yet_known'%>
+              <label for="baby_gender3">Not Yet Known</label>
+            </div>
+          </div>
+          <div class="rkv_row">
+            <%= text_field_tag "name", nil, style:"background-position: 15px 10px" , class:"rkv_input_icon rkv_baby_name", id: 'input_baby_name', placeholder: "Baby's Name", required: true%>
+          </div>
+          <div class="rkv_row" style="margin: 6px 0 26px">
+            <label class="rkv_field_title" style="margin-right: 11px">Baby's D.O.B <span>(Or Expected)</span></label>
+            <div class="rkv_select_container">
+
+              <%= date_select :dob, :date, {:order => [:month, :year, :day], :start_year => 2015, :end_year => 2020}, {:class => "rkv_select"}%>
+
+
+
+            </div>
+          </div>
+          <div class="rkv_row">
+            <input class="rkv_button" type="submit" value="Continue">
+          </div>
+        <%end%>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style type="text/css">
+    header.rkv-header {
+        background-image: none;
+    }
+</style>
