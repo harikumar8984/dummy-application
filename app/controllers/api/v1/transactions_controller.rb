@@ -15,10 +15,10 @@ class  Api::V1::TransactionsController < ApplicationController
     if params[:html_format]
      if current_user.user_type != params[:user_type]
        flash[:message] =t('user_type_mismatch')
-       return redirect_to :back
+       return redirect_to new_transaction_path(stripe_error: true, subscription_type:params[:subscription_type], amount: params[:amount] )
     elsif current_user.stripe_account?
         flash[:message] =t('already_stripe_account')
-        return redirect_to :back
+        return redirect_to new_transaction_path(stripe_error: true, subscription_type:params[:subscription_type], amount: params[:amount] )
      end
    else
      return render status: 200, :json=> {:success => false, data: [t('already_stripe_account')] } if current_user.stripe_account?
@@ -34,8 +34,8 @@ class  Api::V1::TransactionsController < ApplicationController
       end
     else
       if params[:html_format]
-        flash[:message] =  @stripe_customer.errors.messages
-        return redirect_to :back
+        flash[:message] =  @stripe_customer.errors.messages[:base][0]
+        return redirect_to new_transaction_path(stripe_error: true, subscription_type:params[:subscription_type], amount: params[:amount] )
       else
         return render status: 200, :json=> {:success => false, data: @stripe_customer.errors.messages }
       end
@@ -153,7 +153,6 @@ class  Api::V1::TransactionsController < ApplicationController
     StripeSubscription.update_with_in_app_subscription(current_user, 'canceled')
     return render status: 201, :json=> {:success => true, data: {data: "Subscription deactivated" } }
   end
-
 
   def subscription_status
       status = current_user.stripe_account? ? current_user.active_subscription? ? 'active' : 'canceled' : 'no_account'

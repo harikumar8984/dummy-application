@@ -40,3 +40,11 @@ en:
         menu: 'Dummy Subscription'
         title: 'Dummy Subscription...'
         breadcrumb: 'Dummy Subscription'
+
+  activerecord:
+      errors:
+        models:
+          child:
+            attributes:
+              dob:
+                blank: "date of birth is invalid"

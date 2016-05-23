@@ -11,7 +11,7 @@
 // about supported directives.
 //
 //= require jquery.min
+//= require script.js
 //= require registration.js
 //= require app.js
-//= require bootstrap-datepicker
 //= require modernizr-custom

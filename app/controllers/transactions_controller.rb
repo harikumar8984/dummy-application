@@ -8,10 +8,17 @@ class  TransactionsController < ApplicationController
   respond_to :json
 
   def new
-    @auth_token = current_user.authentication_token if current_user
-    @user_type = params[:user_type]
+    @user = current_user if current_user
+    @auth_token = @user.authentication_token
+    @user_type = @user.user_type
     @subscription = Transaction.new
-    get_stripe_plan
+    if params[:stripe_error]
+      @subscription_type = params[:subscription_type]
+      @amount = params[:amount]
+    else
+      get_stripe_plan
+    end
+
   end
 
   def get_stripe_plan
@@ -20,13 +27,13 @@ class  TransactionsController < ApplicationController
       @plan = []
       all_plan[:data].each do |plan|
         amount = plan.amount > 0 ? (plan.amount.to_f/100) : 0.00
-        if params[:user_type] == 'beta' && plan.id != 'Yearly'
-          @plan << [(plan.id == 'Beta' ? 'Yearly' : plan.id.to_s) + " ($"+ amount.to_s+")", plan.id]
-        elsif plan.id != 'Beta' && params[:user_type] != 'beta'
-          if params[:user_type] == 'gift'
-            @plan << [plan.id.to_s + " ($"+ amount.to_s+")", plan.id] if plan.id == 'Yearly'
+        if @user_type == 'beta' && plan.id != 'Yearly'
+          @plan << [(plan.id == 'Beta' ? 'Yearly' : plan.id.to_s) , "$"+ amount.to_s, plan.id]
+        elsif plan.id != 'Beta' && @user_type != 'beta'
+          if @user_type == 'gift'
+            @plan << [plan.id.to_s , "$"+ amount.to_s, plan.id] if plan.id == 'Yearly'
           else
-            @plan << [plan.id.to_s + " ($"+ amount.to_s+")", plan.id]
+            @plan << [plan.id.to_s , "$"+ amount.to_s, plan.id]
           end
         end
       end

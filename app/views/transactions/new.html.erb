@@ -1,60 +1,62 @@
-<div class = "payment-body">
-<div class="page-fixed page-background">
-  <div class="page-content-inner">
-    <div id="tab-links" class="clearfix tab-links">
-      <a class="tab-link external payment-tab-link active">
-        <img src="/assets/credit_card.png" alt="" width="58px">
-        <span class="label">Payment Details</span>
-      </a>
-      <a class="tab-link external nuryl-tab-link">
-        <img src="/assets/nuryl_logo.png" alt="" width="58px">
-        <span class="label">Nuryl</span>
-      </a>
-    </div>
-    <div class="form-wrapper">
-      <%= form_tag subscripe_api_transactions_path, method:'post', class:'form-horizontal', id: 'stripe_registration' do %>
-       <%= hidden_field_tag :html_format, true %>
-       <%= hidden_field_tag :user_type, @user_type %>
-       <%= hidden_field_tag :card_id %>
-       <%= hidden_field_tag :auth_token, @auth_token%>
-       <div id="stripe_error">
-        <div class="message">
-          <%= flash[:message] %>
-          <noscript>JavaScript is not enabled and is required for this form. First enable it in your web browser settings.</noscript>
+<div class="rkv_wrapper" id = 'plan_select_form'>
+  <div class="rkv_section rkv_video_section">
+    <h2 class="rkv_headding">
+      Unlock the Nuryl Playlist
+    </h2>
+      <div class="rkv_col2">
+        <div class="rkv_video_container">
+          <img src="/assets/video_image.jpg">
         </div>
-       </div>
+      </div>
+      <div class="rkv_col2">
+        <ul class="rkv_list_items">
+          <li>Get a New Playlist Every Month Specifically Designed Specifically for Your Baby's Date of Birth</li>
+          <li>29 Playlists, Nearly 600 Musical Pieces</li>
+          <li>HALF of the Nuryl Playlists Are Comprised of Pieces That Were Created ONLY for Nuryl and Can't Be Found Anywhere</li>
+          <li>Mini Music Lessons Built-in to the Playlists</li>
+          <li>Track Your Baby's Daily, Weekly, and Monthly Listening</li>
+        </ul>
+      </div>
+  </div>
+  <div class="rkv_section rkv_offers_section">
+    <h1 class="rkv_headding">Choose Your Plan Now</h1>
+    <div class="rkv_services_container">
+      <%unless @plan.nil?%>
+       <%@plan.reverse.each do |plan|%>
+          <div class="rkv_col3">
+            <%if plan[2] == 'Beta'%>  <div class="rkv_offer_text"><span>Most Popular</span></div> <%end%>
+            <h2 class="rkv_plan_name"><%=plan[0]%></h2>
+            <%if plan[2] == 'Beta' || plan[2] == 'Gift'%>
+                <p class="rkv_plan_price"><span class="rkv_old_price">$119.88</span><span class="nuryl_price rkv_new_price"><%=plan[1]%></span></p>
+            <%else%>
+            <p class="rkv_plan_price"><span class="rkv_price nuryl_price"><%=plan[1]%>
+            <%end%>
+            <%if plan[2] == 'Monthly'%>/<sub>Month</sub>
+            </span></p>
+            <p class="rkv_plan_details">Subscribe to Nuryl with a monthly plan and have full access to the entire catalog of playlists.</p>
 
-          <div class="form-row">
-            <%= text_field_tag :card_number, nil, name: nil, placeholder: "Credit Card Number", required: true%>
-        </div>
-        <div class="form-row">
-          <%= text_field_tag :card_code, nil, name: nil,  placeholder: "Security Code (CVV)", required: true %>
-        </div>
-        <div class="expyr clearfix">
-          <div class="pull-left form-row width-50">
-            <%= select_month nil, {add_month_numbers_true: true}, {name: nil, id: "card_month"}%>
+            <%elsif plan[2] == 'Beta'%>
+                <p class="rkv_plan_details">Subscribe for a full year and save big! Unlock the playlists now.</p>
+
+            <%elsif plan[2] == 'Gift'%>
+                <p class="rkv_plan_details">Give the gift of Nuryl to a family member of friend. Nuryl is a gift that will last a lifetime.</p>
+            <%end%>
+            <a href="#" class="rkv_choose_plan rkv_button">Choose Plan</a>
           </div>
-          <div class="pull-right form-row width-50">
-            <%= select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "card_year"}%>
-          </div>
-        </div>
-        <div class="form-row">
-          <%= select_tag(:subscription_type, options_for_select(@plan)) %>
-        </div>
-
-        <div class="submit-wrapper">
-          <%= button_tag(type: 'submit' , class: "button submit-button payment-btn") do %>
-               <span >Subscribe <img src="/assets/check.png" alt="" width="18px"></span>
-          <% end %>
-        </div>
-
+       <%end%>
       <%end%>
     </div>
   </div>
 </div>
-</div>
+
+<%= render partial: 'transactions/payment_form' %>
+
 
 <%= javascript_include_tag "transactions" %>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js"></script>
+<style type="text/css">
+    header.rkv-header {
+        background-image: none;
+    }
+</style>
 
