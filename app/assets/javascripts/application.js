@@ -13,5 +13,4 @@
 //= require jquery.min
 //= require script.js
 //= require registration.js
-//= require app.js
-//= require modernizr-custom
+

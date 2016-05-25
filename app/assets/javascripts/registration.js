@@ -18,24 +18,16 @@ $(document).ready(function () {
         $('.error-email-label').hide();
     }));
 
-    //if (!Modernizr.touch || !Modernizr.inputtypes.date) {
-    //    $('input[type=date]')
-    //        .attr('type', 'text')
-    //        .datepicker({deide
-    //            // Consistent format with the HTML5 picker
-    //            format: 'mm/dd/yyyy'
-    //        });
-    //}
 
     $('#sign-up-link').click(function(){
         $('#sign-in-form').hide();
         $('#sign-up-form').show();
-        $('.message').text('');
+        $('.message , .message_cust').text('');
     });
     $('#sign-in-link').click(function(){
         $('#sign-up-form').hide();
         $('#sign-in-form').show();
-        $('.message').text('');
+        $('.message , .message_cust').text('');
     });
 
     if ( window.location.search.indexOf('invalid_login=true') > 0) {
