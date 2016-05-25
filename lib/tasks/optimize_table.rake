@@ -2,7 +2,7 @@ namespace :optimize_table do
 
 	desc "Optimizing table player_usage_stats."
 
-	task :optimize_player_usage_stats, [:player_usage_stats] => :environment do |t, args|
+	task :optimize_player_usage_stats  => :environment do |t, args|
 
 		users = PlayerUsageStat.select('user_id').uniq
 		users.each do |m|
