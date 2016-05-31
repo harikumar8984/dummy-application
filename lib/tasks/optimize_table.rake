@@ -22,7 +22,7 @@ namespace :optimize_table do
 							@duration = 0
 							device_id = record.select('device_detail_id').first.device_detail_id
 							record.each do |w|
-								@duration += w.duration
+								@duration += w.duration unless w.duration.nil?
 							end
 
 							PlayerUsageStat.where(user_id: m.user_id, course_id: p.course_id,
