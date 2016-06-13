@@ -408,6 +408,3 @@ DEPENDENCIES
   vtiger
   web-console (~> 2.0)
   yajl-ruby
-
-BUNDLED WITH
-   1.12.1
