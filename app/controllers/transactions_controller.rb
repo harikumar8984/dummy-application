@@ -1,16 +1,31 @@
 class  TransactionsController < ApplicationController
-  skip_before_filter :is_device_id?, :only => [:new, :get_stripe_plan]
-  skip_before_filter :authenticate_scope!, :only => [:new, :get_stripe_plan]
-  skip_before_filter :authenticate_user_from_token!, :only => [:new, :get_stripe_plan]
-  skip_before_filter :authenticate_device, :only => [:new, :get_stripe_plan]
-  before_filter :authenticate_user!
+  skip_before_filter :is_device_id?, :only => [:new, :get_stripe_plan, :new_subscription]
+  skip_before_filter :authenticate_scope!, :only => [:new, :get_stripe_plan, :new_subscription]
+  skip_before_filter :authenticate_user_from_token!, :only => [:new, :get_stripe_plan, :new_subscription]
+  skip_before_filter :authenticate_device, :only => [:new, :get_stripe_plan, :new_subscription]
+  before_filter :authenticate_user!, :only => [:new]
   #force_ssl if: :ssl_configured?
   respond_to :json
 
   def new
     @user = current_user if current_user
-    @auth_token = @user.authentication_token
-    @user_type = @user.user_type
+    initialize_transaction @user
+  end
+
+  def new_subscription
+    @user = User.find_by_subscription_token(params[:subscription_token])
+    unless @user
+      return render status: 200, :json=> {:success => false, data: 'Invalid Token' }
+    end
+    sign_in @user
+    initialize_transaction @user
+    render "new"
+  end
+
+
+  def initialize_transaction user
+    @auth_token = user.authentication_token
+    @user_type = user.user_type
     @subscription = Transaction.new
     if params[:stripe_error]
       @subscription_type = params[:subscription_type]
@@ -18,7 +33,6 @@ class  TransactionsController < ApplicationController
     else
       get_stripe_plan
     end
-
   end
 
   def get_stripe_plan

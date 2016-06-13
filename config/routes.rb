@@ -11,6 +11,7 @@ Nuryl::Application.routes.draw do
     match '/api/v1/users/change_password' => 'api/v1/passwords#update_password_api', :via => :put
     match 'user_registration' => 'api/v1/registrations#new', :via => :get
     match 'registration' => 'registrations#create', :via => :post
+    match  'subscribe' => 'transactions#new_subscription', :via => :get
   end
 
   namespace :api, defaults: { format: :json },
@@ -28,6 +29,7 @@ Nuryl::Application.routes.draw do
           get 'usage_statics' => 'users#send_usage_statics_info'
           get 'edit_profile' => 'users#edit_profile'
           post 'update_profile' => 'users#update_profile'
+          get 'subscription_mail' => 'users#send_subscription_mail'
         end
       end
       resources :transactions, only: [:create] do

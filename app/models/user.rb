@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
   end
 
   def update_stripe_customer_token(token)
-    update_attributes(stripe_customer_token: token)
+    update_attributes(stripe_customer_token: token, subscription_token: nil)
   end
 
   def self.user_from_authentication(token)
@@ -65,6 +65,11 @@ class User < ActiveRecord::Base
 
   def has_subscription?
     stripe_customer.stripe_subscriptions.present?
+  end
+
+  # Generate a friendly string randomly to be used as token.
+  def self.friendly_token
+    SecureRandom.urlsafe_base64(15).tr('lIO0', 'sxyz')
   end
 
 
