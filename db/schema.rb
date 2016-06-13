@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160508081343) do
+ActiveRecord::Schema.define(version: 20160613052441) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
@@ -238,6 +238,7 @@ ActiveRecord::Schema.define(version: 20160508081343) do
     t.string   "gifter_first_name",      limit: 255
     t.string   "gifter_last_name",       limit: 255
     t.string   "gifter_email",           limit: 255
+    t.string   "subscription_token",     limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

@@ -153,5 +153,22 @@ class Api::V1::UsersController < ApplicationController
     return render status: 200, :json=> {:success => false, data: [t('no_active_stripe_subscription')] } unless current_user.active_subscription?
   end
 
+  def send_subscription_mail
+    current_user.update_attributes(subscription_token: subscription_token)
+    UserMailer.payment_form_mail(current_user).deliver
+    return render status: 200, :json=> {:success => true}
+  end
+
+
+  private
+  def subscription_token
+    loop do
+      token = User.friendly_token
+      break token unless User.where(subscription_token: token).first
+    end
+  end
+
+
+
 
 end

@@ -47,5 +47,11 @@ class UserMailer < ActionMailer::Base
     mail(from: ENV['Support_Email'], to:'harikumar8984@gmail.com', subject: status)
   end
 
+  def payment_form_mail(user)
+    @user = user
+    mail(from: ENV['Support_Email'], to: @user.email, subject: 'Nuryl Subscription')
+
+  end
+
 end
 
