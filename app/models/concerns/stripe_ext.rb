@@ -21,7 +21,7 @@ module StripeExt
 
   def self.change_plan(plan_id, subscription_id, user, model)
     begin
-      customer = Stripe::Customer.retrieve(user.stripe_customer_token)
+      customer = stripe_customer_from_token(user.stripe_customer_token)
       subscription = customer.subscriptions.retrieve(subscription_id)
       subscription.plan = plan_id
       return subscription.save
@@ -33,7 +33,7 @@ module StripeExt
 
   def self.new_subscription(id, user, model)
     begin
-      customer = Stripe::Customer.retrieve(user.stripe_customer_token)
+      customer = stripe_customer_from_token(user.stripe_customer_token)
       return customer.subscriptions.create(:plan => id)
     rescue => e
       model.errors.add(:base, "Stripe error: #{e.message}")
@@ -43,7 +43,7 @@ module StripeExt
 
   def self.cancel_subscription(user, subscription_id , model)
     begin
-      customer = Stripe::Customer.retrieve(user.stripe_customer_token)
+      customer = stripe_customer_from_token(user.stripe_customer_token)
       #under assumption that has only active subscription at a time
       return customer.subscriptions.retrieve(subscription_id).delete
     rescue => e
@@ -59,6 +59,16 @@ module StripeExt
     rescue => e
       false
     end
+  end
+
+
+  def self.update_customer(user, card, model)
+     customer = stripe_customer_from_token(user.stripe_customer_token)
+     customer.source = card # obtained with Stripe.js
+     return customer.save
+    rescue => e
+      model.errors.add(:base, "Stripe error: #{e.message}")
+      return false
   end
 
 
@@ -83,6 +93,10 @@ module StripeExt
       return false
     end
 
+  end
+
+  def self.stripe_customer_from_token token
+    Stripe::Customer.retrieve(token)
   end
 
 end

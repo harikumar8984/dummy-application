@@ -24,6 +24,15 @@ class StripeCustomer < ActiveRecord::Base
     end
   end
 
+  def update_customer(user, params)
+    customer = StripeExt.update_customer(user, params[:card_id], self)
+    if customer
+      user.update_stripe_customer_token(customer.id)
+      return true
+    end
+  end
+
+
   def save_with_in_app_payment(user, params)
     StripeCustomer.create(create_iap_json(user, params))
   end

@@ -88,6 +88,16 @@ class  Api::V1::TransactionsController < ApplicationController
     end
   end
 
+  def update_customer
+    return render status: 200, :json=> {:success => false, data: [t('no_stripe_account')] } if current_user.stripe_customer_token.nil?
+    @stripe_customer = StripeCustomer.new
+    if @stripe_customer.update_customer(current_user, params)
+           return render status: 201, :json=> {:success => true, data: {data: "Card updated" } }
+    else
+      return render status: 200, :json=> {:success => false, data: @stripe_customer.errors.messages }
+    end
+  end
+
   def intialize_transaction
     @transaction = Transaction.new
   end
