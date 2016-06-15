@@ -155,7 +155,7 @@ class Api::V1::UsersController < ApplicationController
 
   def send_subscription_mail
     current_user.update_attributes(subscription_token: subscription_token)
-    UserMailer.payment_form_mail(current_user).deliver
+    UserMailer.payment_form_mail(current_user, 'Subscription', 'Begin Using the Nuryl App Today! Here is Your Special Offer.').deliver
     return render status: 200, :json=> {:success => true}
   end
 

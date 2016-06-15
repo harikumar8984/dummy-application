@@ -5,7 +5,7 @@ class MailTemplate < ActiveRecord::Base
   end
 
   def context_enum
-    [['Registration']]
+    [['Registration'], ['Subscription']]
   end
 
 end

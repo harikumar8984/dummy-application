@@ -5,8 +5,7 @@ class UserMailer < ActionMailer::Base
     @user = user
     content = MailTemplate.find_by_device_type_and_context(device_type, context).content rescue nil
     unless  content.nil?
-      template = Liquid::Template.parse(content)
-      @template = template.render('name' => @user.f_name).html_safe
+      liquid_template(content)
       mail(to: @user.email, subject: body)
     end
   end
@@ -47,10 +46,18 @@ class UserMailer < ActionMailer::Base
     mail(from: ENV['Support_Email'], to:'harikumar8984@gmail.com', subject: status)
   end
 
-  def payment_form_mail(user)
+  def payment_form_mail(user, context, subject)
     @user = user
-    mail(from: ENV['Support_Email'], to: @user.email, subject: 'Nuryl Subscription')
+    content = MailTemplate.find_by_context(context).content rescue nil
+    unless  content.nil?
+      liquid_template(content)
+      mail(to: @user.email, subject: subject)
+    end
+  end
 
+  def liquid_template(content)
+    template = Liquid::Template.parse(content)
+    @template = template.render('name' => @user.f_name).html_safe
   end
 
 end
