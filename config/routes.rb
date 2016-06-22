@@ -30,6 +30,7 @@ Nuryl::Application.routes.draw do
           get 'edit_profile' => 'users#edit_profile'
           post 'update_profile' => 'users#update_profile'
           get 'subscription_mail' => 'users#send_subscription_mail'
+          get 'get_urls' => 'users#get_urls'
         end
       end
       resources :transactions, only: [:create] do

@@ -33,6 +33,8 @@ en:
   download_nurl_app: 'You will receive an email to download the Nuryl app'
   subscription_sucess : 'Subscription successfully created. Please login on your device and check email for further instructions.'
   user_type_mismatch: 'Your subscription plan and your user type are not matching'
+  no_params_type_name: 'Provide type and name of URL'
+  url_not_found: 'The requested URL not found'
 
   admin:
     actions:
