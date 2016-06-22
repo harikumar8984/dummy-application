@@ -57,7 +57,7 @@ Rails.application.configure do
   ENV['VTIGER_USERNAME'] = 'HARI'
   ENV['VTIGER_KEY'] = 'JZSpZjKgqfpha2v'
   ENV['VTIGER_URL'] = 'vtiger.nuryl.com'
-  ENV['Video_Url_Learn_More'] = 'https://player.vimeo.com/video/158950941'
-  ENV['Video_Url_How_To'] = 'https://player.vimeo.com/video/158950941'
+  ENV['VIDEO_URL_LEARN_MORE'] = 'https://player.vimeo.com/video/158950941'
+  ENV['VIDEO_URL_HOW_TO'] = 'https://player.vimeo.com/video/158950941'
 
 end

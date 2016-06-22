@@ -163,7 +163,7 @@ class Api::V1::UsersController < ApplicationController
     if params[:type].nil? || params[:name].nil?
       return render status: 200, :json=> {:success => false, data: [t('no_params_type_name')]}
     end
-    data = ENV[params[:type] + '_' + params[:name]]
+    data = ENV[(params[:type] + '_' + params[:name]).upcase]
     return render status: 200, :json=> {:success => false, data:[t('url_not_found')] } if data.nil?
     return render status: 200, :json=> {:success => true, data: data }
   end
