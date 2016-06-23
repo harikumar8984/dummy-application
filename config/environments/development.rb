@@ -59,5 +59,6 @@ Rails.application.configure do
   ENV['VTIGER_URL'] = 'vtiger.nuryl.com'
   ENV['VIDEO_URL_LEARN_MORE'] = 'https://player.vimeo.com/video/158950941'
   ENV['VIDEO_URL_HOW_TO'] = 'https://player.vimeo.com/video/158950941'
+  ENV['AFTER_SUBSCRIPTION_URL'] = 'http://www.nuryl.com/welcome-nuryl-user/'
 
 end
