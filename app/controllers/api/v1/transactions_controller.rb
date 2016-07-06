@@ -83,7 +83,7 @@ class  Api::V1::TransactionsController < ApplicationController
     unless cancel_subscription
       return render status: 200, :json=> {:success => false, data: @transaction.errors.messages }
     else deactivate_subscription(cancel_subscription)
-      UserMailer.test_mail(cancel_subscription, 'from_cancel_subscription').deliver
+      UserMailer.test_mail(cancel_subscription, 'from_cancel_subscription').deliver if response['livemode'] == true
       return render status: 201, :json=> {:success => true, data: {data: "Subscription deactivated" } }
     end
   end

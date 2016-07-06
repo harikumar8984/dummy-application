@@ -79,10 +79,8 @@ module StripeExt
         when 'charge.succeeded'
           Transaction.create_transaction(event_object, event_json['type'])
         when 'charge.failed'
-          UserMailer.test_mail(event_json, 'from_webhook_charge.failed').deliver
           Transaction.create_transaction(event_object, event_json['type'])
         when 'customer.subscription.deleted'
-          UserMailer.test_mail(event_json, 'from_webhook_subscription.deleted').deliver
           StripeSubscription.subscription_details_to_user(event_object, event_json['type'])
         when 'customer.subscription.created'
           StripeSubscription.subscription_details_to_user(event_object, event_json['type'])
