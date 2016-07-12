@@ -2,19 +2,19 @@ namespace :VtigerCrmIntegration do
 
   desc "Import all existing users to CRM"
   task :import_users => :environment do |t,args|
-    if [1,4,7, 10,13, 16, 19, 22].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
+    #if [1,7, 13, 19 ].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
       login_vtiger
       user = User.where("created_at >=?" ,Time.now - 1.day)
       user.each do |user|
         hash = create_user_list_hash(user)
         @cmd.find_contact_by_email_or_add(nil, user.l_name, user.email,hash )
       end
-    end
+    #end
    end
 
     desc "Updating CRM with CMS latest data"
     task :update_cms_crm => :environment do |t,args|
-      #if [3,6, 9,12, 15, 18,21, 24].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
+      if [6, 12, 18, 24].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
       login_vtiger
       yesterday = Time.now - 365.day
       puts ('******#####Vtiger Updation Start######********')
@@ -29,11 +29,15 @@ namespace :VtigerCrmIntegration do
           update_crm_object(user)
           puts (user.email+ 'updated to Vtiger')
         end
-      #end
+      end
         end
       end
       puts ('**********#######All CMS data updated to crm#######*********')
     end
+
+   # def remove_special_char email
+   #    email.gsub!(/[+"]/,'')
+   # end
 
     def user_created_yesterday
       user = User.where("created_at >= ?", Time.zone.now.beginning_of_day)
