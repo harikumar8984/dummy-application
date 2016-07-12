@@ -54,7 +54,7 @@ RailsAdmin.config do |config|
       only ['User','Course', 'CourseContent', 'Content', 'CourseCategory', 'MailTemplate', 'StripeSubscription']
     end
     delete  do
-      only ['User', 'Course', 'CourseContent', 'Content', 'CourseCategory', 'MailTemplate','StripeSubscription']
+      only ['User', 'Course', 'CourseContent', 'Content', 'CourseCategory', 'MailTemplate','StripeCustomer','StripeSubscription', 'Transaction']
     end
     show_in_app
 
