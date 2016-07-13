@@ -1,6 +1,7 @@
 namespace :ArchivePlayerUsageStats do
   desc "Archive Player Usage Stats"
   task :do_archive => :environment do |t,args|
+    PlayerUsageStat.where('duration =? OR usage_date =? OR usage_date=?', nil, nil, '0000-00-00').delete_all
     player_stats = PlayerUsageStat.where('usage_date <= ?',2.months.ago.at_beginning_of_month)
     columns = [:user_id, :device_detail_id, :course_id, :content_id, :usage_date, :duration ]
     player_stats.find_in_batches do |batch_stats|
