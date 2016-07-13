@@ -19,6 +19,7 @@ namespace :VtigerCrmIntegration do
       yesterday = Time.now - 365.day
       puts ('******#####Vtiger Updation Start######********')
       batch_user = User.find_in_batches do |batch_user|
+        binding.pry
         batch_user.each do |user|
           puts user.email
         if ( (user.updated_at >= yesterday  || user.created_at >= yesterday) ||
@@ -70,7 +71,7 @@ namespace :VtigerCrmIntegration do
     transaction_details = {}
     transaction_details = create_transaction_hash(user , user.transactions.last) if user.stripe_account? && user.active_subscription? && user.transactions.last
     player_usage_details = {}
-    player_usage_details = create_player_usage_stats_hash(user.player_usage_stats)
+    player_usage_details = create_player_usage_stats_hash(user.player_usage_stats, user.player_usage_stats_aggregate)
     create_user_hash(user).merge(device_details).merge(children_details).merge(payment_details).merge(transaction_details).merge(player_usage_details)
   end
 
@@ -112,32 +113,38 @@ namespace :VtigerCrmIntegration do
      cf_929: user.active_subscription.interval}
   end
 
-  def create_player_usage_stats_hash(player_usage_stats)
+  def create_player_usage_stats_hash(player_usage_stats, player_usage_stats_aggregate)
     month_usage_stats = usage_stats(player_usage_stats , Date.today.at_beginning_of_month)
-    year_usage_stats = usage_stats(player_usage_stats ,  Date.today.at_beginning_of_year)
-    daily_usage_stats_1 = usage_daily_stats(player_usage_stats ,  Date.today)
-    daily_usage_stats_2 = usage_daily_stats(player_usage_stats ,  Date.today - 1.day)
-    daily_usage_stats_3 = usage_daily_stats(player_usage_stats ,  Date.today - 2.day)
-    total_usage_stats = usage_stats(player_usage_stats ,  nil)
+    daily_usage_stats_1 = usage_stats(player_usage_stats ,  Date.today)
+    daily_usage_stats_2 = usage_stats(player_usage_stats ,  Date.today - 1.day)
+    daily_usage_stats_3 = usage_stats(player_usage_stats ,  Date.today - 2.day)
+    year_usage_stats = usage_yearly_stats(player_usage_stats , player_usage_stats_aggregate,  Date.today.at_beginning_of_year)
+    total_usage_stats = usage_yearly_stats(player_usage_stats ,  player_usage_stats_aggregate, nil)
     {cf_923: daily_usage_stats_1.first.duration.nil? ? '00:00:00' : Time.at(daily_usage_stats_1.first.duration).utc.strftime("%H:%M:%S"),
      cf_925: daily_usage_stats_2.first.duration.nil? ? '00:00:00' : Time.at(daily_usage_stats_2.first.duration).utc.strftime("%H:%M:%S"),
      cf_927: daily_usage_stats_3.first.duration.nil? ? '00:00:00' : Time.at(daily_usage_stats_3.first.duration).utc.strftime("%H:%M:%S"),
      cf_897: month_usage_stats.first.duration.nil? ? '00:00:00' : Time.at(month_usage_stats.first.duration).utc.strftime("%H:%M:%S"),
-     cf_899: year_usage_stats.first.duration.nil? ? '00:00:00'  : Time.at(year_usage_stats.first.duration).utc.strftime("%H:%M:%S"),
-     cf_913: total_usage_stats.first.duration.nil? ? '00:00:00' : Time.at(total_usage_stats.first.duration).utc.strftime("%H:%M:%S")
+     cf_899: year_usage_stats == 0 ? '00:00:00'  : Time.at(year_usage_stats).utc.strftime("%H:%M:%S"),
+     cf_913: total_usage_stats == 0 ? '00:00:00' : Time.at(total_usage_stats).utc.strftime("%H:%M:%S")
     }
   end
 
-  def usage_stats(player_usage_stats, filter_date)
-    if filter_date
-      player_usage_stats.select("sum(duration) as duration").where("DATE(usage_date) >= ?", filter_date).order(usage_date: :desc)
-    else
-      player_usage_stats.select("sum(duration) as duration").order(usage_date: :desc)
-    end
+  def usage_yearly_stats(player_usage_stats, aggregate, filter_date)
+     current_duration = usage_stats_query(player_usage_stats, filter_date)
+     aggregate_duration = usage_stats_query(aggregate, filter_date)
+     (current_duration.first.duration.nil? ? 0 : current_duration.first.duration) + (aggregate_duration.first.duration.nil? ? 0 : aggregate_duration.first.duration)
   end
 
-  def usage_daily_stats(player_usage_stats, filter_date)
-    player_usage_stats.select("sum(duration) as duration").where("DATE(usage_date) = ?", filter_date).order(usage_date: :desc)
+  def usage_stats(player_usage_stats, filter_date)
+    usage_stats_query(player_usage_stats, filter_date)
+  end
+
+  def usage_stats_query(model, filter_date)
+    if filter_date.nil?
+      model.select("sum(duration) as duration").order(usage_date: :desc)
+    else
+      model.select("sum(duration) as duration").where("DATE(usage_date) >= ?", filter_date).order(usage_date: :desc)
+    end
   end
 
 end

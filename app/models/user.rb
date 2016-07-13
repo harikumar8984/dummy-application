@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   has_many :children, through: :user_children, dependent: :destroy
   has_one :device_detail, dependent: :destroy
   has_many :player_usage_stats, dependent: :destroy
+  has_many :player_usage_stats_aggregate, dependent: :destroy
   has_many :progress, dependent: :destroy
   has_one :stripe_customer, dependent: :destroy
   has_many :transactions, dependent: :destroy

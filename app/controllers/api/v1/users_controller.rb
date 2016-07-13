@@ -101,7 +101,11 @@ class Api::V1::UsersController < ApplicationController
     data = []
     data = (filter_date..Date.today()).map{ |m| m.strftime('%Y%m') }.uniq.map{ |m| {month: Date::ABBR_MONTHNAMES[ Date.strptime(m, '%Y%m').mon ], duration: 0}} if params[:filter] == '1_Year'
     Date.today().downto(filter_date){|date|  data << ({date: date, duration: 0})} unless params[:filter] == '1_Year'
-    usage_stats = user.player_usage_stats.select(" usage_date as usage_date, sum(duration) as duration").where("DATE(usage_date) >= ?", filter_date).group("#{query_filter}(usage_date)").order(usage_date: :desc)
+    usage_stats = usage_stats_query(user.player_usage_stats, filter_date, query_filter)
+    if params[:filter] == '1_Year'
+      usage_aggregate_stats = usage_stats_query(user.player_usage_stats_aggregate, filter_date, query_filter)
+      usage_stats = usage_stats + usage_aggregate_stats
+    end
     usage_stats.each do |usage_status|
       if usage_status.usage_date
         date_hash = data.find { |h| h[:month] == usage_status.usage_date.to_date.strftime("%b") } if params[:filter] == '1_Year'
@@ -110,7 +114,11 @@ class Api::V1::UsersController < ApplicationController
       end
     end
     return render status: 200, :json=> {:success => true, data: data }
-   end
+  end
+
+  def usage_stats_query(model, filter_date, query_filter)
+    model.select(" usage_date as usage_date, sum(duration) as duration").where("DATE(usage_date) >= ?", filter_date).group("#{query_filter}(usage_date)").order(usage_date: :desc)
+  end
 
   def edit_profile
     user = user_from_auth_token
