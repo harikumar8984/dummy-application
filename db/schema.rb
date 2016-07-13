@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160508081343) do
+ActiveRecord::Schema.define(version: 20160711121434) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
@@ -127,6 +127,25 @@ ActiveRecord::Schema.define(version: 20160508081343) do
   add_index "player_usage_stats", ["device_detail_id"], name: "index_player_usage_stats_on_device_detail_id", using: :btree
   add_index "player_usage_stats", ["user_id"], name: "index_player_usage_stats_on_user_id", using: :btree
 
+  create_table "player_usage_stats_aggregates", force: :cascade do |t|
+    t.integer  "duration",   limit: 4
+    t.date     "usage_date"
+    t.integer  "user_id",    limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  create_table "player_usage_stats_archives", force: :cascade do |t|
+    t.integer  "duration",         limit: 4
+    t.string   "device_detail_id", limit: 255
+    t.integer  "user_id",          limit: 4
+    t.string   "course_id",        limit: 255
+    t.string   "content_id",       limit: 255
+    t.string   "usage_date",       limit: 255
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
   create_table "progresses", force: :cascade do |t|
     t.datetime "started_at"
     t.datetime "finished_at"
@@ -238,6 +257,7 @@ ActiveRecord::Schema.define(version: 20160508081343) do
     t.string   "gifter_first_name",      limit: 255
     t.string   "gifter_last_name",       limit: 255
     t.string   "gifter_email",           limit: 255
+    t.string   "subscription_token",     limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

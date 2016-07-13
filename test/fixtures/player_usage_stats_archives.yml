@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  duration: 1
+  device_detail_id: MyString
+  integer: MyString
+  user_id: MyString
+  integer: MyString
+  course_id: MyString
+  integer: MyString
+  content_id: MyString
+  integer: MyString
+  usage_date: MyString
+  datetime: MyString
+
+two:
+  duration: 1
+  device_detail_id: MyString
+  integer: MyString
+  user_id: MyString
+  integer: MyString
+  course_id: MyString
+  integer: MyString
+  content_id: MyString
+  integer: MyString
+  usage_date: MyString
+  datetime: MyString
