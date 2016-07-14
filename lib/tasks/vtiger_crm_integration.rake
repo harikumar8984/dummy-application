@@ -19,7 +19,6 @@ namespace :VtigerCrmIntegration do
       yesterday = Time.now - 365.day
       puts ('******#####Vtiger Updation Start######********')
       batch_user = User.find_in_batches do |batch_user|
-        binding.pry
         batch_user.each do |user|
           puts user.email
         if ( (user.updated_at >= yesterday  || user.created_at >= yesterday) ||
