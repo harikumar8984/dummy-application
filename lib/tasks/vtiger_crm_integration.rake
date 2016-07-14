@@ -14,7 +14,7 @@ namespace :VtigerCrmIntegration do
 
     desc "Updating CRM with CMS latest data"
     task :update_cms_crm => :environment do |t,args|
-      if [6, 12, 18, 24].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
+     # if [6, 12, 18, 24].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
       login_vtiger
       yesterday = Time.now - 365.day
       puts ('******#####Vtiger Updation Start######********')
@@ -32,7 +32,7 @@ namespace :VtigerCrmIntegration do
         end
       end
         end
-      end
+     # end
       puts ('**********#######All CMS data updated to crm#######*********')
     end
 
