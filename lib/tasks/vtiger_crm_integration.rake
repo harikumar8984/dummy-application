@@ -36,7 +36,7 @@ namespace :VtigerCrmIntegration do
   end
 
    def remove_special_char email
-      email.gsub!(/[+"]/,'')
+      email.gsub(/[+"]/,'')
    end
 
     def user_created_yesterday
