@@ -4,45 +4,45 @@ namespace :VtigerCrmIntegration do
   task :import_users => :environment do |t,args|
     #if [1,7, 13, 19 ].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
       login_vtiger
-      user = User.where("created_at >=?" ,Time.now - 1.day)
+      user = User.where("created_at >=?" ,Time.now - 365.day)
       user.each do |user|
         hash = create_user_list_hash(user)
-        @cmd.find_contact_by_email_or_add(nil, user.l_name, user.email,hash )
+        @cmd.find_contact_by_email_or_add(nil, user.l_name, remove_special_char(user.email), hash )
       end
     #end
-   end
+  end
 
-    desc "Updating CRM with CMS latest data"
-    task :update_cms_crm => :environment do |t,args|
-     # if [6, 12, 18, 24].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
-      login_vtiger
-      yesterday = Time.now - 365.day
-      puts ('******#####Vtiger Updation Start######********')
-      batch_user = User.find_in_batches do |batch_user|
-        batch_user.each do |user|
-          puts user.email
-        if ( (user.updated_at >= yesterday  || user.created_at >= yesterday) ||
-            (user.children && user.children.first.updated_at >= yesterday  || user.children.first.created_at >= yesterday) ||
-            (user.stripe_customer && (user.stripe_customer.updated_at >= yesterday  || user.stripe_customer.created_at >= yesterday)) ||
-            (user.transactions.last && (user.transactions.last.updated_at >= yesterday  || user.transactions.last.created_at >= yesterday)) ||
-            (user.player_usage_stats.last &&  (user.player_usage_stats.last.updated_at >= yesterday  || user.player_usage_stats.last.created_at >= yesterday)) )
-          update_crm_object(user)
-          puts (user.email+ 'updated to Vtiger')
-        end
+  desc "Updating CRM with CMS latest data"
+  task :update_cms_crm => :environment do |t,args|
+   # if [6, 12, 18, 24].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
+    login_vtiger
+    yesterday = Time.now - 15.day
+    puts ('******#####Vtiger Updation Start######********')
+    batch_user = User.find_in_batches do |batch_user|
+      batch_user.each do |user|
+        puts user.email
+      if ( (user.updated_at >= yesterday  || user.created_at >= yesterday) ||
+          (user.children && user.children.first.updated_at >= yesterday  || user.children.first.created_at >= yesterday) ||
+          (user.stripe_customer && (user.stripe_customer.updated_at >= yesterday  || user.stripe_customer.created_at >= yesterday)) ||
+          (user.transactions.last && (user.transactions.last.updated_at >= yesterday  || user.transactions.last.created_at >= yesterday)) ||
+          (user.player_usage_stats.last &&  (user.player_usage_stats.last.updated_at >= yesterday  || user.player_usage_stats.last.created_at >= yesterday)) )
+        update_crm_object(user)
+        puts (user.email+ 'updated to Vtiger')
       end
-        end
-     # end
-      puts ('**********#######All CMS data updated to crm#######*********')
+     end
     end
-
-   # def remove_special_char email
-   #    email.gsub!(/[+"]/,'')
    # end
+    puts ('**********#######All CMS data updated to crm#######*********')
+  end
+
+   def remove_special_char email
+      email.gsub!(/[+"]/,'')
+   end
 
     def user_created_yesterday
       user = User.where("created_at >= ?", Time.zone.now.beginning_of_day)
       user.each do |user|
-        @cmd.find_contact_by_email_or_add(nil, user.l_name, user.email, create_user_list_hash(user) )
+        @cmd.find_contact_by_email_or_add(nil, user.l_name, remove_special_char(user.email), create_user_list_hash(user) )
       end
     end
 
@@ -50,7 +50,7 @@ namespace :VtigerCrmIntegration do
   def  update_crm_object(user)
     object = @cmd.query_element_by_email(user.email, 'Contacts')
     if object[0]
-      @cmd.updateobject({lastname: user.l_name, email: user.email, id: object[1], assigned_user_id: '8'}.merge(create_user_list_hash(user)))
+      @cmd.updateobject({lastname: user.l_name, email: remove_special_char(user.email), id: object[1], assigned_user_id: '8'}.merge(create_user_list_hash(user)))
     end
   end
 
@@ -73,8 +73,6 @@ namespace :VtigerCrmIntegration do
     player_usage_details = create_player_usage_stats_hash(user.player_usage_stats, user.player_usage_stats_aggregate)
     create_user_hash(user).merge(device_details).merge(children_details).merge(payment_details).merge(transaction_details).merge(player_usage_details)
   end
-
-
 
   def create_user_hash(user)
      {firstname: user.f_name, cf_809: user.id, cf_917: user.user_type, cf_813: user.subscription_end_date,
