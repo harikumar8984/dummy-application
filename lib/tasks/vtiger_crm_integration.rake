@@ -4,7 +4,7 @@ namespace :VtigerCrmIntegration do
   task :import_users => :environment do |t,args|
     #if [1,7, 13, 19 ].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
       login_vtiger
-      user = User.where("created_at >=?" ,Time.now - 1.day)
+      user = User.where("created_at >=?" ,Time.now - 365.day)
       user.each do |user|
         hash = create_user_list_hash(user)
         @cmd.find_contact_by_email_or_add(nil, user.l_name, remove_special_char(user.email), hash )
