@@ -51,7 +51,7 @@ RailsAdmin.config do |config|
     bulk_delete
     show
     edit do
-      only ['User','Course', 'CourseContent', 'Content', 'CourseCategory', 'MailTemplate', 'StripeSubscription']
+      only ['User','Course', 'CourseContent', 'Content', 'CourseCategory', 'MailTemplate', 'StripeSubscription', 'DeviceDetail']
     end
     delete  do
       only ['User', 'Course', 'CourseContent', 'Content', 'CourseCategory', 'MailTemplate','StripeCustomer','StripeSubscription', 'Transaction']
