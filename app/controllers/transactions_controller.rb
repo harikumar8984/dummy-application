@@ -1,8 +1,8 @@
 class  TransactionsController < ApplicationController
-  skip_before_filter :is_device_id?, :only => [:new, :get_stripe_plan, :new_subscription]
-  skip_before_filter :authenticate_scope!, :only => [:new, :get_stripe_plan, :new_subscription]
-  skip_before_filter :authenticate_user_from_token!, :only => [:new, :get_stripe_plan, :new_subscription]
-  skip_before_filter :authenticate_device, :only => [:new, :get_stripe_plan, :new_subscription]
+  skip_before_filter :is_device_id?, :only => [:new, :get_stripe_plan, :new_subscription, :change_card_details, :update_card_details]
+  skip_before_filter :authenticate_scope!, :only => [:new, :get_stripe_plan, :new_subscription, :change_card_details, :update_card_details]
+  skip_before_filter :authenticate_user_from_token!, :only => [:new, :get_stripe_plan, :new_subscription, :change_card_details, :update_card_details]
+  skip_before_filter :authenticate_device, :only => [:new, :get_stripe_plan, :new_subscription, :change_card_details, :update_card_details]
   before_filter :authenticate_user!, :only => [:new]
   #force_ssl if: :ssl_configured?
   respond_to :json
@@ -51,6 +51,22 @@ class  TransactionsController < ApplicationController
           end
         end
       end
+    end
+  end
+
+  def change_card_details
+    @user = current_user if current_user
+  end
+
+  def update_card_details
+    url =  request.base_url.to_s + update_card_api_transactions_path
+    begin
+      puts 'inside client'
+      c = RestClient::Request.execute(method: :put, url: url,header: {"device-id" => current_user.try(:device_detail).try(:device_id), "auth-token" => current_user.authentication_token})
+      puts c
+    rescue => e
+      e.response
+      puts e.message
     end
   end
 

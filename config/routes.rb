@@ -52,6 +52,10 @@ Nuryl::Application.routes.draw do
   end
 
   resources :transactions ,only: [:new] do
+    collection do
+      get 'change_card_details' => 'transactions#change_card_details'
+      put 'update_card' => 'transactions#update_card_details'
+    end
 
   end
 
