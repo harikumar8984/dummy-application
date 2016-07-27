@@ -45,7 +45,7 @@ Nuryl::Application.routes.draw do
           post 'in_app_purchase_details' => 'transactions#in_app_purchase_details'
           put 'in_app_deactivate_subscription' => 'transactions#cancel_in_app_subscription'
           get 'subscription_status' => 'transactions#subscription_status'
-          put 'update_card' => 'transactions#update_customer'
+          put 'update_card' => 'transactions#update_card'
         end
       end
     end

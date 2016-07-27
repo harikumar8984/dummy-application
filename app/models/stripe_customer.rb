@@ -24,10 +24,10 @@ class StripeCustomer < ActiveRecord::Base
     end
   end
 
-  def update_customer(user, params)
-    customer = StripeExt.update_customer(user, params[:card_id], self)
+  def update_card_detail(user, params)
+    customer = StripeExt.update_card(user, params[:card_id], self)
     if customer
-      user.update_stripe_customer_token(customer.id)
+      update_attributes(default_source: customer.default_source)
       return true
     end
   end

@@ -73,6 +73,10 @@ class User < ActiveRecord::Base
     SecureRandom.urlsafe_base64(15).tr('lIO0', 'sxyz')
   end
 
+  def update_card_source customer
+    update_attributes(stripe_customer_token: customer.token, subscription_token: nil)
+  end
+
 
   private
 
