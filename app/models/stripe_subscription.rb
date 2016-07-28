@@ -1,6 +1,9 @@
 class StripeSubscription < ActiveRecord::Base
+  include SharedMethod
   belongs_to :stripe_customers
   scope :active, -> { where(status: 'active') }
+  after_create :change_user_date
+  after_destroy :change_user_date
 
   def status_enum
     [['active'],['canceled']]

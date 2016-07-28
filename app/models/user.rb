@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   has_many :transactions, dependent: :destroy
 
   validates :f_name,:l_name, presence: true
+  after_create :change_date
 
   def ensure_authentication_token!
     if authentication_token.blank?
@@ -71,6 +72,10 @@ class User < ActiveRecord::Base
   # Generate a friendly string randomly to be used as token.
   def self.friendly_token
     SecureRandom.urlsafe_base64(15).tr('lIO0', 'sxyz')
+  end
+
+  def change_date
+    update_attributes(changed_date: Time.now)
   end
 
 
