@@ -17,7 +17,6 @@ namespace :VtigerCrmIntegration do
     login_vtiger
     puts ('******#####Vtiger Updation Start######********')
     users = User.where("changed_date >=?" ,Time.now - 1.day)
-    binding.pry
     users.each do |user|
         puts user.email
         update_crm_object(user)
