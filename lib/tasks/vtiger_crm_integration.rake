@@ -21,14 +21,14 @@ namespace :VtigerCrmIntegration do
     batch_user = User.find_in_batches do |batch_user|
       batch_user.each do |user|
         puts user.email
-      if ( (user.updated_at >= yesterday  || user.created_at >= yesterday) ||
-          (user.children && user.children.first.updated_at >= yesterday  || user.children.first.created_at >= yesterday) ||
-          (user.stripe_customer && (user.stripe_customer.updated_at >= yesterday  || user.stripe_customer.created_at >= yesterday)) ||
-          (user.transactions.last && (user.transactions.last.updated_at >= yesterday  || user.transactions.last.created_at >= yesterday)) ||
-          (user.player_usage_stats.last &&  (user.player_usage_stats.last.updated_at >= yesterday  || user.player_usage_stats.last.created_at >= yesterday)) )
+      # if ( (user.updated_at >= yesterday  || user.created_at >= yesterday) ||
+      #     (user.children && user.children.first.updated_at >= yesterday  || user.children.first.created_at >= yesterday) ||
+      #     (user.stripe_customer && (user.stripe_customer.updated_at >= yesterday  || user.stripe_customer.created_at >= yesterday)) ||
+      #     (user.transactions.last && (user.transactions.last.updated_at >= yesterday  || user.transactions.last.created_at >= yesterday)) ||
+      #     (user.player_usage_stats.last &&  (user.player_usage_stats.last.updated_at >= yesterday  || user.player_usage_stats.last.created_at >= yesterday)) )
         update_crm_object(user)
         puts (user.email+ 'updated to Vtiger')
-      end
+      # end
      end
     end
    end
