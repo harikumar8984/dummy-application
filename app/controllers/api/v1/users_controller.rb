@@ -71,6 +71,7 @@ class Api::V1::UsersController < ApplicationController
      end
     end
     PlayerUsageStat.import columns, values
+    current_user.change_date
     return render status: 201, :json=> {:success => true}
   end
 

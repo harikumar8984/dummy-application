@@ -1,7 +1,10 @@
 class StripeCustomer < ActiveRecord::Base
+  include SharedMethod
   belongs_to :user
   has_many :transactions, dependent: :destroy
   has_many :stripe_subscriptions, dependent: :destroy
+  after_create :change_user_date
+  after_destroy :change_user_date
 
   def save_with_stripe_payment(user, params)
     unless params[:subscription_type].nil?
@@ -46,6 +49,7 @@ class StripeCustomer < ActiveRecord::Base
   def create_iap_json(user, params)
     {customer_id: params[:apple_id],  currency: params[:currency],user_id: user.id, payment_type: 'iap' }
   end
+
 
 
 end

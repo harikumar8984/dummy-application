@@ -1,6 +1,9 @@
 class Transaction < ActiveRecord::Base
+  include SharedMethod
   #extend StripeExt
   belongs_to :stripe_customer
+  after_create :change_user_date
+  after_destroy :change_user_date
 
   def self.create_transaction(response, type)
     user = User.user_from_stripe_customer(response['customer'])
