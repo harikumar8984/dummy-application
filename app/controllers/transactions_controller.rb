@@ -1,8 +1,8 @@
 class  TransactionsController < ApplicationController
-  skip_before_filter :is_device_id?, :only => [:new, :get_stripe_plan, :new_subscription]
-  skip_before_filter :authenticate_scope!, :only => [:new, :get_stripe_plan, :new_subscription]
-  skip_before_filter :authenticate_user_from_token!, :only => [:new, :get_stripe_plan, :new_subscription]
-  skip_before_filter :authenticate_device, :only => [:new, :get_stripe_plan, :new_subscription]
+  skip_before_filter :is_device_id?, :only => [:new, :get_stripe_plan, :new_subscription, :change_card_details, :update_card_details]
+  skip_before_filter :authenticate_scope!, :only => [:new, :get_stripe_plan, :new_subscription, :change_card_details, :update_card_details]
+  skip_before_filter :authenticate_user_from_token!, :only => [:new, :get_stripe_plan, :new_subscription, :change_card_details, :update_card_details]
+  skip_before_filter :authenticate_device, :only => [:new, :get_stripe_plan, :new_subscription, :change_card_details, :update_card_details]
   before_filter :authenticate_user!, :only => [:new]
   #force_ssl if: :ssl_configured?
   respond_to :json
@@ -51,6 +51,20 @@ class  TransactionsController < ApplicationController
           end
         end
       end
+    end
+  end
+
+  def change_card_details
+    @user = current_user if current_user
+  end
+
+  def update_card_details
+    @stripe_customer = current_user.stripe_customer
+    if @stripe_customer.update_card_detail(current_user, params)
+      render template: 'transactions/show'
+    else
+      flash[:message] = @stripe_customer.errors.messages[:base]
+      redirect_to :back
     end
   end
 

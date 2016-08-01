@@ -45,13 +45,17 @@ Nuryl::Application.routes.draw do
           post 'in_app_purchase_details' => 'transactions#in_app_purchase_details'
           put 'in_app_deactivate_subscription' => 'transactions#cancel_in_app_subscription'
           get 'subscription_status' => 'transactions#subscription_status'
-          put 'update_card' => 'transactions#update_customer'
+          put 'update_card' => 'transactions#update_card'
         end
       end
     end
   end
 
   resources :transactions ,only: [:new] do
+    collection do
+      get 'change_card_details' => 'transactions#change_card_details'
+      put 'update_card' => 'transactions#update_card_details'
+    end
 
   end
 

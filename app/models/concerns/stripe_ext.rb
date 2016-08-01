@@ -62,11 +62,11 @@ module StripeExt
   end
 
 
-  def self.update_customer(user, card, model)
-     customer = stripe_customer_from_token(user.stripe_customer_token)
-     customer.source = card # obtained with Stripe.js
-     return customer.save
-    rescue => e
+  def self.update_card(user, card, model)
+    customer = stripe_customer_from_token(user.stripe_customer_token)
+    customer.source = card # obtained with Stripe.js
+    return customer.save
+  rescue => e
       model.errors.add(:base, "Stripe error: #{e.message}")
       return false
   end

@@ -1,0 +1,54 @@
+<div class="rkv_wrapper">
+  <div class="rkv_form_wrapper  rkv_checkout">
+    <h1>Update Card Details</h1>
+    <div class="rkv_col2">
+      <div class="rkv_form_container">
+        <div class="rkv_form">
+          <%= form_tag update_card_transactions_path, method:'put', class:'form-horizontal', id: 'stripe_registration' do %>
+              <%= hidden_field_tag :card_id %>
+              <div id="stripe_error">
+                <div class="message">
+                  <%= flash[:message] %>
+                  <noscript>JavaScript is not enabled and is required for this form. First enable it in your web browser settings.</noscript>
+                </div>
+              </div>
+
+              <div class="rkv_row">
+                <%= text_field_tag :f_name, @user.f_name, placeholder:"First Name"%>
+              </div>
+              <div class="rkv_row">
+                <%= text_field_tag :f_name, @user.l_name, placeholder:"First Name"%>
+              </div>
+              <div class="rkv_row">
+                <%= text_field_tag :card_number, nil, name: nil, placeholder: "Credit Card #", required: true%>
+              </div>
+              <div class="rkv_row" style="margin: 6px 0 26px">
+                <label class="rkv_field_title" style="margin-right: 11px; line-height: 45px; text-indent: 15px;">Expiration Date</label>
+                <div class="rkv_select_container wide">
+                  <%= select_month nil, {add_month_numbers_true: true}, {name: nil, id: "card_month", class: 'rkv_select'}%>
+                  <%= select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "card_year", class: 'rkv_select'}%>
+                  <%= text_field_tag :card_code, nil, name: nil,  placeholder: "CVV", style:"width:100px; padding:5px; border:1px solid #999; line-height:33px;", required: true %>
+                </div>
+              </div>
+              <div class="rkv_row">
+                <%= button_tag(type: 'submit' , class: "rkv_button submit-button payment-btn") do %>
+                    <span >Update</span>
+                <% end %>
+              </div>
+          <%end%>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style type="text/css">
+    body {
+        background-image: none;
+    }
+</style>
+
+<%= javascript_include_tag "transactions" %>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js"></script>
