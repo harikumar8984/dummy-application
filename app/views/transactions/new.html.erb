@@ -1,7 +1,8 @@
 <div class="rkv_wrapper" id = 'plan_select_form'>
   <div class="rkv_section rkv_video_section">
-    <%= link_to '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> <span class="mrg-left-3">Update Card</span><i class="icon-arrow-right"></i>'.html_safe, change_card_details_transactions_path %>
-
+    <%if current_user.stripe_account?%>
+     <%= link_to '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> <span class="mrg-left-3">Update Card</span><i class="icon-arrow-right"></i>'.html_safe, change_card_details_transactions_path %>
+    <%end%>
     <h2 class="rkv_headding">
       Unlock the Nuryl Playlist
     </h2>
