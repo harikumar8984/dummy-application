@@ -44,15 +44,11 @@
           <div class="rkv_row" style="margin: 6px 0 26px">
             <label class="rkv_field_title" style="margin-right: 11px">Baby's D.O.B <span>(Or Expected)</span></label>
             <div class="rkv_select_container">
-
               <%= date_select :dob, :date, {:order => [:month, :day, :year], :start_year => 2010, :end_year => 2020}, {:class => "rkv_select"}%>
-
-
-
             </div>
           </div>
           <div class="rkv_row">
-            <input class="rkv_button" type="submit" value="Continue">
+            <input class="rkv_button child_submit_button" type="submit" value="Continue">
           </div>
         <%end%>
       </div>
@@ -65,3 +61,10 @@
         background-image: none;
     }
 </style>
+
+<script type="text/javascript">
+    //mix panel show page tracking
+    mixpanel.track(
+            "W child details show"
+    );
+</script>

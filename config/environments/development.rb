@@ -60,5 +60,6 @@ Rails.application.configure do
   ENV['VIDEO_URL_LEARN_MORE'] = 'https://player.vimeo.com/video/158950941'
   ENV['VIDEO_URL_HOW_TO'] = 'https://player.vimeo.com/video/158950941'
   ENV['AFTER_SUBSCRIPTION_URL'] = 'http://www.nuryl.com/welcome-nuryl-user/'
+  ENV['MIX_PANEL_TOKEN'] = 'de2017bc175cdbd26153202678cf2bdd'
 
 end

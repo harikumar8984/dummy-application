@@ -254,6 +254,7 @@ GEM
     mime-types (2.99)
     mini_portile (0.6.2)
     minitest (5.8.3)
+    mixpanel-ruby (2.2.0)
     multi_json (1.11.2)
     mysql (2.9.1)
     mysql2 (0.3.18)
@@ -391,6 +392,7 @@ DEPENDENCIES
   jquery-rails
   liquid-rails
   mailcatcher
+  mixpanel-ruby
   mysql
   mysql2 (~> 0.3.18)
   newrelic_rpm
