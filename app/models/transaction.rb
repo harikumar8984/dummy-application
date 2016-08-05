@@ -24,7 +24,7 @@ class Transaction < ActiveRecord::Base
     balance_transaction_id: response['balance_transaction'], description: response['description'],
     failure_code: response['failure_code'], failure_message: response['failure_message'],
     paid: response['paid'], transaction_type: type, statement_descriptor: response['statement_descriptor'],
-    purchase_date: Time.now, payment_type: 'stripe'}
+    purchase_date: Time.zone.now, payment_type: 'stripe'}
   end
 
   def self.save_with_in_app_transaction(user, params)
