@@ -40,6 +40,7 @@ subscription = {
                 } else {
                     $is_submitted = true;
                     return true;
+
                 }
             }));
 
@@ -60,6 +61,8 @@ subscription = {
             $('#card_id').val(response.id);
             $('.payment-btn').attr('disabled', 'disabled');
             $('#stripe_registration')[0].submit();
+            mixpanel_transaction_entry();
+
         }
         else {
             $('#stripe_error').text(response.error.message);
@@ -91,4 +94,21 @@ function show_payment_form(this_evt){
     $('#payment_form .rkv_items_list_container .rkv_susbcription_title').text('Nuryl ' + (this_evt).parent().find('.rkv_plan_name').text() + ' Subscription')
     $('#payment_form .rkv_items_list_container .rkv_price').text((this_evt).parent().find('.nuryl_price').text());
     $('#payment_form .rkv_subscription_table .rkv_total_amount').text((this_evt).parent().find('.nuryl_price').text());
+    //mix panel show page tracking
+    mixpanel.track(
+        "W payment show"
+    );
+}
+
+
+function mixpanel_transaction_entry(){
+    mixpanel.identify(distinct_id);
+    mixpanel.people.append({
+        "$subscription_type": $('#payment_form #subscription_type').val(),
+        "$amount": $('#payment_form #amount').val(),
+        "$payment_type": 'Stripe'
+    });
+    mixpanel.track(
+        "W payment creation"
+    );
 }

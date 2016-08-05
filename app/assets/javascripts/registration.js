@@ -30,6 +30,31 @@ $(document).ready(function () {
         $('.message , .message_cust').text('');
     });
 
+    $('.sign-up-button').click(function(){
+        existing_id = mixpanel.identify($('#input_email').val());
+        mixpanel.people.set({
+            "$first_name": $('#input_first_name').val(),
+            "$last_name": $('#input_last_name').val(),
+            "$email": $('#input_email').val()
+        });
+        mixpanel.track(
+            "W sign up creation"
+        );
+    });
+
+    $('.child_submit_button').click(function(){
+        mixpanel.identify(distinct_id);
+        mixpanel.people.append({
+            "baby_name": $('#input_baby_name').val(),
+            "gender": $('input[name=gender]:checked').val()
+        });
+        mixpanel.track(
+            "W child details creation"
+        );
+    });
+
+
+
     if ( window.location.search.indexOf('invalid_login=true') > 0) {
         $('#sign-up-form').hide();
         $('#sign-in-form').show();
