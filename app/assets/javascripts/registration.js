@@ -44,7 +44,7 @@ $(document).ready(function () {
 
     $('.child_submit_button').click(function(){
         mixpanel.identify(distinct_id);
-        mixpanel.people.append({
+        mixpanel.people.set({
             "baby_name": $('#input_baby_name').val(),
             "gender": $('input[name=gender]:checked').val()
         });

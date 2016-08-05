@@ -104,7 +104,7 @@ function show_payment_form(this_evt){
 
 function mixpanel_transaction_entry(){
     mixpanel.identify(distinct_id);
-    mixpanel.people.append({
+    mixpanel.people.set({
         "$subscription_type": $('#payment_form #subscription_type').val(),
         "$amount": $('#payment_form #amount').val(),
         "$payment_type": 'Stripe'
