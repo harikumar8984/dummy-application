@@ -95,6 +95,7 @@ function show_payment_form(this_evt){
     $('#payment_form .rkv_items_list_container .rkv_price').text((this_evt).parent().find('.nuryl_price').text());
     $('#payment_form .rkv_subscription_table .rkv_total_amount').text((this_evt).parent().find('.nuryl_price').text());
     //mix panel show page tracking
+    mixpanel.identify(distinct_id);
     mixpanel.track(
         "W payment show"
     );
