@@ -20,16 +20,16 @@ module RailsAdmin
         register_instance_option :controller do
           Proc.new do
             user = @object
-            subscription_json = {user_id: user.id , subscription_id: 'dummy_'+Digest::SHA1.hexdigest([Time.now, rand].join), status: 'active', plan_id: 'dummy', amount:  'dummy', interval: 'dummy', payment_type: 'dummy'}
+            subscription_json = {user_id: user.id , subscription_id: 'dummy_'+Digest::SHA1.hexdigest([Time.zone.now, rand].join), status: 'active', plan_id: 'dummy', amount:  'dummy', interval: 'dummy', payment_type: 'dummy'}
             if !user.stripe_account?
-              customer_json =  {customer_id: 'dummy_'+Digest::SHA1.hexdigest([Time.now, rand].join), account_balance: 0.00, currency: 'usd',
+              customer_json =  {customer_id: 'dummy_'+Digest::SHA1.hexdigest([Time.zone.now, rand].join), account_balance: 0.00, currency: 'usd',
                                        description: 'Dummy stripe account', user_id: user.id, payment_type: 'dummy' }
               stripe_customer = StripeCustomer.create(customer_json)
               user.reload
               user.stripe_customer.stripe_subscriptions.create(subscription_json) if user.stripe_customer
-              transaction_json = {user_id: user.id, customer_id:  'dummy_'+Digest::SHA1.hexdigest([Time.now, rand].join),
-                                  amount: 'dummy', currency: 'dummy', transaction_id: 'dummy_'+Digest::SHA1.hexdigest([Time.now, rand].join),
-                                  paid: false, purchase_date: Time.now, payment_type: 'dummy', description: 'Dummy transactions'}
+              transaction_json = {user_id: user.id, customer_id:  'dummy_'+Digest::SHA1.hexdigest([Time.zone.now, rand].join),
+                                  amount: 'dummy', currency: 'dummy', transaction_id: 'dummy_'+Digest::SHA1.hexdigest([Time.zone.now, rand].join),
+                                  paid: false, purchase_date: Time.zone.now, payment_type: 'dummy', description: 'Dummy transactions'}
               user.stripe_customer.transactions.create(transaction_json) if user.stripe_customer
             elsif (!user.has_subscription? || (user.has_subscription? && !user.active_subscription?))
               user.stripe_customer.stripe_subscriptions.create(subscription_json) if user.stripe_customer

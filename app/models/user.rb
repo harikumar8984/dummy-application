@@ -75,7 +75,7 @@ class User < ActiveRecord::Base
   end
 
   def change_date
-    update_attributes(changed_date: Time.now)
+    update_attributes(changed_date: Time.zone.now)
   end
 
 
