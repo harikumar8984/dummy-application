@@ -1,0 +1,13 @@
+<div class="rkv_wrapper">
+  <div class="rkv_form_wrapper">
+    <h1 style="color: #8A8989">User Profile</h1>
+    <h1></h1>
+    <div class="rkv_form_container">
+			<p><b>First Name:</b> <%= @user.try(:f_name)%></p>
+			<p><b>Last Name:</b> <%= @user.try(:l_name)%></p>
+			<p><b>Email:</b> <%= @user.email %></p>
+			<p><b>zipcode:</b> <%= @user.try(:zipcode) %></p>
+			<p><b>last sign in:</b> <%= @user.try(:last_sign_in_at).strftime("%m/%d/%Y %I:%M%p")  %></p>
+		</div>
+	</div>
+</div>

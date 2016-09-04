@@ -1,0 +1,44 @@
+<div class="rkv_wrapper">
+  <div class="rkv_form_wrapper">
+    <h1 style="color: #8A8989">Edit Profile</h1>
+    <h1></h1>
+    <div class="rkv_form_container">
+      <div class="rkv_form" style="height: 540px">
+        <%= form_for @user, class:'children-create-form', :format => :html do |f| %>
+          <% if @user && current_user.errors.any? %>
+            <div id="error_explanation">
+              <% current_user.errors.full_messages.each do |msg| %>
+                <%= msg %><br>
+              <% end %>
+            </div>
+          <% end %>
+          <div class="rkv_row">
+            <%= f.text_field :f_name, style:"background-position: 15px 10px" , class:"rkv_input_icon rkv_fname", id: 'input_first_name', placeholder: 'First Name'%>
+          </div>
+          <div class="rkv_row">
+            <%= f.text_field :l_name, style:"background-position: 15px 10px" , class:"rkv_input_icon rkv_lname", id: 'input_last_name', placeholder: 'Last Name'%>
+          </div>
+          <div class="rkv_row">
+            <div class='error-email-label'></div>
+            <%= f.email_field :email, style:"background-position: 15px -75px", class:"rkv_input_icon rkv_email" , id: 'input_email', placeholder: 'Email'%>
+          </div>
+          <div class="rkv_row">
+            <div class='error-email-label'></div>
+            <%= f.password_field :current_password, style:"background-position: 15px -75px", class:"rkv_input_icon", placeholder: 'Current Password'%>
+          </div>
+          <div class="rkv_row">
+            <div class='error-email-label'></div>
+            <%= f.password_field :password, style:"background-position: 15px -75px", class:"rkv_input_icon rkv_lname", placeholder: 'New Password'%>
+          </div>
+          <div class="rkv_row">
+            <div class='error-email-label'></div>
+            <%= f.password_field :password_confirmation, style:"background-position: 15px -75px", class:"rkv_input_icon rkv_lname" , placeholder: 'Password Confirmation'%>
+          </div>
+          <div class="rkv_row">
+            <input class="rkv_button child_submit_button" type="submit" value="Update">
+          </div>
+        <%end%>
+      </div>
+    </div>
+  </div>
+</div>

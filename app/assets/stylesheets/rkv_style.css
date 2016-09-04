@@ -3,6 +3,7 @@ header.rkv-header {
 	display: inline-block;
 	float: left;
 	width: 100%;
+	background-color: rgba(165,165,165,0.88);
 	background-image: url(header-background.jpg);
 }
 body {

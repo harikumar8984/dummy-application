@@ -215,6 +215,8 @@ GEM
       tilt
     http-cookie (1.0.2)
       domain_name (~> 0.5)
+    httparty (0.14.0)
+      multi_xml (>= 0.5.2)
     i18n (0.7.0)
     inflecto (0.0.2)
     ipaddress (0.8.0)
@@ -256,6 +258,7 @@ GEM
     minitest (5.8.3)
     mixpanel-ruby (2.2.0)
     multi_json (1.11.2)
+    multi_xml (0.5.5)
     mysql (2.9.1)
     mysql2 (0.3.18)
     nested_form (0.3.2)
@@ -388,6 +391,7 @@ DEPENDENCIES
   fastercsv
   fog
   freshdesk
+  httparty
   jbuilder (~> 2.0)
   jquery-rails
   liquid-rails
@@ -410,3 +414,6 @@ DEPENDENCIES
   vtiger
   web-console (~> 2.0)
   yajl-ruby
+
+BUNDLED WITH
+   1.12.5

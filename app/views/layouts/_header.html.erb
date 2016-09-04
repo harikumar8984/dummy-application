@@ -20,17 +20,39 @@
       <div class="rkv-responsive-search-button"></div>
       <div class="rkv-responsive-menu-button"></div>
       <div class="rkv-menu-section">
+
+        <% header_tabs = HTTParty.get('http://nuryl.staging.wpengine.com/wp-json/wp-api-menus/v2/menu-locations/main_navigation') %>
         <ul>
-          <li><a href="http://www.nuryl.com/">home</a></li>
-          <li><a href="http://www.nuryl.com/download-the-nuryl-app/"  class="active">subscribe</a></li>
-          <li><a href="http://www.nuryl.com/what-is-nuryl/">how to use Nuryl</a></li>
-          <li><a href="http://www.nuryl.com/category/resources/">resources</a></li>
-          <li><a href="http://www.nuryl.com/news">news</a></li>
-          <li><a href="http://www.nuryl.com/nuryl-faq/">faq</a></li>
-          <li><a href="http://www.nuryl.com/contact">contact</a></li>
-          <li><a href="http://www.nuryl.com" class="rkv-search"></a></li>
+          <% header_tabs.each do |header| %>
+            <% if header["children"].present? %>
+              <li>
+                <div class="dropdown">
+                  <%= button_to "#{header["title"]}", header["url"],{class:"dropbtn"}%>
+                  <div class="dropdown-content">
+                    <ul class="sub-menu">
+                      <% header["children"].each do |clild| %>
+                        <li><a href="<%= clild["url"]%>"><%= clild["title"] %></a></li>
+                      <% end %>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+            <% else %>
+              <li><a href="<%= header["url"]%>"  class=""><%= header["title"]%></a></li>
+            <% end %>
+          <% end %>
+            <li><a href="http://www.nuryl.com" class="rkv-search"></a></li>
           <% if user_signed_in? %>
-              <li><%=button_to "LOG OUT", destroy_user_session_path,{method: :delete,class:"hidden-menu"}%></li>
+           <li><div class="dropdown">
+                  <%= button_to "Hi #{current_user.f_name}","#",{class:"dropbtn"}%>
+                  <div class="dropdown-content">
+                    <ul class="sub-menu">
+                      <li><a href="<%= edit_user_path(current_user) %>">Edit Account</a></li>
+                      <li><a href="<%= user_path(current_user) %>">Account</a></li>
+                      <li><%=button_to "Log out", destroy_user_session_path,{method: :delete,class:"hidden-menu"}%></a></li>
+                    </ul>
+                  </div>
+                </div></li>
            <%end%>
         </ul>
       </div>
