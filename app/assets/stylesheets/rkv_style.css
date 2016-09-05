@@ -4,7 +4,7 @@ header.rkv-header {
 	float: left;
 	width: 100%;
 	background-color: rgba(165,165,165,0.88);
-	background-image: url(header-background.jpg);
+	/*background-image: url(header-background.jpg);*/
 }
 body {
 	margin: 0;	
