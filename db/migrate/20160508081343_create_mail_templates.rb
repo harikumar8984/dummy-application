@@ -4,7 +4,7 @@ class CreateMailTemplates < ActiveRecord::Migration
     	t.string :device_type
     	t.string :template
     	t.string :context
-    	t.text :content, :limit => 4294967295
+    	t.text :content, :limit => 1000_000
   
         t.timestamps null: false
     end
