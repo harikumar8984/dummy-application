@@ -8,6 +8,7 @@
 			<p><b>Email:</b> <%= @user.email %></p>
 			<p><b>zipcode:</b> <%= @user.try(:zipcode) %></p>
 			<p><b>last sign in:</b> <%= @user.try(:last_sign_in_at).strftime("%m/%d/%Y %I:%M%p")  %></p>
+			
 		</div>
 	</div>
 </div>
