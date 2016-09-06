@@ -119,5 +119,11 @@ body {
 }
 
 .rkv-menu-section ul a.rkv-search::before {
-  top: 50px;
+  top: 57px !important;
+}
+
+.sub-menu a {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
