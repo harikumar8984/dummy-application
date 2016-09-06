@@ -127,3 +127,18 @@ body {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
+
+@media only screen and (max-width: 1000px){
+  .rkv-menu-section a {
+    line-height: normal !important;
+    padding: 15px !important;
+  }
+  .rkv-menu-section ul a.rkv-search::before {
+    color: hsl(0, 0%, 60%); !important;
+    top: 0 !important;
+  }
+  .dropdown .dropbtn {
+    color: hsl(0, 0%, 60%) !important;
+    line-height: normal !important;
+  }
+}
