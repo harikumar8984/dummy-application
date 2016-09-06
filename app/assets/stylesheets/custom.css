@@ -2,7 +2,8 @@ header.rkv-header {
     background-image: none;
 }
 body {
-    background-image: url(header-background.jpg);
+    /*background-image: url(header-background.jpg);*/
+    background-color: #f9f9f9;
     background-position: top center;
     background-size: cover;
     background-repeat: no-repeat;
