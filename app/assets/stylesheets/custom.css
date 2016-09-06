@@ -67,3 +67,30 @@ body {
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
+
+
+.rkv-logo-section {
+  float: left;
+  width: 250px;
+}
+.rkv-menu-bar .rkv_wrapper {
+  padding: 0;
+}
+.rkv-menu-section > ul {
+  padding-bottom: 40px;
+  padding-top: 40px;
+}
+.rkv-menu-section a {
+  font-size: 17px;
+  font-weight: 500;
+}
+.rkv-menu-section a:hover, .rkv-menu-section a:active {
+ color: #FFB070
+}
+
+.rkv-menu-bar .dropdown .dropbtn {
+  font-family: montserrat;
+  font-size: 17px;
+  font-weight: 500 !important;
+  padding: 9px;
+}
