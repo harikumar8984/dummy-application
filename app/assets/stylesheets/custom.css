@@ -127,6 +127,18 @@ body {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
+.logout {
+background: none;
+padding: 15px;
+border: none;
+font-size: 19px;
+font-weight: 600;
+text-align: center;
+color: #fff;
+display:block; 
+float: left;
+cursor: pointer;
+}
 
 @media only screen and (max-width: 1000px){
   .rkv-menu-section a {
