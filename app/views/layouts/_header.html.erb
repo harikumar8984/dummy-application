@@ -12,7 +12,7 @@
   <div class="rkv-menu-bar">
     <div class="rkv_wrapper">
       <div class="rkv-logo-section">
-        <a href="#">
+        <a href="http://nuryl.com">
           <img class="rkv-logo1" src="/assets/logo.png">
           <img class="rkv-logo2" src="/assets/logo-2.png">
         </a>
@@ -23,10 +23,7 @@
 
         <% header_tabs = HTTParty.get('http://nuryl.staging.wpengine.com/wp-json/wp-api-menus/v2/menu-locations/main_navigation') %>
         <ul>
-          <% header_tabs.each_with_index do |header, index| %>
-            <% if index == 1  && user_signed_in? %>
-              <li><a href="<%= new_transaction_path %>"  class="">subscribe</a></li>
-            <% end %>
+          <% header_tabs.each do |header| %>
             <% if header["children"].present? %>
               <li>
                 <div class="dropdown">
@@ -57,8 +54,8 @@
                 </div>
               </div>
             </li>
-          <%end%>
-          <li><a href="http://www.nuryl.com" class="rkv-search"></a></li>
+          <%end%><!-- 
+          <li><a href="http://www.nuryl.com" class="rkv-search"></a></li> -->
         </ul>
       </div>
     </div>
