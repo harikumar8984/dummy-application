@@ -142,3 +142,10 @@ body {
     line-height: normal !important;
   }
 }
+
+
+@media only screen and (max-width: 480px){
+  .rkv-logo-section {
+    width: 130px !important;
+  }
+}

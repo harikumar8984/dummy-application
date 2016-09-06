@@ -23,7 +23,10 @@
 
         <% header_tabs = HTTParty.get('http://nuryl.staging.wpengine.com/wp-json/wp-api-menus/v2/menu-locations/main_navigation') %>
         <ul>
-          <% header_tabs.each do |header| %>
+          <% header_tabs.each_with_index do |header, index| %>
+            <% if index == 1  && user_signed_in? %>
+              <li><a href="<%= new_transaction_path %>"  class="">subscribe</a></li>
+            <% end %>
             <% if header["children"].present? %>
               <li>
                 <div class="dropdown">
@@ -41,19 +44,21 @@
               <li><a href="<%= header["url"]%>"  class=""><%= header["title"]%></a></li>
             <% end %>
           <% end %>
-            <li><a href="http://www.nuryl.com" class="rkv-search"></a></li>
           <% if user_signed_in? %>
-           <li><div class="dropdown">
-                  <%= button_to "Hi #{current_user.f_name}","#",{class:"dropbtn"}%>
-                  <div class="dropdown-content">
-                    <ul class="sub-menu">
-                      <li><a href="<%= edit_user_path(current_user) %>">Edit Account</a></li>
-                      <li><a href="<%= user_path(current_user) %>">Account</a></li>
-                      <li><%=button_to "Log out", destroy_user_session_path,{method: :delete,class:"hidden-menu"}%></a></li>
-                    </ul>
-                  </div>
-                </div></li>
-           <%end%>
+            <li>
+              <div class="dropdown">
+                <%= button_to "Hi #{current_user.f_name}","#",{class:"dropbtn"}%>
+                <div class="dropdown-content">
+                  <ul class="sub-menu">
+                    <li><a href="<%= edit_user_path(current_user) %>">Edit Account</a></li>
+                    <li><a href="<%= user_path(current_user) %>">Account</a></li>
+                    <li><%=button_to "Log out", destroy_user_session_path,{method: :delete,class:"hidden-menu"}%></a></li>
+                  </ul>
+                </div>
+              </div>
+            </li>
+          <%end%>
+          <li><a href="http://www.nuryl.com" class="rkv-search"></a></li>
         </ul>
       </div>
     </div>
