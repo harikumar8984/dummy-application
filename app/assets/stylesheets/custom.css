@@ -68,29 +68,49 @@ body {
     background-color: #3e8e41;
 }
 
-
 .rkv-logo-section {
-  float: left;
-  width: 250px;
+  width: 250px !important;
 }
 .rkv-menu-bar .rkv_wrapper {
   padding: 0;
 }
 .rkv-menu-section > ul {
-  padding-bottom: 40px;
-  padding-top: 40px;
+  padding: 0 !important;
 }
 .rkv-menu-section a {
   font-size: 17px;
   font-weight: 500;
+  line-height: 112px !important;
 }
 .rkv-menu-section a:hover, .rkv-menu-section a:active {
  color: #FFB070
 }
-
+.rkv-menu-bar .dropdown .dropbtn:hover{
+ color: #FFB070
+}
 .rkv-menu-bar .dropdown .dropbtn {
   font-family: montserrat;
   font-size: 17px;
   font-weight: 500 !important;
   padding: 9px;
+  line-height: 112px;
+  background: none !important;
+}
+.sub-menu > li {
+  display: block !important;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+}
+.sub-menu {
+  background-color: hsl(0, 1%, 67%);
+  padding: 0 !important;
+  width: 198px !important;
+}
+.sub-menu a {
+  border-bottom-color: hsl(0, 0%, 80%);
+  display: inline-block;
+  line-height: 20px !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  width: 100%;
 }
