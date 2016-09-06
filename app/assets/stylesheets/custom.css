@@ -69,16 +69,17 @@ body {
 }
 
 .rkv-logo-section {
-  width: 250px !important;
+  width: 220px !important;
 }
 .rkv-menu-bar .rkv_wrapper {
   padding: 0;
+   max-width: 1170px !important;
 }
 .rkv-menu-section > ul {
   padding: 0 !important;
 }
 .rkv-menu-section a {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 112px !important;
 }
@@ -90,7 +91,7 @@ body {
 }
 .rkv-menu-bar .dropdown .dropbtn {
   font-family: montserrat;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 500 !important;
   padding: 9px;
   line-height: 112px;
@@ -100,12 +101,14 @@ body {
   display: block !important;
   width: 100%;
   border-bottom: 1px solid #ccc;
+  margin-left: 0 !important;
 }
 .sub-menu {
   background-color: hsl(0, 1%, 67%);
   padding: 0 !important;
   width: 198px !important;
 }
+
 .sub-menu a {
   border-bottom-color: hsl(0, 0%, 80%);
   display: inline-block;
@@ -113,4 +116,8 @@ body {
   padding-left: 20px !important;
   padding-right: 20px !important;
   width: 100%;
+}
+
+.rkv-menu-section ul a.rkv-search::before {
+  top: 50px;
 }
