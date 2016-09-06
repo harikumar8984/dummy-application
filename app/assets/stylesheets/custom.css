@@ -134,7 +134,7 @@ body {
     padding: 15px !important;
   }
   .rkv-menu-section ul a.rkv-search::before {
-    color: hsl(0, 0%, 60%); !important;
+    color: hsl(0, 0%, 60%) !important;
     top: 0 !important;
   }
   .dropdown .dropbtn {
