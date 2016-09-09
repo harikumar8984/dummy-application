@@ -4,6 +4,15 @@
     <div class="rkv_col2">
       <div class="rkv_form_container">
         <div class="rkv_form">
+          <div class="form_row">
+            <label for="theme">Payment method</label><br><br>
+            <% ['Paypal', 'Stripe'].each do |p| %>
+              <div class="rkv_row">
+              <%= radio_button_tag 'payment', p, selected: true, id: "#{p}" %>
+              <%= p %>
+              </div>
+            <% end %>
+          </div>
           <%= form_tag subscripe_api_transactions_path, method:'post', class:'form-horizontal', id: 'stripe_registration' do %>
               <%= hidden_field_tag :html_format, true %>
               <%= hidden_field_tag :user_type, @user_type %>
@@ -41,6 +50,67 @@
               <% end %>
             </div>
           <%end%>
+
+          <%= form_tag paypal_transaction_process_transactions_path, method:'post', class:'form-horizontal', id: 'paypal_transaction' do %>
+              <%#= hidden_field_tag :html_format, true %>
+              <%#= hidden_field_tag :user_type, @user_type %>
+              <%#= hidden_field_tag :card_id %>
+              <%#= hidden_field_tag :auth_token, @auth_token%>
+              <%#= hidden_field_tag :subscription_type, @subscription_type%>
+              <%= hidden_field_tag :amount, @amount%>
+              <div id="paypal_error">
+                <div class="message">
+                  <%= flash[:message] %>
+                  <noscript>JavaScript is not enabled and is required for this form. First enable it in your web browser settings.</noscript>
+                </div>
+              </div>
+
+            <div class="rkv_row">
+              <%= text_field_tag :first_name, @user.f_name, placeholder:"First Name"%>
+            </div>
+            <div class="rkv_row">
+              <%= text_field_tag :last_name, @user.l_name, placeholder:"Last Name"%>
+            </div>
+            <div class="rkv_row">
+            <%= select_tag :card_type, options_for_select([["Visa", "visa"], ["MasterCard", "master"], ["Discover", "discover"], ["American Express", "american_express"]]),{class: 'rkv_select'} %>
+            </div>
+            <div class="rkv_row">
+              <%= text_field_tag :card_number, "" , {required: true, placeholder: "Credit Card #"}%>
+            </div>
+            <!-- <div class="rkv_row"> -->
+              <%#= text_field_tag :card_verification, nil , placeholder: "CVV"%>
+            <!-- </div> -->
+            <div class="rkv_row" style="margin: 6px 0 26px">
+              <label class="rkv_field_title" style="margin-right: 11px; line-height: 45px; text-indent: 15px;">Expiration Date</label>
+              <div class="rkv_select_container wide">
+                <%= select_month nil, {},{ id: "card_month", class: 'rkv_select'}%>
+                <%= select_year nil ,{start_year: Date.today.year, end_year: Date.today.year+15}, {id: "card_year", class: 'rkv_select'}%>
+                <%= text_field_tag :card_verification, "", {style:"width:100px; padding:5px; border:1px solid #999; line-height:33px;", required: true, placeholder: "CVV" }%>
+              </div>
+            </div>
+
+            <div class="rkv_row">
+              <%= text_field_tag :address1, "", placeholder: "Address #", required: true%>
+            </div>
+            <div class="rkv_row">
+              <%= text_field_tag :city, "", placeholder: "city #", required: true%>
+            </div>
+            <div class="rkv_row">
+              <%= text_field_tag :state, "", placeholder: "state #", required: true%>
+            </div>
+            <div class="rkv_row">
+              <%= text_field_tag :country, "", placeholder: "country #", required: true%>
+            </div>
+            <div class="rkv_row">
+              <%= text_field_tag :zip_code, "", placeholder: "zip code #", required: true%>
+            </div>
+            <div class="rkv_row">
+              <%= button_tag(type: 'submit' , class: "rkv_button submit-button") do %>
+                  <span >Continue</span>
+              <% end %>
+            </div>
+          <%end%>
+
         </div>
       </div>
     </div>
@@ -67,3 +137,24 @@
 <%= javascript_include_tag "transactions" %>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js"></script>
+<script type="text/javascript">
+$(function() {
+  $('#payment_Paypal').on('change',function() {
+    if( $(this).is(':checked') ) {
+      $('#paypal_transaction').show();
+      $('#stripe_registration').hide();
+    }
+  });
+  $('#payment_Stripe').on('change',function() {
+    if( $(this).is(':checked') ) {
+      $('#stripe_registration').show();
+      $('#paypal_transaction').hide();
+    }
+  });
+});
+</script>
+<style type="text/css">
+  #paypal_transaction{
+    display: none;
+  }
+</style>

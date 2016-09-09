@@ -37,4 +37,49 @@ class Transaction < ActiveRecord::Base
      paid: params[:paid], purchase_date: params[:purchase_date], payment_type: 'iap'}
   end
 
+  # paypal methods
+  def self.purchase(price_in_cents, credit_card, purchase_options)
+    response = GATEWAY.purchase(price_in_cents, credit_card, purchase_options)
+    # response.success?
+  end
+  
+  def self.price_in_cents(amount)
+    (amount*100).round
+  end
+  # private
+  
+  def self.purchase_options(ip_address, first_name, address1, city, state, country, zip)
+    {
+      :ip => ip_address,
+      :billing_address => {
+        :name     => first_name,
+        :address1 => address1,
+        :city     => city,
+        :state    => state,
+        :country  => country,
+        :zip      => zip
+      }
+    }
+  end
+  
+  def validate_card
+    unless credit_card.valid?
+      credit_card.errors.full_messages.each do |message|
+        errors.add_to_base message
+      end
+    end
+  end
+  
+  def self.credit_card(card_type, card_number, card_verification, card_expires_on, first_name, last_name)
+    @credit_card ||= ActiveMerchant::Billing::CreditCard.new(
+      :type               => card_type,
+      :number             => card_number,
+      :verification_value => card_verification,
+      :month              => card_expires_on[:month],
+      :year               => card_expires_on[:year],
+      :first_name         => first_name,
+      :last_name          => last_name
+    )
+  end
+
 end
