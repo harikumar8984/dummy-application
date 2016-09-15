@@ -21,7 +21,7 @@
       <div class="rkv-responsive-menu-button"></div>
       <div class="rkv-menu-section">
 
-        <% header_tabs = HTTParty.get('http://nuryl.staging.wpengine.com/wp-json/wp-api-menus/v2/menu-locations/main_navigation') %>
+        <% header_tabs = HTTParty.get('http://www.nuryl.com//wp-json/wp-api-menus/v2/menu-locations/main_navigation') %>
         <ul>
           <% header_tabs.each do |header| %>
             <% if header["children"].present? %>
