@@ -324,6 +324,7 @@ GEM
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
     ruby-mp3info (0.8.7)
+    safe_yaml (1.0.4)
     sass (3.4.19)
     sass-rails (5.0.4)
       railties (>= 4.0.0, < 5.0)
@@ -409,6 +410,7 @@ DEPENDENCIES
   rails_12factor
   rails_admin!
   ruby-mp3info
+  safe_yaml
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring

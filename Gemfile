@@ -40,7 +40,7 @@ gem 'bootstrap-datepicker-rails'
 gem 'liquid-rails'
 gem 'mixpanel-ruby'
 gem 'httparty'
-
+gem "safe_yaml"
 
 
 # Use ActiveModel has_secure_password
