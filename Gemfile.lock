@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/sferik/rails_admin.git
-  revision: 2a79811339ef8f39b48fc3ef513ac4280fe0099d
+  revision: ffa30e0563e86a91bf88a312911b77d1bfffc2dc
   specs:
-    rails_admin (0.8.1)
+    rails_admin (1.0.0.rc)
       builder (~> 3.1)
       coffee-rails (~> 4.0)
       font-awesome-rails (>= 3.0, < 5)
@@ -11,10 +11,9 @@ GIT
       jquery-ui-rails (~> 5.0)
       kaminari (~> 0.14)
       nested_form (~> 0.3)
-      rack-pjax (~> 0.7)
-      rails (~> 4.0)
+      rack-pjax (>= 0.7)
+      rails (>= 4.0, < 6)
       remotipart (~> 1.0)
-      safe_yaml (~> 1.0)
       sass-rails (>= 4.0, < 6)
 
 GEM
@@ -43,6 +42,11 @@ GEM
     activejob (4.2.1)
       activesupport (= 4.2.1)
       globalid (>= 0.3.0)
+    activemerchant (1.60.0)
+      activesupport (>= 3.2.14, < 5.1)
+      builder (>= 2.1.2, < 4.0.0)
+      i18n (>= 0.6.9)
+      nokogiri (~> 1.4)
     activemodel (4.2.1)
       activesupport (= 4.2.1)
       builder (~> 3.1)
@@ -203,8 +207,8 @@ GEM
     fog-xml (0.1.2)
       fog-core
       nokogiri (~> 1.5, >= 1.5.11)
-    font-awesome-rails (4.5.0.0)
-      railties (>= 3.2, < 5.0)
+    font-awesome-rails (4.6.3.1)
+      railties (>= 3.2, < 5.1)
     formatador (0.2.5)
     freshdesk (0.2)
       nokogiri
@@ -274,9 +278,9 @@ GEM
     pry_debug (0.1.0)
       pry (~> 0.9.0)
     rack (1.6.4)
-    rack-pjax (0.8.0)
+    rack-pjax (1.0.0)
       nokogiri (~> 1.5)
-      rack (~> 1.1)
+      rack (>= 1.1)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
@@ -320,7 +324,6 @@ GEM
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
     ruby-mp3info (0.8.7)
-    safe_yaml (1.0.4)
     sass (3.4.19)
     sass-rails (5.0.4)
       railties (>= 4.0.0, < 5.0)
@@ -382,6 +385,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activemerchant
   activerecord-import
   bootstrap-datepicker-rails
   byebug

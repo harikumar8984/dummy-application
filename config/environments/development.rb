@@ -62,4 +62,13 @@ Rails.application.configure do
   ENV['AFTER_SUBSCRIPTION_URL'] = 'http://www.nuryl.com/welcome-nuryl-user/'
   ENV['MIX_PANEL_TOKEN'] = 'de2017bc175cdbd26153202678cf2bdd'
 
+
+  config.after_initialize do
+    ActiveMerchant::Billing::Base.mode = :test
+    ::GATEWAY = ActiveMerchant::Billing::PaypalGateway.new(
+      :login => "seller_1229899173_biz_api1.railscasts.com",
+      :password => "FXWU58S7KXFC6HBE",
+      :signature => "AGjv6SW.mTiKxtkm6L9DcSUCUgePAUDQ3L-kTdszkPG8mRfjaRZDYtSu"
+    )
+  end
 end

@@ -56,6 +56,7 @@ Nuryl::Application.routes.draw do
     collection do
       get 'change_card_details' => 'transactions#change_card_details'
       put 'update_card' => 'transactions#update_card_details'
+      post 'paypal_transaction_process' => 'transactions#paypal_transaction_process'
     end
 
   end
