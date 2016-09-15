@@ -40,6 +40,7 @@ gem 'bootstrap-datepicker-rails'
 gem 'liquid-rails'
 gem 'mixpanel-ruby'
 gem 'httparty'
+gem 'pg'
 
 
 
