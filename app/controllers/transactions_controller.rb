@@ -72,30 +72,7 @@ class  TransactionsController < ApplicationController
   #   !Rails.env.development?
   # end
 
-  def paypal_transaction_process
-    amount = params[:amount].scan(/\d./).join('').to_f
-    price_in_cents = Transaction.price_in_cents(amount)
-    credit_card = Transaction.credit_card( params[:card_type], params[:card_number],  params[:card_verification],  params[:date],  params[:first_name],  params[:last_name])
-    if credit_card.valid? 
-      begin
-        purchase_options = Transaction.purchase_options(request.ip, params[:first_name], params[:address1], params[:city], params[:state], params[:country], params[:zip])
-        response =  Transaction.purchase(price_in_cents, credit_card, purchase_options)
-        if response.success?
-          flash[:message] = response
-          redirect_to new_transaction_path
-        else
-          flash[:message] = response.message
-          redirect_to new_transaction_path
-        end
-      rescue
-        flash[:message] = "Something went wrong...!"
-        redirect_to new_transaction_path
-      end
-    else
-      flash[:message] = credit_card.errors.full_messages.join(", ")
-      redirect_to :back
-    end
-  end
+  
 end
 
 #4222222222222  9/23 123
