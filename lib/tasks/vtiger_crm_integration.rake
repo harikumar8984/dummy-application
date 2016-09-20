@@ -4,7 +4,8 @@ namespace :VtigerCrmIntegration do
   task :import_users => :environment do |t,args|
     #if [1,7, 13, 19 ].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
       login_vtiger
-      user = User.where("created_at >=?" ,Time.now - 2.day)
+      #user = User.where("created_at >=?" ,Time.now - 2.day)
+      user = User.all
       user.each do |user|
         hash = create_user_list_hash(user)
         @cmd.find_contact_by_email_or_add(nil, user.l_name, remove_special_char(user.email), hash )
@@ -17,7 +18,7 @@ namespace :VtigerCrmIntegration do
   if [1,7, 13, 19 ].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
     login_vtiger
     puts ('******#####Vtiger Updation Start######********')
-    users = User.where("changed_date >=?" ,Time.now - 1.day)
+    users = User.where("changed_date >=?" ,Time.now - 10.day)
     users.each do |user|
         puts user.email
         update_crm_object(user)
@@ -105,9 +106,9 @@ namespace :VtigerCrmIntegration do
 
   def create_player_usage_stats_hash(player_usage_stats, player_usage_stats_aggregate)
     month_usage_stats = usage_stats(player_usage_stats , Date.today.at_beginning_of_month)
-    daily_usage_stats_1 = usage_stats(player_usage_stats ,  Date.today)
-    daily_usage_stats_2 = usage_stats(player_usage_stats ,  Date.today - 1.day)
-    daily_usage_stats_3 = usage_stats(player_usage_stats ,  Date.today - 2.day)
+    daily_usage_stats_1 = daily_usage_stats(player_usage_stats ,  Date.today)
+    daily_usage_stats_2 = daily_usage_stats(player_usage_stats ,  Date.today - 1.day)
+    daily_usage_stats_3 = daily_usage_stats(player_usage_stats ,  Date.today - 2.day)
     year_usage_stats = usage_yearly_stats(player_usage_stats , player_usage_stats_aggregate,  Date.today.at_beginning_of_year)
     total_usage_stats = usage_yearly_stats(player_usage_stats ,  player_usage_stats_aggregate, nil)
     {cf_923: daily_usage_stats_1.first.duration.nil? ? '00:00:00' : Time.at(daily_usage_stats_1.first.duration).utc.strftime("%H:%M:%S"),
@@ -135,6 +136,10 @@ namespace :VtigerCrmIntegration do
     else
       model.select("sum(duration) as duration").where("DATE(usage_date) >= ?", filter_date).order(usage_date: :desc)
     end
+  end
+
+  def daily_usage_stats(player_usage_stats, filter_date)
+    player_usage_stats.select("sum(duration) as duration").where("DATE(usage_date) = ?", filter_date).order(usage_date: :desc)
   end
 
 end
