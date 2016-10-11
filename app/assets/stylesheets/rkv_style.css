@@ -1,4 +1,4 @@
-@import url("http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css");
+@import url("https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css");
 header.rkv-header {
 	display: inline-block;
 	float: left;
@@ -188,7 +188,7 @@ body {
 	letter-spacing: -0.35px
 }
 .rkv_list_items li:before {
-	content: url(http://www.nuryl.com/wp-content/uploads/2016/05/tick_icon.png);
+	content: url(https://www.nuryl.com/wp-content/uploads/2016/05/tick_icon.png);
 	position: absolute;
 	left: -50px;
 }
@@ -376,10 +376,10 @@ input.rkv_input_icon {
 	background-repeat: no-repeat;
 }
 .create_account input.rkv_input_icon {
-	background-image: url(http://www.nuryl.com/wp-content/uploads/2016/05/input_icons_1.png);
+	background-image: url(https://www.nuryl.com/wp-content/uploads/2016/05/input_icons_1.png);
 }
 input.rkv_input_icon.rkv_baby_name {
-	background-image: url(http://www.nuryl.com/wp-content/uploads/2016/05/input_icon_baby.png);
+	background-image: url(https://www.nuryl.com/wp-content/uploads/2016/05/input_icon_baby.png);
 	background-position: 13px center;
 }
 .rkv_button {
