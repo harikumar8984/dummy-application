@@ -12,7 +12,7 @@
   <div class="rkv-menu-bar">
     <div class="rkv_wrapper">
       <div class="rkv-logo-section">
-        <a href="http://nuryl.com">
+        <a href="https://nuryl.com">
           <img class="rkv-logo1" src="/assets/logo.png">
           <img class="rkv-logo2" src="/assets/logo-2.png">
         </a>
@@ -21,7 +21,7 @@
       <div class="rkv-responsive-menu-button"></div>
       <div class="rkv-menu-section">
 
-        <% header_tabs = HTTParty.get('http://www.nuryl.com/wp-json/wp-api-menus/v2/menu-locations/main_navigation') %>
+        <% header_tabs = HTTParty.get('https://www.nuryl.com/wp-json/wp-api-menus/v2/menu-locations/main_navigation') %>
         <ul>
           <% header_tabs.each do |header| %>
             <% if header["children"].present? %>
