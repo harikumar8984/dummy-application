@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   before_save :ensure_authentication_token!
+  after_create :subscribe_user_to_mailing_list
 
   has_many :user_children, dependent: :destroy
   has_many :children, through: :user_children, dependent: :destroy
@@ -86,6 +87,10 @@ class User < ActiveRecord::Base
       token = Devise.friendly_token
       break token unless User.where(authentication_token: token).first
     end
+  end
+
+  def subscribe_user_to_mailing_list
+    SubscribeUserToMailingListJob.perform_later(self , ENV["SUBSCRIBED_USER_MAILCHIMP_LIST_ID"])
   end
 
 end

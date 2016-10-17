@@ -24,5 +24,6 @@ module Nuryl
     config.active_record.raise_in_transactional_callbacks = true
     config.autoload_paths += Dir["#{config.root}/lib"]
     config.time_zone = 'Eastern Time (US & Canada)'
+    config.active_job.queue_adapter = :delayed_job
   end
 end
