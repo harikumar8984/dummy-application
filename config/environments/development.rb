@@ -61,6 +61,9 @@ Rails.application.configure do
   ENV['VIDEO_URL_HOW_TO'] = 'https://player.vimeo.com/video/158950941'
   ENV['AFTER_SUBSCRIPTION_URL'] = 'http://www.nuryl.com/welcome-nuryl-user/'
   ENV['MIX_PANEL_TOKEN'] = 'de2017bc175cdbd26153202678cf2bdd'
+  ENV['MAILCHIMP_API_KEY'] = "32d37a6a2ebcf4a704c55dd3a1c18db7-us14"
+  ENV['SUBSCRIBED_USER_MAILCHIMP_LIST_ID'] = "6c5b08226f"
+  ENV['PAID_USER_MAILCHIMP_LIST_ID'] = "bae00fe0de"
 
 
   config.after_initialize do

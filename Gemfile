@@ -41,6 +41,8 @@ gem 'liquid-rails'
 gem 'mixpanel-ruby'
 gem 'httparty'
 gem "safe_yaml"
+gem 'gibbon', :git => 'https://github.com/amro/gibbon.git'
+gem 'delayed_job_active_record'
 
 
 # Use ActiveModel has_secure_password

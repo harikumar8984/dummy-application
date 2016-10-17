@@ -24,6 +24,7 @@ class StripeCustomer < ActiveRecord::Base
       stripe_customer = StripeCustomer.create(create_json(customer, user))
       subscription_json =StripeSubscription.create_json(customer.subscriptions.data[0], user)
       stripe_customer.stripe_subscriptions.create(subscription_json)
+      paid_user_to_mailing_list(user)
     end
   end
 
@@ -38,6 +39,7 @@ class StripeCustomer < ActiveRecord::Base
 
   def save_with_in_app_payment(user, params)
     StripeCustomer.create(create_iap_json(user, params))
+    paid_user_to_mailing_list(user)
   end
 
   def create_json(customer, user)
@@ -48,6 +50,12 @@ class StripeCustomer < ActiveRecord::Base
 
   def create_iap_json(user, params)
     {customer_id: params[:apple_id],  currency: params[:currency],user_id: user.id, payment_type: 'iap' }
+  end
+
+  private
+
+  def paid_user_to_mailing_list user
+    PaidUserToMailingListJob.perform_later(user , ENV["SUBSCRIBED_USER_MAILCHIMP_LIST_ID"], ENV['PAID_USER_MAILCHIMP_LIST_ID'])
   end
 
 
