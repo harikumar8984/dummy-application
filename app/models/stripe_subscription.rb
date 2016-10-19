@@ -32,9 +32,9 @@ class StripeSubscription < ActiveRecord::Base
   end
 
   def self.subscription_details_to_user(response, type)
-    user = User.user_from_stripe_customer(response['customer'])
+    #user = User.user_from_stripe_customer(response['customer'])
     update_with_status(response)
-    UserMailer.subscription_mail(user, response).deliver if user
+    #UserMailer.subscription_mail(user, response).deliver if user
   end
 
   def self.update_with_status(response)
