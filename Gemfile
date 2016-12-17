@@ -56,6 +56,10 @@ gem 'delayed_job_active_record'
 
 gem 'rails_12factor', group: :production
 
+group :production do
+  gem 'pg'
+end
+
 group :development, :test do
   gem 'pry_debug'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
