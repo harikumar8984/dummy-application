@@ -4,9 +4,10 @@
     <div class="rkv_col2">
       <div class="rkv_form_container">
         <div class="rkv_form">
-          <%= form_tag update_card_transactions_path, method:'put', class:'form-horizontal', id: 'stripe_registration' do %>
+          <%= form_tag update_card_transactions_path, method:'put', class:'form-horizontal', id: 'subscription_payment_form' do %>
               <%= hidden_field_tag :card_id %>
-              <div id="stripe_error">
+              <%= hidden_field_tag :payment_gateway_type, @payment_gateway_type || 'stripe'%>
+              <div id="payment_error">
                 <div class="message">
                   <%= flash[:message] %>
                   <noscript>JavaScript is not enabled and is required for this form. First enable it in your web browser settings.</noscript>

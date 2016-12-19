@@ -1,6 +1,6 @@
 <div class="rkv_wrapper" id = 'plan_select_form'>
   <div class="rkv_section rkv_video_section">
-    <%if current_user.stripe_account? %>
+    <%if current_user.account_type("STRIPE") %>
      <%= link_to '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> <span class="mrg-left-3">Update Card</span><i class="icon-arrow-right"></i>'.html_safe, change_card_details_transactions_path %>
     <%end%>
     <h2 class="rkv_headding">
@@ -26,23 +26,23 @@
     <h1 class="rkv_headding">Choose Your Plan Now</h1>
     <div class="rkv_services_container">
       <%unless @plan.nil?%>
-       <%@plan.reverse.each do |plan|%>
+       <%@plan.each do |plan|%>
           <div class="rkv_col3">
-            <%if plan[2] == 'Beta'%>  <div class="rkv_offer_text"><span>Most Popular</span></div> <%end%>
-            <h2 class="rkv_plan_name"><%=plan[0]%></h2>
-            <%if plan[2] == 'Beta' || plan[2] == 'Gift'%>
-                <p class="rkv_plan_price"><span class="rkv_old_price">$119.88</span><span class="nuryl_price rkv_new_price"><%=plan[1]%></span></p>
+            <%if plan.name == 'Yearly'%>  <div class="rkv_offer_text"><span>Most Popular</span></div> <%end%>
+            <h2 class="rkv_plan_name"><%=plan.display_name%></h2>
+            <%if plan.name == 'Yearly' || plan.name == 'Gift'%>
+                <p class="rkv_plan_price"><span class="rkv_old_price">$119.88</span><span class="nuryl_price rkv_new_price"><%=plan.amount%></span></p>
             <%else%>
-            <p class="rkv_plan_price"><span class="rkv_price nuryl_price"><%=plan[1]%>
+            <p class="rkv_plan_price"><span class="rkv_price nuryl_price"><%=plan.amount%>
             <%end%>
-            <%if plan[2] == 'Monthly'%>/<sub>Month</sub>
+            <%if plan.name == 'Monthly'%>/<sub>Month</sub>
             </span></p>
             <p class="rkv_plan_details">Subscribe to Nuryl with a monthly plan and have full access to the entire catalog of playlists.</p>
 
-            <%elsif plan[2] == 'Beta'%>
+            <%elsif plan.name == 'Yearly'%>
                 <p class="rkv_plan_details">Subscribe for a full year and save big! Unlock the playlists now.</p>
 
-            <%elsif plan[2] == 'Gift'%>
+            <%elsif plan.name == 'Gift'%>
                 <p class="rkv_plan_details">Give the gift of Nuryl to a family member of friend. Nuryl is a gift that will last a lifetime.</p>
             <%end%>
             <a href="#" class="rkv_choose_plan rkv_button">Choose Plan</a>
@@ -56,6 +56,10 @@
 
 
 <%= javascript_include_tag "transactions" %>
+<%= javascript_include_tag "stripe" %>
+<%= javascript_include_tag "paypal" %>
+
+
 
 <style type="text/css">
     header.rkv-header {
@@ -74,6 +78,7 @@
     mixpanel.track(
             "W choose plan show"
     );
+
 </script>
 
 

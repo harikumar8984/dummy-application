@@ -22,4 +22,27 @@ namespace :ArchivePlayerUsageStats do
       player_stats.destroy_all
     end
   end
+
+  desc "Clear stats agregate"
+  task :do_clear_stats_agregate => :environment do |t,args|
+    date_array = ['2016-03-01', '2016-04-01','2016-05-01','2016-06-01','2016-07-01','2016-08-01','2016-09-01']
+    date_array.each do |date|
+      aggregate = PlayerUsageStatsAggregate.where(usage_date: date)
+      user_ids = aggregate.uniq.pluck(:user_id)
+      created_date = aggregate.first.created_at
+      user_ids.each do |ids|
+        duration = PlayerUsageStatsAggregate.where(user_id: ids, usage_date: date).sum(:duration)
+        sql ="INSERT INTO player_usage_aggregate_temp (duration, user_id, usage_date, created_at, updated_at) VALUES (#{duration},#{ids},\"#{date.to_s}\",\"#{date.to_s}\", \"#{date.to_s}\")"
+        records_array = ActiveRecord::Base.connection.execute(sql)
+        puts sql
+      end
+    end
+  end
 end
+
+
+
+
+
+
+

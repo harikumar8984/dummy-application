@@ -64,14 +64,8 @@ Rails.application.configure do
   ENV['MAILCHIMP_API_KEY'] = "32d37a6a2ebcf4a704c55dd3a1c18db7-us14"
   ENV['SUBSCRIBED_USER_MAILCHIMP_LIST_ID'] = "6c5b08226f"
   ENV['PAID_USER_MAILCHIMP_LIST_ID'] = "bae00fe0de"
-
-
-  config.after_initialize do
-    ActiveMerchant::Billing::Base.mode = :test
-    ::GATEWAY = ActiveMerchant::Billing::PaypalGateway.new(
-      :login => "seller_1229899173_biz_api1.railscasts.com",
-      :password => "FXWU58S7KXFC6HBE",
-      :signature => "AGjv6SW.mTiKxtkm6L9DcSUCUgePAUDQ3L-kTdszkPG8mRfjaRZDYtSu"
-    )
-  end
+  ENV["AFTER_SUBSCRIPTION_URL"] = 'http://www.nuryl.com/welcome-nuryl-user/'
+  ENV["PAYPAL_EMAIL"] = 'harikumar8984@gmail.com'
+  ENV["PAYPAL_HOST"] = 'https://www.sandbox.paypal.com'
+  ENV['PAYPAL_APP_HOST'] = 'http://paypal.nuryl.ultrahook.com'
 end

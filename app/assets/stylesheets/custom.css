@@ -140,6 +140,16 @@ float: left;
 cursor: pointer;
 }
 
+.pay_with_paypal {
+    background-image:url(paypal.png) !important;
+    text-indent:30px;
+    display:block;
+    cursor: pointer;
+    height: 50px;
+    width: 220px;
+    margin-left: 28px;
+}
+
 @media only screen and (max-width: 1000px){
   .rkv-menu-section a {
     line-height: normal !important;

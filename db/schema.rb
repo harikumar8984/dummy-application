@@ -11,25 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161013102910) do
-
-  create_table "admin_users", force: :cascade do |t|
-    t.string   "email",                  limit: 255, default: "", null: false
-    t.string   "encrypted_password",     limit: 255, default: "", null: false
-    t.string   "reset_password_token",   limit: 255
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",     limit: 255
-    t.string   "last_sign_in_ip",        limit: 255
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
-  end
-
-  add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
-  add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
+ActiveRecord::Schema.define(version: 20161116112423) do
 
   create_table "children", force: :cascade do |t|
     t.date     "dob"
@@ -118,6 +100,30 @@ ActiveRecord::Schema.define(version: 20161013102910) do
     t.string   "status",      limit: 255
   end
 
+  create_table "in_app_purchase_transactions", force: :cascade do |t|
+    t.integer  "in_app_purchase_id", limit: 4
+    t.date     "transaction_date"
+    t.string   "transaction_id",     limit: 255
+    t.float    "amount",             limit: 24
+    t.integer  "user_id",            limit: 4
+    t.string   "currency",           limit: 255
+    t.string   "transaction_status", limit: 255
+    t.string   "failure_message",    limit: 255
+    t.boolean  "paid",               limit: 1
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  create_table "in_app_purchases", force: :cascade do |t|
+    t.string   "apple_id",            limit: 255
+    t.integer  "user_id",             limit: 4
+    t.date     "purchase_start_date"
+    t.string   "duration",            limit: 255
+    t.string   "status",              limit: 255
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
   create_table "mail_templates", force: :cascade do |t|
     t.string   "device_type", limit: 255
     t.string   "template",    limit: 255
@@ -125,6 +131,27 @@ ActiveRecord::Schema.define(version: 20161013102910) do
     t.text     "content",     limit: 4294967295
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
+  end
+
+  create_table "paypal_purchases", force: :cascade do |t|
+    t.integer  "user_id",       limit: 4
+    t.date     "purchase_date"
+    t.string   "duration",      limit: 255
+    t.string   "status",        limit: 255
+    t.string   "description",   limit: 255
+    t.string   "token",         limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  create_table "paypal_transactions", force: :cascade do |t|
+    t.text     "notification_params", limit: 65535
+    t.string   "transaction_id",      limit: 255
+    t.boolean  "status",              limit: 1
+    t.date     "purchase_date"
+    t.integer  "paypal_purchase_id",  limit: 4
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
   end
 
   create_table "player_usage_stats", force: :cascade do |t|
@@ -144,11 +171,11 @@ ActiveRecord::Schema.define(version: 20161013102910) do
   add_index "player_usage_stats", ["user_id"], name: "index_player_usage_stats_on_user_id", using: :btree
 
   create_table "player_usage_stats_aggregates", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
     t.integer  "duration",   limit: 4
     t.date     "usage_date"
-    t.integer  "user_id",    limit: 4
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "player_usage_stats_archives", force: :cascade do |t|
@@ -211,7 +238,7 @@ ActiveRecord::Schema.define(version: 20161013102910) do
 
   add_index "stripe_subscriptions", ["stripe_customer_id"], name: "index_stripe_subscriptions_on_stripe_customer_id", using: :btree
 
-  create_table "transactions", force: :cascade do |t|
+  create_table "stripe_transactions", force: :cascade do |t|
     t.datetime "date"
     t.string   "status",                 limit: 255
     t.string   "details",                limit: 255
@@ -235,7 +262,35 @@ ActiveRecord::Schema.define(version: 20161013102910) do
     t.datetime "purchase_date"
   end
 
-  add_index "transactions", ["stripe_customer_id"], name: "index_transactions_on_stripe_customer_id", using: :btree
+  add_index "stripe_transactions", ["stripe_customer_id"], name: "index_stripe_transactions_on_stripe_customer_id", using: :btree
+
+  create_table "subscription_details", force: :cascade do |t|
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "user_id",           limit: 4
+    t.integer  "subscription_id",   limit: 4
+    t.string   "subscription_type", limit: 255
+  end
+
+  create_table "subscription_plans", force: :cascade do |t|
+    t.string   "name",         limit: 255, null: false
+    t.string   "display_name", limit: 255, null: false
+    t.float    "amount",       limit: 24,  null: false
+    t.string   "interval",     limit: 255
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "user_id",                 limit: 4
+    t.string   "status",                  limit: 255
+    t.string   "subscription_type",       limit: 255
+    t.integer  "subscription_plan_id",    limit: 4
+    t.date     "subscription_start_date"
+    t.date     "subscription_end_date"
+  end
 
   create_table "user_children", force: :cascade do |t|
     t.string   "relationship", limit: 255
@@ -293,7 +348,7 @@ ActiveRecord::Schema.define(version: 20161013102910) do
   add_foreign_key "progresses", "users"
   add_foreign_key "stripe_customers", "users"
   add_foreign_key "stripe_subscriptions", "stripe_customers"
-  add_foreign_key "transactions", "stripe_customers"
+  add_foreign_key "stripe_transactions", "stripe_customers"
   add_foreign_key "user_children", "children"
   add_foreign_key "user_children", "users"
 end

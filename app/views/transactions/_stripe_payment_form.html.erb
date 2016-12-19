@@ -1,0 +1,26 @@
+<div id = 'stripe_payment_div'>
+  <div class="rkv_row">
+    <%= text_field_tag :f_name, @user.f_name, placeholder:"First Name"%>
+  </div>
+  <div class="rkv_row">
+    <%= text_field_tag :l_name, @user.l_name, placeholder:"First Name"%>
+  </div>
+  <div class="rkv_row">
+    <%= text_field_tag :card_number, nil, name: nil, placeholder: "Credit Card #", required: true%>
+  </div>
+  <div class="rkv_row" style="margin: 6px 0 26px">
+    <label class="rkv_field_title" style="margin-right: 11px; line-height: 45px; text-indent: 15px;">Expiration Date</label>
+    <div class="rkv_select_container wide">
+      <%= select_month nil, {add_month_numbers_true: true}, {name: nil, id: "card_month", class: 'rkv_select'}%>
+      <%= select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "card_year", class: 'rkv_select'}%>
+      <%= text_field_tag :card_code, nil, name: nil,  placeholder: "CVV", style:"width:100px; padding:5px; border:1px solid #999; line-height:33px;", required: true %>
+    </div>
+  </div>
+  <div class="rkv_row">
+    <%= button_tag(type: 'submit' , class: "rkv_button submit-button payment-btn stripe_payment-btn") do %>
+        <span >Continue</span>
+    <% end %>
+  </div>
+</div>
+
+

@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  apple_id: 
+  currency: 
+  transaction_status: 
+  duration: 
+  purchase_start_date: 
+  purchase_end_date: 
+  transaction_id: 
+  failure_message: 
+  paid: false
+
+two:
+  apple_id: 
+  currency: 
+  transaction_status: 
+  duration: 
+  purchase_start_date: 
+  purchase_end_date: 
+  transaction_id: 
+  failure_message: 
+  paid: false

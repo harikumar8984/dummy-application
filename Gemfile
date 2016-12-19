@@ -5,13 +5,13 @@ gem 'rails', '4.2.1'
 # Use mysql2 as the database for Active Record
 gem 'mysql2', '~> 0.3.18'
 #For rails_admin page
-gem 'rails_admin'
+gem "rails_admin", '0.7.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.1.0'
+gem 'coffee-rails'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 gem 'activemerchant'
@@ -43,6 +43,7 @@ gem 'httparty'
 gem "safe_yaml"
 gem 'gibbon', :git => 'https://github.com/amro/gibbon.git'
 gem 'delayed_job_active_record'
+gem 'pg'
 
 
 # Use ActiveModel has_secure_password
@@ -55,10 +56,6 @@ gem 'delayed_job_active_record'
 # gem 'capistrano-rails', group: :development
 
 gem 'rails_12factor', group: :production
-
-group :production do
-  gem 'pg'
-end
 
 group :development, :test do
   gem 'pry_debug'

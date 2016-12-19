@@ -14,8 +14,8 @@ class User < ActiveRecord::Base
   has_many :player_usage_stats, dependent: :destroy
   has_many :player_usage_stats_aggregate, dependent: :destroy
   has_many :progress, dependent: :destroy
-  has_one :stripe_customer, dependent: :destroy
-  has_many :transactions, dependent: :destroy
+  has_one :subscription
+  has_many :subscription_details
 
   validates :f_name,:l_name, presence: true
   after_create :change_date
@@ -30,44 +30,87 @@ class User < ActiveRecord::Base
     email == "admin@nuryl.com"
   end
 
-  def update_stripe_customer_token(token)
-    update_attributes(stripe_customer_token: token, subscription_token: nil)
-  end
 
   def self.user_from_authentication(token)
     User.find_by_authentication_token(token.to_s)
   end
 
-  def self.user_from_stripe_customer(token)
-    where(stripe_customer_token:  token).first
+  def self.user_from_payment_token(token, payment_class)
+    payment_object = payment_class.fetch_user_from_payment_token(token)
+    User.find(payment_object.user_id) unless payment_object.nil?
   end
 
   def self.from_user_id(id)
     where(id:  id).first
   end
 
-  def stripe_account?
-    stripe_customer.present?
+  def has_account?
+    subscription.present?
+  end
+
+  def account_type(account_type)
+    has_account? && subscription.subscription_type == account_type
+  end
+
+  def account_type?
+    subscription.subscription_type if has_account?
   end
 
   def active_subscription?
-    stripe_customer.stripe_subscriptions.active.present?
+    has_account? && subscription.status == 'Active'
   end
 
-  def active_subscription
-    stripe_customer.stripe_subscriptions.active.first
+
+  def my_subscription
+    #under the assumption that last will be active one
+    payment_type = subscription_details.try(:last).try(:subscription_type).try(:constantize)
+    unless payment_type.nil?
+      payment_type.find(subscription_details.last.subscription_id)
+    else
+      false
+    end
+
   end
 
-  def active_subscription_plan
-    stripe_customer.stripe_subscriptions.active.first.plan_id
+  def my_subscription_in_a_payment_type payment_type_class
+    last_payment_type = subscription_details.where(subscription_type: payment_type_class).try(:last)
+    payment_type = last_payment_type.try(:subscription_type).try(:constantize)
+    unless payment_type.nil?
+      return payment_type.find(last_payment_type.subscription_id)
+    else
+      return false
+    end
   end
 
-  def payment_type
-    stripe_customer.payment_type
+  def create_my_subscription(type, plan, start_date, status)
+    plan_id = plan.nil? ? nil : plan.id
+    unless has_account?
+      Subscription.create(user_id: self.id, status: status , subscription_type: type, subscription_plan_id: plan_id, subscription_start_date: start_date, subscription_end_date: end_date(start_date, plan))
+    else
+      subscription.update_attributes(status: status, subscription_type: type, subscription_plan_id: plan_id, subscription_start_date: start_date, subscription_end_date: end_date(start_date, plan) )
+    end
+    paid_user_to_mailing_list
   end
 
-  def has_subscription?
-    stripe_customer.stripe_subscriptions.present?
+  def create_my_subscription_details (obj)
+    subscription_details.create(subscription: obj)
+  end
+
+  def update_my_subscription_plan(start_date, plan)
+    subscription.update_attributes(subscription_plan_id: plan.id, subscription_start_date: start_date, subscription_end_date: end_date(start_date, plan))
+  end
+
+  def update_my_subscription_status status
+    subscription.update_attributes(status: status)
+  end
+
+  def cancel_my_subscription status
+    subscription.update_attributes(status: status, subscription_end_date: Date.today)
+  end
+
+  def end_date(start_date, plan)
+     return nil if plan.nil?
+     start_date + plan.date_from_plan
   end
 
   # Generate a friendly string randomly to be used as token.
@@ -91,6 +134,10 @@ class User < ActiveRecord::Base
 
   def subscribe_user_to_mailing_list
     SubscribeUserToMailingListJob.perform_later(self , ENV["SUBSCRIBED_USER_MAILCHIMP_LIST_ID"])
+  end
+
+  def paid_user_to_mailing_list
+    PaidUserToMailingListJob.perform_later(self , ENV["SUBSCRIBED_USER_MAILCHIMP_LIST_ID"], ENV['PAID_USER_MAILCHIMP_LIST_ID'])
   end
 
 end

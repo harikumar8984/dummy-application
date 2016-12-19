@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
 
   def authenticate_device
       device_id = request.headers["device-id"].presence
-      device_details = DeviceDetail.where(device_id: device_id.strip, user_id: current_user.id, status: 'active') if device_id
+      device_details = DeviceDetail.where(device_id: device_id.strip, user_id: current_user.id, status: 'Active') if device_id
       if device_details.blank?
         render :status => 401,:json=> {:success => false, errors: device_id.blank? ? [t('devise.failure.Invalid device id')] : [t('devise.failure.invalid_device')]}
       end
@@ -54,8 +54,7 @@ class ApplicationController < ActionController::Base
   def account_info_on_response
     if current_user
       user = User.user_from_authentication(current_user.authentication_token)
-      unless user.stripe_account?
-
+      unless user.has_account?
         response_body_json = JSON.parse(response.body).merge({user_type: user.user_type, has_account: false }) rescue response.body
       else
         response_body_json = JSON.parse(response.body).merge({user_type: user.user_type, is_active: user.active_subscription? }) rescue response.body

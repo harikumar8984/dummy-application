@@ -14,7 +14,9 @@ class Api::V1::SessionsController < Devise::SessionsController
       authenticate_device unless create_device_details(resource)
       resource.ensure_authentication_token!
       susbcription_details = []
-      susbcription_details = resource.active_subscription_plan,resource.payment_type if  resource.stripe_account? && resource.active_subscription?
+      if  resource.has_account? && resource.active_subscription?
+        susbcription_details = resource.subscription.subscription_plan.name,resource.account_type?
+      end
       return render :json=> {:success => true, :token => resource.authentication_token, subscription_plan: susbcription_details[0], payment_type: susbcription_details[1] } if performed? == false
     end
     failure

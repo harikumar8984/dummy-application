@@ -13,7 +13,10 @@ Nuryl::Application.routes.draw do
     match 'user_registration' => 'api/v1/registrations#new', :via => :get
     match 'registration' => 'registrations#create', :via => :post
     match  'subscribe' => 'transactions#new_subscription', :via => :get
+    match 'edit_password' => 'devise/passwords#edit', :via => :get
+    match 'update_password/:id' => 'devise/passwords#update', :via => :put
   end
+
 
   namespace :api, defaults: { format: :json },
              path: '/api'  do
@@ -37,15 +40,13 @@ Nuryl::Application.routes.draw do
       resources :transactions, only: [:create] do
         collection do
           post 'subscripe' => 'transactions#create'
+          get 'subscription_type' => 'transactions#get_subscription_type'
+          get 'subscription_status' => 'transactions#subscription_status'
           get 'subscription_amount' => 'transactions#get_subscription_amount'
           post 'change_subscription_plan' => 'transactions#change_plan'
           post 'new_subscription' => 'transactions#new_subscription'
           post 'cancel_subscription' => 'transactions#cancel_subscription'
           post 'webhook' => 'transactions#webhook'
-          get 'subscription_type' => 'transactions#get_subscription_type'
-          post 'in_app_purchase_details' => 'transactions#in_app_purchase_details'
-          put 'in_app_deactivate_subscription' => 'transactions#cancel_in_app_subscription'
-          get 'subscription_status' => 'transactions#subscription_status'
           put 'update_card' => 'transactions#update_card'
         end
       end
@@ -57,9 +58,12 @@ Nuryl::Application.routes.draw do
       get 'change_card_details' => 'transactions#change_card_details'
       put 'update_card' => 'transactions#update_card_details'
       post 'paypal_transaction_process' => 'transactions#paypal_transaction_process'
+      post 'subscripe' => 'transactions#create'
+      post 'paypal_hook' => 'transactions#paypal_hook'
     end
-
   end
+
+
 
   resources :childrens ,only: [:new, :create] do
 

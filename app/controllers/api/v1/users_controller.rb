@@ -6,7 +6,7 @@ class Api::V1::UsersController < ApplicationController
   respond_to :json
 
   def course_content
-    unless has_stripe_account_active?
+    unless has_account_active?
       content = {content: []}
       course_category = CourseCategory.where(name: params[:criteria]).first
       course =  course_category.course unless course_category.nil?
@@ -26,7 +26,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def get_content
-    unless has_stripe_account_active?
+    unless has_account_active?
       content = Content.active.where(id: params[:content_id]).first
       course = Course.where(id: params[:course_id]).first
       if is_blank_course_content(course, content)
@@ -89,22 +89,23 @@ class Api::V1::UsersController < ApplicationController
     user = user_from_auth_token
     query_filter = 'date'
     case params[:filter]
-       when "7_Days" then
-         filter_date =  1.week.ago.to_date + 1.day
+      when "7_Days" then
+        filter_date =  1.week.ago.to_date + 1.day
       when "1_Month" then
-         filter_date = 30.days.ago.to_date + 1.day
-       when '1_Year' then
-         filter_date =  1.year.ago.to_date.beginning_of_month.next_month
-         query_filter = 'month'
+        filter_date = 30.days.ago.to_date + 1.day
+      when '1_Year' then
+        filter_date =  1.year.ago.to_date.beginning_of_month.next_month
+        query_filter = 'month'
       else
         filter_date =  1.day.ago.to_date + 1.day
-     end
+    end
     data = []
     data = (filter_date..Date.today()).map{ |m| m.strftime('%Y%m') }.uniq.map{ |m| {month: Date::ABBR_MONTHNAMES[ Date.strptime(m, '%Y%m').mon ], duration: 0}} if params[:filter] == '1_Year'
     Date.today().downto(filter_date){|date|  data << ({date: date, duration: 0})} unless params[:filter] == '1_Year'
-    usage_stats = usage_stats_query(user.player_usage_stats, filter_date, query_filter)
+    query_filter == 'month' ? month_date_query =  "EXTRACT (#{query_filter} FROM usage_date) as usage_date_filter" : month_date_query = "date(usage_date) as usage_date_filter"
+    usage_stats = usage_stats_query(user.player_usage_stats, filter_date, month_date_query)
     if params[:filter] == '1_Year'
-      usage_aggregate_stats = usage_stats_query(user.player_usage_stats_aggregate, filter_date, query_filter)
+      usage_aggregate_stats = usage_stats_query(user.player_usage_stats_aggregate, filter_date, month_date_query)
       usage_stats = usage_stats + usage_aggregate_stats
     end
     usage_stats.each do |usage_status|
@@ -117,8 +118,8 @@ class Api::V1::UsersController < ApplicationController
     return render status: 200, :json=> {:success => true, data: data }
   end
 
-  def usage_stats_query(model, filter_date, query_filter)
-    model.select(" usage_date as usage_date, sum(duration) as duration").where("DATE(usage_date) >= ?", filter_date).group("#{query_filter}(usage_date)").order(usage_date: :desc)
+  def usage_stats_query(model, filter_date, month_date_query)
+    model.select("max(usage_date) as usage_date, #{month_date_query}, sum(duration) as duration").where("date(usage_date) >= ?",filter_date).group("usage_date_filter").order('max(usage_date) desc')
   end
 
   def edit_profile
@@ -147,7 +148,7 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  def has_stripe_account_active?
+  def has_account_active?
     if params[:criteria] == 'beta_playlist_2'
       return false
     elsif params[:course_id]
@@ -158,8 +159,8 @@ class Api::V1::UsersController < ApplicationController
         end
       end
     end
-    return render status: 200, :json=> {:success => false, data: [t('no_stripe_account')] } unless current_user.stripe_account?
-    return render status: 200, :json=> {:success => false, data: [t('no_active_stripe_subscription')] } unless current_user.active_subscription?
+    return render status: 200, :json=> {:success => false, data: [t('no_account')] } unless current_user.has_account?
+    return render status: 200, :json=> {:success => false, data: [t('no_active_subscription')] } unless current_user.active_subscription?
   end
 
   def send_subscription_mail

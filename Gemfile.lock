@@ -204,7 +204,7 @@ GEM
     fog-xml (0.1.2)
       fog-core
       nokogiri (~> 1.5, >= 1.5.11)
-    font-awesome-rails (4.7.0.1)
+    font-awesome-rails (4.7.0.0)
       railties (>= 3.2, < 5.1)
     formatador (0.2.5)
     freshdesk (0.2)
@@ -404,7 +404,7 @@ DEPENDENCIES
   bootstrap-datepicker-rails
   byebug
   carrierwave
-  coffee-rails (~> 4.1.0)
+  coffee-rails
   delayed_job_active_record
   devise
   fastercsv
@@ -424,7 +424,7 @@ DEPENDENCIES
   pry_debug
   rails (= 4.2.1)
   rails_12factor
-  rails_admin
+  rails_admin (= 0.7.0)
   ruby-mp3info
   safe_yaml
   sass-rails (~> 5.0)

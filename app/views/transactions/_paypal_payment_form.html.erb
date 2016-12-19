@@ -1,0 +1,13 @@
+<%= form_tag subscripe_transactions_path, method:'post', class:'form-horizontal', id: 'paypal_payment_form' do %>
+    <%= hidden_field_tag :user_type, @user_type %>
+    <%= hidden_field_tag :auth_token, @auth_token%>
+    <%= hidden_field_tag :subscription_type, @subscription_type%>
+    <%= hidden_field_tag :amount, @amount%>
+    <%= hidden_field_tag :payment_gateway_type, @payment_gateway_type || 'Paypal'%>
+    <div class="rkv_row">
+        <%= button_tag(type: 'submit', class: "submit-button payment-btn paypal_payment-btn pay_with_paypal") do %>
+            <span class=''></span>
+        <% end %>
+    </div>
+
+<%end%>
