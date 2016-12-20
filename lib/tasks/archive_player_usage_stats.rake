@@ -26,7 +26,7 @@ namespace :ArchivePlayerUsageStats do
   task :do_clear_stats_agregate => :environment do |t,args|
     date_array = ['2016-09-01']
     date_array.each do |date|
-      aggregate = PlayerUsageStatsAggregate.where(usage_date: date)
+      aggregate = PlayerUsageStatsAggregate.where(usage_date: date).group('user_id').having('count(user_id) > 1')
       user_ids = aggregate.uniq.pluck(:user_id)
       user_ids.each do |ids|
         all_record = PlayerUsageStatsAggregate.where(user_id: ids, usage_date: date)
