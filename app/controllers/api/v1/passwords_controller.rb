@@ -10,17 +10,16 @@ class Api::V1::PasswordsController < Devise::PasswordsController
   respond_to :json
 
   def create
-    @user = User.find_by_email(params[:email])
-    if @user
-      @user.send_reset_password_instructions
+    self.resource = resource_class.send_reset_password_instructions(params)
+    yield resource if block_given?
+    if successfully_sent?(resource)
       render :status => 201, :json => { :success => true}
     else
       render :status => 200, :json => {   :success => false, :errors => 'Email not found' }
     end
   end
 
-
-   def update_password_api
+  def update_password_api
     user = user_from_auth_token
      if user
        if user.update_with_password(current_password: params[:current_password], password:  params[:password], password_confirmation: params[:password_confirmation])

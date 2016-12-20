@@ -25,5 +25,11 @@ module Nuryl
     config.autoload_paths += Dir["#{config.root}/lib"]
     config.time_zone = 'Eastern Time (US & Canada)'
     config.active_job.queue_adapter = :delayed_job
+    #Skipping filter in devise controllers
+    config.to_prepare do
+      Devise::PasswordsController.skip_before_filter :is_device_id?, :authenticate_device, :authenticate_user_from_token!
+    end
+
+
   end
 end
