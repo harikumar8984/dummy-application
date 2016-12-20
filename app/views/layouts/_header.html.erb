@@ -47,6 +47,11 @@
                 <%= button_to "Hi #{current_user.f_name}","#",{class:"dropbtn"}%>
                 <div class="dropdown-content">
                   <ul class="sub-menu">
+                    <li>
+                        <%if current_user.account_type("STRIPE") %>
+                            <%= link_to '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> <span class="mrg-left-3">Update Card</span><i class="icon-arrow-right"></i>'.html_safe, change_card_details_transactions_path %>
+                        <%end%>
+                    </li>
                     <li><a href="<%= edit_user_path(current_user) %>">Edit Account</a></li>
                     <li><a href="<%= user_path(current_user) %>">Account</a></li>
                     <li><%= button_to "Log out", destroy_user_session_path,{method: :delete,class:"hidden-menu logout"}%></a></li>
