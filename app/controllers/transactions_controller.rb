@@ -21,8 +21,12 @@ class  TransactionsController < ApplicationController
       return render status: 200, :json=> {:success => false, data: 'Invalid Token' }
     end
     sign_in @user
-    initialize_transaction @user
-    render "new"
+    if @user.active_subscription?
+      render template: 'transactions/paid_user'
+    else
+      initialize_transaction @user
+      render "new"
+    end
   end
 
   def initialize_transaction user

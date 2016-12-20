@@ -19,7 +19,13 @@ class SessionsController < Devise::SessionsController
       if resource.admin?
       redirect_to rails_admin_path
       else
-        redirect_to resource.children.blank? ? new_children_path(user_id: resource.id) : new_transaction_path(user_type: resource.user_type)
+        if resource.children.blank?
+          redirect_to new_children_path(user_id: resource.id)
+        elsif resource.active_subscription?
+          render template: 'transactions/paid_user'
+        else
+          redirect_to new_transaction_path(user_type: resource.user_type)
+        end
       end
       return
     end
