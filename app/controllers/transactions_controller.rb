@@ -12,7 +12,11 @@ class  TransactionsController < ApplicationController
 
   def new
     @user = current_user if current_user
-    initialize_transaction @user
+    if @user.active_subscription?
+      render template: 'transactions/paid_user'
+    else
+       initialize_transaction @user
+    end
   end
 
   def new_subscription

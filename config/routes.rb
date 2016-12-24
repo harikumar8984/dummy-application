@@ -5,7 +5,7 @@ Nuryl::Application.routes.draw do
   resources :users, only: [:show, :edit, :update ]
   # Api definition
   devise_scope :user do
-    root to: "transactions#new_subscription"
+    root to: "sessions#new"
     match 'api/v1/user_registration' => 'api/v1/registrations#create', :via => :post
     match 'api/v1/help' => 'api/v1/helps#create', :via => :post
     match '/api/v1/users/forget_password' => 'api/v1/passwords#create', :via => :post

@@ -39,11 +39,13 @@ class SessionsController < Devise::SessionsController
   end
 
   def new
+    @user_type = params[:user_type] || 'beta'
     if user_signed_in? && current_user.admin?
       redirect_to rails_admin_path
       @user = User.new
+    elsif user_signed_in?
+      redirect_to new_transaction_path
     else
-      @user_type = params[:user_type] || 'beta'
       super
     end
   end
