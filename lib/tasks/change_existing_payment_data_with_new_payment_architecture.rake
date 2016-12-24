@@ -66,7 +66,7 @@ namespace :ChangeExistingPaymentDataWithNewPaymentArchitecture do
 
   def get_start_date (user, stripe_customer, subscription)
     plan_name = get_plan_name subscription
-    if plan_name == "Yearly" || "Gift" || 'Beta'
+    if plan_name == "Yearly" || plan_name == "Gift" || plan_name =='Beta'
       start_date = stripe_customer.created_at.to_date
     end
     if plan_name == "Monthly"
