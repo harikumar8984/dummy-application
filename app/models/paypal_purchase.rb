@@ -45,7 +45,7 @@ class PaypalPurchase < ActiveRecord::Base
         upload: 1,
         no_shipping: 1,
         return: return_path,
-        notify_url: "#{Rails.application.secrets.app_host}/transactions/paypal_hook",
+        notify_url: "#{ENV['PAYPAL_APP_HOST']}/transactions/paypal_hook",
         invoice: token,
         item_name: "Nuryl " + params[:subscription_type].to_s + ' Subscription',
         cmd: "_xclick-subscriptions",
