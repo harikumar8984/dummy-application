@@ -51,10 +51,10 @@ RailsAdmin.config do |config|
     bulk_delete
     show
     edit do
-      only ['User','Course', 'CourseContent', 'Content', 'CourseCategory', 'MailTemplate', 'StripeSubscription', 'DeviceDetail']
+      only ['User','Course', 'CourseContent', 'Content', 'CourseCategory', 'MailTemplate', 'StripeSubscription', 'DeviceDetail', 'SubscriptionPlan']
     end
     delete  do
-      only ['User', 'Course', 'CourseContent', 'Content', 'CourseCategory', 'MailTemplate','StripeCustomer','StripeSubscription', 'StripeTransaction']
+      only ['User', 'Course', 'CourseContent', 'Content', 'CourseCategory', 'MailTemplate','StripeCustomer','StripeSubscription', 'StripeTransaction', 'SubscriptionPlan']
     end
     show_in_app
 
