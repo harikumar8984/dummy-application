@@ -41,7 +41,7 @@ class  TransactionsController < ApplicationController
       @amount = params[:amount]
       @payment_gateway_type = params[:payment_gateway_type]
     else
-      @plan = SubscriptionPlan.where('name !=?', 'Beta')
+      @plan = SubscriptionPlan.where('name !=?', 'Beta').order("id DESC")
     end
   end
 
