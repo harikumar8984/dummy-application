@@ -5,4 +5,10 @@ class Subscription < ActiveRecord::Base
 
   after_create :change_user_date
   after_destroy :change_user_date
+
+
+  def status_enum
+    [['Active'],['Canceled']]
+  end
+
 end
