@@ -20,42 +20,42 @@ class PaypalPurchase < ActiveRecord::Base
       end
   end
 
-  # def paypal_url(params, return_path)
-  #   plan = SubscriptionPlan.subscription_with_name(params[:subscription_type]).first
-  #   values = {
-  #       business: ENV["PAYPAL_EMAIL"],
-  #       cmd: "_xclick",
-  #       upload: 1,
-  #       return: return_path,
-  #       invoice: token,
-  #       amount: params[:amount],
-  #       item_name: "Nuryl " + params[:subscription_type].to_s + ' Subscription',
-  #       item_number: plan.id,
-  #       quantity: '1',
-  #       notify_url: "#{ENV["PAYPAL_APP_HOST"]}/transactions/paypal_hook"
-  #   }
-  #   "#{ENV['PAYPAL_HOST']}/cgi-bin/webscr?" + values.to_query
-  # end
-
-
   def paypal_url(params, return_path)
     plan = SubscriptionPlan.subscription_with_name(params[:subscription_type]).first
     values = {
         business: ENV["PAYPAL_EMAIL"],
+        cmd: "_xclick",
         upload: 1,
-        no_shipping: 1,
         return: return_path,
-        notify_url: "#{ENV['PAYPAL_APP_HOST']}/transactions/paypal_hook",
         invoice: token,
+        amount: params[:amount],
         item_name: "Nuryl " + params[:subscription_type].to_s + ' Subscription',
-        cmd: "_xclick-subscriptions",
-        a3: params[:amount],
-        p3: 1,
-        #srt: plan.cycles_from_plan,
-        t3: plan.period_from_plan
+        item_number: params[:subscription_type].to_s,
+        quantity: '1',
+        notify_url: "#{ENV["PAYPAL_APP_HOST"]}/transactions/paypal_hook"
     }
     "#{ENV['PAYPAL_HOST']}/cgi-bin/webscr?" + values.to_query
   end
+
+
+  # def paypal_url(params, return_path)
+  #   plan = SubscriptionPlan.subscription_with_name(params[:subscription_type]).first
+  #   values = {
+  #       business: ENV["PAYPAL_EMAIL"],
+  #       upload: 1,
+  #       no_shipping: 1,
+  #       return: return_path,
+  #       notify_url: "#{ENV['PAYPAL_APP_HOST']}/transactions/paypal_hook",
+  #       invoice: token,
+  #       item_name: "Nuryl " + params[:subscription_type].to_s + ' Subscription',
+  #       cmd: "_xclick-subscriptions",
+  #       a3: params[:amount],
+  #       p3: 1,
+  #       #srt: plan.cycles_from_plan,
+  #       t3: plan.period_from_plan
+  #   }
+  #   "#{ENV['PAYPAL_HOST']}/cgi-bin/webscr?" + values.to_query
+  # end
 
 
   def create_json(params)
