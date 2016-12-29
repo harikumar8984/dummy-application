@@ -100,10 +100,13 @@ class  TransactionsController < ApplicationController
   def paypal_hook
     params.permit! # Permit all Paypal input params
     status = params[:payment_status]
+    puts 'inside paypal hooks'
     if status == "Completed"
+      puts 'complted status'
       @paypal_purchase = PaypalPurchase.where(token: params[:invoice]).first
       @paypal_purchase.save_with_paypal_payment(params) unless @paypal_purchase.nil?
     end
+    puts "satus name" + status.to_s
     render nothing: true
   end
 
