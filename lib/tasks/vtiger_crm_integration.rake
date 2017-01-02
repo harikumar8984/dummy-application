@@ -4,7 +4,7 @@ namespace :VtigerCrmIntegration do
   task :import_users => :environment do |t,args|
     #if [1,7, 13, 19 ].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
       login_vtiger
-      user = User.last(10)
+      user = User.all
       #user = User.where("created_at >=?" ,Time.now - 2.day)
       user.each do |user|
         hash = create_user_list_hash(user)
@@ -117,17 +117,17 @@ namespace :VtigerCrmIntegration do
 
   def usage_stats_query(model, user_id, filter_date)
     if filter_date.nil?
-      model.constantize.find_by_sql("Select sum(duration) as duration from #{model.tableize} \
+      model.constantize.find_by_sql("Select sum(duration) as duration, usage_date from #{model.tableize} \
        where user_id = #{user_id} order by usage_date DESC")
     else
-      model.constantize.find_by_sql("Select sum(duration) as duration from #{model.tableize } \
+      model.constantize.find_by_sql("Select sum(duration) as duration, usage_date from #{model.tableize } \
        where (user_id =#{user_id} and date(usage_date) >= '#{filter_date.strftime('%Y-%m-%d')}') ORDER BY usage_date DESC")
     end
   end
 
   def daily_usage_stats(model, user_id, filter_date)
-    model.constantize.find_by_sql("Select sum(duration) as duration from #{model.tableize } \
-       where user_id = #{user_id} AND DATE(usage_date) = '#{filter_date.strftime('%Y-%m-%d')}' order by usage_date DESC")
+    model.constantize.find_by_sql("Select sum(duration) as duration, usage_date from #{model.tableize } \
+       where user_id = #{user_id} and date(usage_date) = '#{filter_date.strftime('%Y-%m-%d')}' order by usage_date DESC")
   end
 
 end
