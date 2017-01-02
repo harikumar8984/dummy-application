@@ -4,8 +4,8 @@ namespace :VtigerCrmIntegration do
   task :import_users => :environment do |t,args|
     #if [1,7, 13, 19 ].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
       login_vtiger
-      user = User.where("created_at >=?" ,Time.now - 2.day)
-      #user = User.all
+      user = User.last(10)
+      #user = User.where("created_at >=?" ,Time.now - 2.day)
       user.each do |user|
         hash = create_user_list_hash(user)
         @cmd.find_contact_by_email_or_add(nil, user.l_name, remove_special_char(user.email), hash )
@@ -29,15 +29,8 @@ namespace :VtigerCrmIntegration do
   end
 
    def remove_special_char words
-     words.gsub(/[+ &"]/,'')
+     words.gsub(/[+ &"]/,'') unless words.nil?
    end
-
-    def user_created_yesterday
-      user = User.where("created_at >= ?", Time.zone.now.beginning_of_day)
-      user.each do |user|
-        @cmd.find_contact_by_email_or_add(nil, user.l_name, remove_special_char(user.email), create_user_list_hash(user) )
-      end
-    end
 
 
   def  update_crm_object(user)
@@ -54,63 +47,59 @@ namespace :VtigerCrmIntegration do
   end
 
   def create_user_list_hash(user)
-    device_details = {}
-    device_details = create_device_hash(user.device_detail) unless user.device_detail.nil?
-    children_details = {}
-    children_details = create_children_hash(user.children.first) unless user.children.blank?
-    payment_details = {}
-    payment_details = create_payment_hash(user.stripe_customer) unless user.stripe_customer.nil?
-    transaction_details = {}
-    transaction_details = create_transaction_hash(user , user.transactions.last) if user.stripe_account? && user.active_subscription? && user.transactions.last
-    player_usage_details = {}
-    player_usage_details = create_player_usage_stats_hash(user.player_usage_stats, user.player_usage_stats_aggregate)
-    create_user_hash(user).merge(device_details).merge(children_details).merge(payment_details).merge(transaction_details).merge(player_usage_details)
+    user_record = User.find_by_sql ("SELECT u.id, u.f_name, u.l_name, u.email, u.user_type, u.zipcode, u.current_sign_in_at, u.last_sign_in_at,
+           u.current_sign_in_ip, u.last_sign_in_ip, u.sign_in_count, u.created_at, d.device_id, d.device_type, c.name as child_name, c.dob, c.gender,
+           sp.name as payment_interval, sp.amount, s.status, s.subscription_start_date, s.subscription_end_date, s.subscription_type
+           FROM users u left join device_details d on d.user_id = u.id left join user_children uc on uc.user_id = u.id left join children c on c.id = uc.child_id
+           left join subscriptions s on s.user_id = u.id left join subscription_plans sp on sp.id = s.subscription_plan_id where u.id =#{user.id}")
+      if  user_record
+         device_details = create_device_hash(user_record[0])
+         children_details = {}
+         children_details = create_children_hash(user_record[0])
+         payment_details = {}
+         payment_details = create_payment_hash(user_record[0])
+         player_usage_details = {}
+         player_usage_details = create_player_usage_stats_hash(user.id)
+
+       create_user_hash(user_record[0]).merge(device_details).merge(children_details).merge(payment_details).merge(player_usage_details)
+    end
   end
 
   def create_user_hash(user)
-     {firstname: user.f_name, cf_809: user.id, cf_917: user.user_type, cf_813: user.subscription_end_date,
-      cf_915: user.stripe_account? ? user.active_subscription? : false, cf_817: user.zipcode, cf_821: user.authentication_token,
-      cf_835: user.current_sign_in_at ? user.current_sign_in_at.to_date : '',
-      cf_839: user.last_sign_in_at ? user.last_sign_in_at.to_date : '', cf_837: user.current_sign_in_ip, cf_841: user.last_sign_in_ip,
-      cf_833: user.sign_in_count}
+     {firstname: user.f_name, cf_809: user.id, cf_917: user.user_type, cf_817: user.zipcode}
   end
 
   def create_device_hash(device_detail)
-      {cf_823: device_detail.device_id, cf_829: device_detail.created_at ? device_detail.created_at.to_date : '' ,
-       cf_831: device_detail.updated_at ? device_detail.updated_at.to_date : '',
-       cf_827: device_detail.status, cf_825: device_detail.device_type}
+      {cf_823: device_detail.device_id,
+       cf_825: device_detail.device_type,
+       cf_829: device_detail.created_at ? device_detail.created_at.to_date : '',
+       cf_943: device_detail.current_sign_in_at ? device_detail.current_sign_in_at.to_date : '',
+       cf_839: device_detail.last_sign_in_at ? device_detail.last_sign_in_at.to_date : '',
+       cf_951: device_detail.current_sign_in_ip,
+       cf_841: device_detail.last_sign_in_ip,
+       cf_833: device_detail.sign_in_count}
   end
 
   def create_children_hash(children)
-
-    {cf_853: remove_special_char(children.name), cf_851: children.dob, cf_855: children.created_at ? children.created_at.to_date : '',
-     cf_857: children.updated_at ? children.updated_at.to_date : ''}
+    {cf_853: remove_special_char(children.child_name), cf_851: children.dob,
+     cf_893: children.gender }
   end
 
   def create_payment_hash(payment)
-    {cf_861: payment.customer_id, cf_865: payment.source_url, cf_867: payment.created_at ? payment.created_at.to_date : '',
-     cf_869: payment.updated_at ? payment.updated_at.to_date : '', cf_911: payment.payment_type}
+    {cf_933: payment.subscription_start_date ? payment.subscription_start_date.to_date : '',
+     cf_935: payment.subscription_end_date ? payment.subscription_end_date.to_date : '' ,
+     cf_937: payment.subscription_type, cf_939: payment.payment_interval,
+     cf_941: payment.status,  cf_949: payment.amount }
   end
 
-  def create_transaction_hash(user, transaction)
-     if transaction.payment_type == 'stripe'
-      amount =  transaction.amount > 0 ? (transaction.amount.to_f/ 100).to_f : 0.00
-     else
-       amount = transaction.amount
-     end
 
-    {cf_871: transaction.transaction_id, cf_873: transaction.purchase_date ? transaction.purchase_date.to_date : '',
-     cf_905: transaction.status , cf_881: amount, cf_885: transaction.paid, cf_887: transaction.failure_code,
-     cf_929: user.active_subscription.interval}
-  end
-
-  def create_player_usage_stats_hash(player_usage_stats, player_usage_stats_aggregate)
-    month_usage_stats = usage_stats(player_usage_stats , Date.today.at_beginning_of_month)
-    daily_usage_stats_1 = daily_usage_stats(player_usage_stats ,  Date.today)
-    daily_usage_stats_2 = daily_usage_stats(player_usage_stats ,  Date.today - 1.day)
-    daily_usage_stats_3 = daily_usage_stats(player_usage_stats ,  Date.today - 2.day)
-    year_usage_stats = usage_yearly_stats(player_usage_stats , player_usage_stats_aggregate,  Date.today.at_beginning_of_year)
-    total_usage_stats = usage_yearly_stats(player_usage_stats ,  player_usage_stats_aggregate, nil)
+  def create_player_usage_stats_hash(user_id)
+    month_usage_stats = usage_stats_query("PlayerUsageStat", user_id , Date.today.at_beginning_of_month)
+    daily_usage_stats_1 =  daily_usage_stats("PlayerUsageStat", user_id,  Date.today)
+    daily_usage_stats_2 = daily_usage_stats("PlayerUsageStat", user_id,  Date.today - 1.day)
+    daily_usage_stats_3 = daily_usage_stats("PlayerUsageStat", user_id, Date.today - 2.day)
+    year_usage_stats = usage_yearly_stats(user_id , Date.today.at_beginning_of_year)
+    total_usage_stats = usage_yearly_stats(user_id , nil)
     {cf_923: daily_usage_stats_1.first.duration.nil? ? '00:00:00' : Time.at(daily_usage_stats_1.first.duration).utc.strftime("%H:%M:%S"),
      cf_925: daily_usage_stats_2.first.duration.nil? ? '00:00:00' : Time.at(daily_usage_stats_2.first.duration).utc.strftime("%H:%M:%S"),
      cf_927: daily_usage_stats_3.first.duration.nil? ? '00:00:00' : Time.at(daily_usage_stats_3.first.duration).utc.strftime("%H:%M:%S"),
@@ -120,26 +109,25 @@ namespace :VtigerCrmIntegration do
     }
   end
 
-  def usage_yearly_stats(player_usage_stats, aggregate, filter_date)
-     current_duration = usage_stats_query(player_usage_stats, filter_date)
-     aggregate_duration = usage_stats_query(aggregate, filter_date)
+  def usage_yearly_stats(user_id, filter_date)
+     current_duration = usage_stats_query("PlayerUsageStat", user_id, filter_date)
+     aggregate_duration = usage_stats_query("PlayerUsageStatsAggregate", user_id, filter_date)
      (current_duration.first.duration.nil? ? 0 : current_duration.first.duration) + (aggregate_duration.first.duration.nil? ? 0 : aggregate_duration.first.duration)
   end
 
-  def usage_stats(player_usage_stats, filter_date)
-    usage_stats_query(player_usage_stats, filter_date)
-  end
-
-  def usage_stats_query(model, filter_date)
+  def usage_stats_query(model, user_id, filter_date)
     if filter_date.nil?
-      model.select("sum(duration) as duration").order(usage_date: :desc)
+      model.constantize.find_by_sql("Select sum(duration) as duration from #{model.tableize} \
+       where user_id = #{user_id} order by usage_date DESC")
     else
-      model.select("sum(duration) as duration").where("DATE(usage_date) >= ?", filter_date).order(usage_date: :desc)
+      model.constantize.find_by_sql("Select sum(duration) as duration from #{model.tableize } \
+       where (user_id =#{user_id} and date(usage_date) >= '#{filter_date.strftime('%Y-%m-%d')}') ORDER BY usage_date DESC")
     end
   end
 
-  def daily_usage_stats(player_usage_stats, filter_date)
-    player_usage_stats.select("sum(duration) as duration").where("DATE(usage_date) = ?", filter_date).order(usage_date: :desc)
+  def daily_usage_stats(model, user_id, filter_date)
+    model.constantize.find_by_sql("Select sum(duration) as duration from #{model.tableize } \
+       where user_id = #{user_id} AND DATE(usage_date) = '#{filter_date.strftime('%Y-%m-%d')}' order by usage_date DESC")
   end
 
 end
