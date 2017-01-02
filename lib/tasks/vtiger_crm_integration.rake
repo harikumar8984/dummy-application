@@ -117,16 +117,16 @@ namespace :VtigerCrmIntegration do
 
   def usage_stats_query(model, user_id, filter_date)
     if filter_date.nil?
-      model.constantize.find_by_sql("Select sum(duration) as duration, usage_date from #{model.tableize} \
+      model.constantize.find_by_sql("Select sum(duration) as duration, max(usage_date) from #{model.tableize} \
        where user_id = #{user_id}")
     else
-      model.constantize.find_by_sql("Select sum(duration) as duration, usage_date from #{model.tableize } \
+      model.constantize.find_by_sql("Select sum(duration) as duration, max(usage_date) from #{model.tableize } \
        where (user_id =#{user_id} and date(usage_date) >= '#{filter_date.strftime('%Y-%m-%d')}')")
     end
   end
 
   def daily_usage_stats(model, user_id, filter_date)
-    model.constantize.find_by_sql("Select sum(duration) as duration, usage_date from #{model.tableize } \
+    model.constantize.find_by_sql("Select sum(duration) as duration, max(usage_date) from #{model.tableize } \
        where user_id = #{user_id} and date(usage_date) = '#{filter_date.strftime('%Y-%m-%d')}'")
   end
 
