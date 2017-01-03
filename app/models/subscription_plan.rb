@@ -7,7 +7,7 @@ class SubscriptionPlan < ActiveRecord::Base
   end
 
   def cycles_from_plan
-    interval == "Yearly" ? 3 : 12
+    interval == "Yearly" ? 3 : 36
   end
 
   def period_from_plan
