@@ -2,15 +2,15 @@ namespace :VtigerCrmIntegration do
 
   desc "Import all existing users to CRM"
   task :import_users => :environment do |t,args|
-    #if [1,7, 13, 19 ].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
+    if [1,7, 13, 19 ].include?(Time.now.in_time_zone('Eastern Time (US & Canada)').hour)
       login_vtiger
-      user = User.all
-      #user = User.where("created_at >=?" ,Time.now - 2.day)
+      #user = User.all
+      user = User.where("created_at >=?" ,Time.now - 2.day)
       user.each do |user|
         hash = create_user_list_hash(user)
         @cmd.find_contact_by_email_or_add(nil, user.l_name, remove_special_char(user.email), hash )
       end
-    #end
+    end
   end
 
   desc "Updating CRM with CMS latest data"
